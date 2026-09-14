@@ -9,6 +9,12 @@
 
 ## 1. Ficheros
 
+*(CE-a: Se han analizado los distintos sistemas lógicos de almacenamiento y sus funciones)*
+
+* Un ordenador maneja y almacena una gran cantidad de información.
+* La información se almacena en dispositivos como discos duros, pendrives, DVDs, etc. 
+* Esta información almacenada debe estar adecuadamente organizada. 
+* Para poder organizar la información se utilizan `los ficheros o archivos`
 
 Antes de la aparición de las bases de datos, la información se almacenaba organizada en **ficheros** (archivos), gestionados directamente por los programas de aplicación o por el sistema operativo. Un **fichero** es un conjunto de **registros**, y cada registro está formado por **campos**.
 
@@ -135,7 +141,10 @@ Estas limitaciones son las que justifican la aparición de las **bases de datos*
 
 ## 2. Bases de datos: conceptos, usos y tipos
 
+
 ### 2.1 Concepto de base de datos
+
+*(CE-d: Se ha reconocido la utilidad de un sistema gestor de bases de datos)*
 
 Una **base de datos** es un conjunto de datos organizados, estructurados y relacionados entre sí, almacenados de forma conjunta, sin redundancias innecesarias, y diseñados para ser utilizados por diferentes usuarios y aplicaciones de forma simultánea.
 
@@ -148,6 +157,8 @@ A diferencia de un simple conjunto de ficheros, una base de datos:
 
 ### 2.2 Usos de las bases de datos
 
+*(CE-d: Se ha reconocido la utilidad de un sistema gestor de bases de datos)*
+
 Las bases de datos se utilizan prácticamente en cualquier ámbito donde haya que gestionar información de forma organizada:
 
 - **Gestión empresarial:** clientes, proveedores, facturación, nóminas, inventario.
@@ -158,6 +169,8 @@ Las bases de datos se utilizan prácticamente en cualquier ámbito donde haya qu
 - **Aplicaciones móviles y de escritorio:** almacenamiento local de configuración o datos del usuario.
 
 ### 2.3 Tipos de bases de datos según el modelo de datos
+
+*(CE-b: Se han identificado los distintos tipos de bases de datos según el modelo de datos utilizado)*
 
 El **modelo de datos** define cómo se organizan, estructuran y relacionan los datos dentro de la base de datos.
 
@@ -173,6 +186,8 @@ El **modelo de datos** define cómo se organizan, estructuran y relacionan los d
 > **Evolución histórica:** Jerárquico → En red → Relacional → Orientado a objetos / NoSQL. El modelo **relacional**, propuesto por E. F. Codd en 1970, sigue siendo el más extendido, aunque el modelo **NoSQL** ha ganado peso con el Big Data y las aplicaciones web de gran escala.
 
 ### 2.4 Tipos de bases de datos según la ubicación de la información
+
+*(CE-c: Se han identificado los distintos tipos de bases de datos en función de la ubicación de la información)*
 
 | Tipo | Descripción | Ventajas | Inconvenientes |
 |---|---|---|---|
@@ -195,6 +210,8 @@ Un **Sistema Gestor de Bases de Datos (SGBD)**, en inglés *DBMS (Database Manag
 
 ### 3.2 Funciones de un SGBD
 
+*(CE-e: Se ha descrito la función de cada uno de los elementos de un sistema gestor de bases de datos)*
+
 - **Definición de la estructura de los datos:** permite crear tablas, especificar tipos de datos, relaciones y restricciones.
 - **Manipulación de los datos:** inserción, consulta, actualización y eliminación de datos.
 - **Independencia de los datos:** separa la estructura lógica de los datos de su almacenamiento físico, de modo que los programas no dependen de cómo se guardan realmente.
@@ -207,6 +224,8 @@ Un **Sistema Gestor de Bases de Datos (SGBD)**, en inglés *DBMS (Database Manag
 - **Optimización de consultas:** determina la forma más eficiente de ejecutar cada consulta (uso de índices, orden de las operaciones).
 
 ### 3.3 Componentes (elementos) de un SGBD
+
+*(CE-e: Se ha descrito la función de cada uno de los elementos de un sistema gestor de bases de datos)*
 
 | Componente | Función |
 |---|---|
@@ -334,6 +353,8 @@ graph LR
 - Cuando la transacción termina (commit o rollback), el motor devuelve el resultado a la interfaz y al usuario.
 
 ### 3.4 Tipos de sistemas gestores de bases de datos
+
+*(CE-f: Se han clasificado los sistemas gestores de bases de datos)*
 
 Los SGBD se pueden clasificar según varios criterios:
 
