@@ -1,41 +1,14 @@
 
-# Unidad de Aprendizaje: Sistemas de almacenamiento de la información
+# Unidad 1 - Sistemas de almacenamiento de la información <!-- omit from toc -->
 
 **Módulo:** Gestión de base de datos
-**RA1:** Reconoce los elementos de las bases de datos, analizando sus funciones y valorando la utilidad de los sistemas gestores.
 
+**RA1:** Reconoce los elementos de las bases de datos, analizando sus funciones y valorando la utilidad de los sistemas gestores.
 
 ---
 
-## Indice <!-- omit from toc -->
-- [Unidad de Aprendizaje: Sistemas de almacenamiento de la información](#unidad-de-aprendizaje-sistemas-de-almacenamiento-de-la-información)
-  - [1. Ficheros](#1-ficheros)
-    - [1.1 Ficheros planos (secuenciales)](#11-ficheros-planos-secuenciales)
-    - [1.2 Ficheros indexados](#12-ficheros-indexados)
-    - [1.3 Ficheros de acceso directo (aleatorio o relativo)](#13-ficheros-de-acceso-directo-aleatorio-o-relativo)
-    - [1.4 Comparativa de tipos de ficheros](#14-comparativa-de-tipos-de-ficheros)
-    - [1.5 Limitaciones de los sistemas de ficheros frente a las bases de datos](#15-limitaciones-de-los-sistemas-de-ficheros-frente-a-las-bases-de-datos)
-  - [2. Bases de datos: conceptos, usos y tipos](#2-bases-de-datos-conceptos-usos-y-tipos)
-    - [2.1 Concepto de base de datos](#21-concepto-de-base-de-datos)
-    - [2.2 Usos de las bases de datos](#22-usos-de-las-bases-de-datos)
-    - [2.3 Tipos de bases de datos según el modelo de datos](#23-tipos-de-bases-de-datos-según-el-modelo-de-datos)
-    - [2.4 Tipos de bases de datos según la ubicación de la información](#24-tipos-de-bases-de-datos-según-la-ubicación-de-la-información)
-  - [3. Sistemas gestores de bases de datos (SGBD): funciones, componentes y tipos](#3-sistemas-gestores-de-bases-de-datos-sgbd-funciones-componentes-y-tipos)
-    - [3.1 Concepto de SGBD](#31-concepto-de-sgbd)
-    - [3.2 Funciones de un SGBD](#32-funciones-de-un-sgbd)
-    - [3.3 Componentes (elementos) de un SGBD](#33-componentes-elementos-de-un-sgbd)
-      - [3.3.1 Diagrama 1: Visión general de componentes y flujos principales](#331-diagrama-1-visión-general-de-componentes-y-flujos-principales)
-      - [3.3.2 Diagrama 2: Flujo DML (consulta/actualización)](#332-diagrama-2-flujo-dml-consultaactualización)
-      - [3.3.3 Diagrama 3: Flujo DDL (definición de esquema)](#333-diagrama-3-flujo-ddl-definición-de-esquema)
-      - [3.3.4 Diagrama 4: Flujo DCL (gestión de permisos y control)](#334-diagrama-4-flujo-dcl-gestión-de-permisos-y-control)
-      - [3.3.5 Diagrama 5: Flujo de transacciones, concurrencia y recuperación](#335-diagrama-5-flujo-de-transacciones-concurrencia-y-recuperación)
-    - [3.4 Tipos de sistemas gestores de bases de datos](#34-tipos-de-sistemas-gestores-de-bases-de-datos)
-  - [4. Esquema-resumen](#4-esquema-resumen)
-  - [5. Glosario de términos clave](#5-glosario-de-términos-clave)
-  - [6. Actividades propuestas (autoevaluación)](#6-actividades-propuestas-autoevaluación)
-
-
 ## 1. Ficheros
+
 
 Antes de la aparición de las bases de datos, la información se almacenaba organizada en **ficheros** (archivos), gestionados directamente por los programas de aplicación o por el sistema operativo. Un **fichero** es un conjunto de **registros**, y cada registro está formado por **campos**.
 
