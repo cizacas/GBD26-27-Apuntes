@@ -47,13 +47,59 @@ Según cómo se organizan y se accede a los registros dentro del fichero, distin
 - **Inconvenientes:** acceso lento a un registro concreto cuando el fichero es grande, ya que hay que recorrerlo desde el inicio; las operaciones de inserción/borrado en medio del fichero son costosas.
 - **Ejemplo de uso:** ficheros de texto plano (`.txt`, `.csv`), copias de seguridad, procesos por lotes (*batch*).
 
+- **Formato (texto o binario):** los ficheros planos se encuentran habitualmente en formato de texto legible (por ejemplo CSV), pero también pueden almacenarse en formato binario. En texto cada registro suele ser una línea y los campos se separan por delimitadores; en binario los registros pueden tener campos de tamaño fijo y ocupan menos espacio y se procesan más rápido. La elección depende de la necesidad de legibilidad/intercambio (texto) frente a rendimiento/compactación (binario).
+
+
+**Ejemplo práctico (.txt):**
+
+Imaginemos un fichero de texto plano llamado "clientes.txt" que almacena información de clientes, donde cada línea corresponde a un registro y los campos están separados por comas:
+
+```
+1,Garcia Perez,garcia@example.com,600123456
+2,Lopez Martinez,lopez@example.com,600987654
+3,Sanchez Diaz,sanchez@example.com,600555000
+```
+
+- Cada línea (por ejemplo `1,Garcia Perez,garcia@example.com,600123456`) es un **registro**: representa la información relacionada con una única entidad (aquí, un cliente).
+- Los **campos** son las partes que componen el registro, separadas por comas en este ejemplo:
+  - Campo 1: `1` (ID del cliente)
+  - Campo 2: `Garcia Perez` (nombre)
+  - Campo 3: `garcia@example.com` (correo electrónico)
+  - Campo 4: `600123456` (teléfono)
+
+> 📌 Nota: En ficheros planos los campos pueden separarse por comas (CSV), tabuladores, punto y coma u otros separadores, o bien tener longitudes fijas. Su simplicidad los hace útiles para intercambio de datos y pequeños procesos por lotes, pero su estructura no protege contra inconsistencias (por ejemplo, distinta ordenación de campos, falta de delimitadores o problemas con comas dentro de los campos). Para mitigar esto, es común usar comillas para campos de texto, incluir una cabecera con nombres de campos o aplicar reglas de validación en el proceso de importación. Si se requiere integridad, control de concurrencia y consultas complejas, conviene usar un SGBD.
+
+
 ### 1.2 Ficheros indexados
 
 - Además de los datos, se mantiene una **estructura de índice** (similar al índice de un libro) que asocia cada valor de una clave con la posición física del registro correspondiente en el fichero.
 - Permiten **dos formas de acceso**: secuencial (recorriendo todos los registros) y **por clave** (a través del índice), combinando lo mejor de ambos mundos.
-- El acceso mediante el índice es mucho más rápido que recorrer todo el fichero, ya que el índice suele organizarse en estructuras eficientes de búsqueda (por ejemplo, árboles).
-- **Inconvenientes:** ocupan más espacio (hay que guardar el índice además de los datos) y hay que mantener el índice actualizado cada vez que se modifica el fichero, lo que añade cierta sobrecarga.
-- **Ejemplo de uso:** ficheros ISAM (*Indexed Sequential Access Method*), muy usados en sistemas de gestión antiguos y como base de algunos motores de bases de datos.
+- El acceso mediante el índice es mucho más rápido que recorrer todo el fichero, ya que el índice suele organizarse en estructuras eficientes de búsqueda (por ejemplo, árboles B o B+).
+- **Inconvenientes:** ocupan más espacio (hay que guardar el índice además de los datos) y hay que mantener el índice actualizado cada vez que se modifica el fichero, lo que añade cierta sobrecarga en inserciones/borrados.
+
+- **Formato (texto o binario):** los ficheros indexados suelen implementarse sobre formatos binarios que permiten direccionar con precisión offsets y manejar estructuras de índice (B-tree, B+tree) de forma eficiente. No obstante, también pueden existir soluciones híbridas: un fichero de datos en texto (CSV) con un índice externo binario que guarda offsets.
+
+**Ejemplo práctico (indexado):**
+
+Supongamos un fichero de datos `clientes.dat` donde cada registro ocupa una posición física (por ejemplo, número de registro) y existe un fichero índice `clientes.idx` que asocia la clave (ID) con esa posición:
+
+Archivo de datos (clientes.dat) - `contenido conceptual`:
+```
+Registro#1: 1|Garcia Perez|garcia@example.com|600123456
+Registro#2: 2|Lopez Martinez|lopez@example.com|600987654
+Registro#3: 3|Sanchez Diaz|sanchez@example.com|600555000
+```
+Índice (clientes.idx) - entrada clave→posición:
+```
+1 -> Registro#1
+2 -> Registro#2
+3 -> Registro#3
+```
+
+- Si se busca el cliente con ID = 2, el sistema consulta el índice (muy rápido) y obtiene `Registro#2`, luego lee directamente la posición en el fichero de datos sin tener que recorrer todos los registros.
+- En implementaciones reales el índice suele estar organizado en árboles (B-tree/B+tree) o en estructuras de hash, y puede residir en memoria para acelerar lecturas.
+
+> 📌 Nota: Los ficheros indexados son especialmente útiles cuando las consultas por clave son frecuentes y se desea combinar acceso rápido por clave con la posibilidad de recorrer registros en orden.
 
 ### 1.3 Ficheros de acceso directo (aleatorio o relativo)
 
@@ -61,7 +107,34 @@ Según cómo se organizan y se accede a los registros dentro del fichero, distin
 - También se conocen como ficheros de **acceso aleatorio** o de **acceso relativo**.
 - **Ventajas:** acceso muy rápido a un registro concreto, independientemente de su posición en el fichero.
 - **Inconvenientes:** es necesario conocer o calcular la posición del registro; no son eficientes para procesar todos los registros de forma ordenada; puede haber colisiones si dos claves generan la misma posición (en el caso de acceso por *hash*).
-- **Ejemplo de uso:** bases de datos que necesitan localizar rápidamente un registro concreto (por ejemplo, una cuenta bancaria a partir de su número de cuenta).
+- **Formato (texto o binario):** los ficheros de acceso directo se implementan típicamente en formato binario con registros de tamaño fijo o estructuras que permitan calcular offsets fiables. Esto facilita el cálculo directo de posiciones y el acceso por hashing. Implementaciones que intentan usar texto para acceso directo existen (por ejemplo, manteniendo un mapa de offsets), pero suelen ser menos eficientes.
+
+**Ejemplo práctico (acceso directo mediante hashing):**
+
+Imaginemos un fichero `cuentas.dat` en el que queremos almacenar cuentas bancarias y acceder por número de cuenta. Usando hashing, definimos una función simple que convierte el número de cuenta en una posición (slot) del fichero:
+
+- Supongamos tamaño del fichero = 1000 slots.
+- Hash(numero_cuenta) mod 1000 = posición.
+
+Ejemplo conceptual:
+```
+Hash(1000456) mod 1000 -> 456  => almacenar registro en slot 456
+Hash(2000102) mod 1000 -> 102  => almacenar registro en slot 102
+Hash(3000001) mod 1000 -> 1    => almacenar registro en slot 001
+```
+- Para buscar la cuenta 2000102 se calcula su hash y se accede directamente al slot 102, sin necesidad de leer otros registros.
+- Si dos cuentas colisionan (mismo slot), el sistema debe resolver la colisión (por ejemplo, con encadenamiento -lista en ese slot- o con sondeo abierto).
+
+**Ejemplo práctico (acceso directo mediante desplazamiento fijo):**
+
+Si los registros tienen tamaño fijo (por ejemplo 200 bytes), y conocemos el número de registro n, la posición física en bytes se calcula como:
+```
+offset = (n - 1) * record_size
+```
+Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 200 = 1800 bytes y lee 200 bytes.
+
+> 📌 Nota: Los ficheros de acceso directo ofrecen lecturas muy rápidas para búsquedas puntuales, pero su diseño requiere planificación (tamaño de registro, estrategia de resolución de colisiones) y suelen usarse cuando la latencia de acceso es crítica.
+
 
 ### 1.4 Comparativa de tipos de ficheros
 

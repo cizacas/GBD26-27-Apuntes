@@ -1,0 +1,12 @@
+graph LR
+  U["Usuarios<br/>/ Aplicaciones"] --> UI["Interfaz / API"]
+  UI --> DML["DML:<br/>SELECT / INSERT / UPDATE / DELETE"]
+  DML --> OPT["Optimizador<br/>de consultas"]
+  OPT --> CAT["Catálogo<br/>(estadísticas / metadatos)"]
+  OPT --> MOTOR["Motor<br/>de base de datos"]
+  MOTOR --> TRANS["Gestor<br/>de transacciones"]
+  TRANS --> CONC["Control de<br/>concurrencia (bloqueos)"]
+  TRANS --> LOG["Registro de<br/>transacciones (WAL)"]
+  LOG --> BACK["Backup /<br/>Recuperación"]
+  MOTOR --> UI
+  UI --> U

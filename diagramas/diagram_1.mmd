@@ -1,0 +1,13 @@
+graph LR
+  U["Usuarios<br/>/ Aplicaciones"] --> UI["Interfaz de usuario<br/>/ API"]
+  UI --> DML["DML<br/>(Consultas / Manipulación)"]
+  UI --> DDL["DDL<br/>(Definición de esquema)"]
+  UI --> DCL["DCL<br/>(Control / Permisos)"]
+  DML --> OPT["Optimizador<br/>de consultas"] --> MOTOR["Motor<br/>de base de datos"]
+  DDL --> MOTOR
+  DCL --> SEC["Módulo de<br/>seguridad"]
+  MOTOR --> CAT["Diccionario /<br/>Catálogo (Metadatos)"]
+  MOTOR --> TRANS["Gestor<br/>de transacciones"]
+  TRANS --> CONC["Gestor de<br/>concurrencia"]
+  TRANS --> BACK["Backup /<br/>Recuperación"]
+  MOTOR --> UI
