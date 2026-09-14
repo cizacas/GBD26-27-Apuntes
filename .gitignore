@@ -1,0 +1,11 @@
+# Ignorar todos los PDF
+
+*.pdf
+**/*.pdf
+
+# ignorar los .zip
+*.zip
+**/*.zip
+
+# Ignorar el directorio site
+**/site/
