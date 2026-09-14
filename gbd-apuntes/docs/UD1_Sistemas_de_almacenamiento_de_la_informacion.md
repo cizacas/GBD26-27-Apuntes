@@ -27,6 +27,11 @@
   - [3.1 Concepto de SGBD](#31-concepto-de-sgbd)
   - [3.2 Funciones de un SGBD](#32-funciones-de-un-sgbd)
   - [3.3 Componentes (elementos) de un SGBD](#33-componentes-elementos-de-un-sgbd)
+    - [3.3.1 Diagrama 1: Visión general de componentes y flujos principales](#331-diagrama-1-visión-general-de-componentes-y-flujos-principales)
+    - [3.3.2 Diagrama 2: Flujo DML (consulta/actualización)](#332-diagrama-2-flujo-dml-consultaactualización)
+    - [3.3.3 Diagrama 3: Flujo DDL (definición de esquema)](#333-diagrama-3-flujo-ddl-definición-de-esquema)
+    - [3.3.4 Diagrama 4: Flujo DCL (gestión de permisos y control)](#334-diagrama-4-flujo-dcl-gestión-de-permisos-y-control)
+    - [3.3.5 Diagrama 5: Flujo de transacciones, concurrencia y recuperación](#335-diagrama-5-flujo-de-transacciones-concurrencia-y-recuperación)
   - [3.4 Tipos de sistemas gestores de bases de datos](#34-tipos-de-sistemas-gestores-de-bases-de-datos)
 - [4. Esquema-resumen](#4-esquema-resumen)
 - [5. Glosario de términos clave](#5-glosario-de-términos-clave)
@@ -246,6 +251,117 @@ Un **Sistema Gestor de Bases de Datos (SGBD)**, en inglés *DBMS (Database Manag
 | **Módulo de copia de seguridad y recuperación** | Permite realizar copias de seguridad y restaurar la base de datos tras un fallo. |
 | **Optimizador de consultas** | Analiza las consultas y decide la estrategia de ejecución más eficiente. |
 | **Interfaz de usuario / API** | Permite a los usuarios y aplicaciones interactuar con el SGBD (línea de comandos, interfaz gráfica, conectores ODBC/JDBC). |
+
+#### 3.3.1 Diagrama 1: Visión general de componentes y flujos principales
+
+```mermaid
+graph LR
+  U["Usuarios<br/>/ Aplicaciones"] --> UI["Interfaz de usuario<br/>/ API"]
+  UI --> DML["DML<br/>(Consultas / Manipulación)"]
+  UI --> DDL["DDL<br/>(Definición de esquema)"]
+  UI --> DCL["DCL<br/>(Control / Permisos)"]
+  DML --> OPT["Optimizador<br/>de consultas"] --> MOTOR["Motor<br/>de base de datos"]
+  DDL --> MOTOR
+  DCL --> SEC["Módulo de<br/>seguridad"]
+  MOTOR --> CAT["Diccionario /<br/>Catálogo (Metadatos)"]
+  MOTOR --> TRANS["Gestor<br/>de transacciones"]
+  TRANS --> CONC["Gestor de<br/>concurrencia"]
+  TRANS --> BACK["Backup /<br/>Recuperación"]
+  MOTOR --> UI
+```
+- El usuario o la aplicación envía solicitudes a través de la interfaz (UI / API).
+- Desde la interfaz se lanzan tres tipos de acciones: operaciones sobre los datos (DML), definiciones de esquema (DDL) y órdenes de control/permiso (DCL).
+- Las peticiones DML pasan por el optimizador de consultas y llegan al motor de base de datos para su ejecución física.
+- Las sentencias DDL se envían al motor para aplicar cambios en el esquema (creación/alteración/eliminación de objetos).
+- Las órdenes DCL se dirigen al módulo de seguridad para comprobar/gestionar permisos.
+- El motor accede al diccionario de datos / catálogo para leer metadatos y estadísticas, y coordina las operaciones mediante el gestor de transacciones.
+- El gestor de transacciones actúa sobre el control de concurrencia y los mecanismos de backup/recuperación.
+- Finalmente el motor devuelve resultados y estado a la interfaz para que lleguen al usuario.
+
+#### 3.3.2 Diagrama 2: Flujo DML (consulta/actualización)
+
+```mermaid
+graph LR
+  U["Usuarios<br/>/ Aplicaciones"] --> UI["Interfaz / API"]
+  UI --> DML["DML:<br/>SELECT / INSERT / UPDATE / DELETE"]
+  DML --> OPT["Optimizador<br/>de consultas"]
+  OPT --> CAT["Catálogo<br/>(estadísticas / metadatos)"]
+  OPT --> MOTOR["Motor<br/>de base de datos"]
+  MOTOR --> TRANS["Gestor<br/>de transacciones"]
+  TRANS --> CONC["Control de<br/>concurrencia (bloqueos)"]
+  TRANS --> LOG["Registro de<br/>transacciones (WAL)"]
+  LOG --> BACK["Backup /<br/>Recuperación"]
+  MOTOR --> UI
+  UI --> U
+```
+- El usuario envía una consulta o modificación (SELECT/INSERT/UPDATE/DELETE) a través de la interfaz.
+- La petición DML llega al optimizador de consultas, que consulta el catálogo (estadísticas, índices y metadatos) para elegir un plan eficiente.
+- El optimizador entrega el plan al motor de base de datos, que ejecuta las operaciones físicas sobre los datos.
+- Durante la ejecución, el motor interactúa con el gestor de transacciones para asegurar propiedades ACID: registra las operaciones (WAL / logs) y coordina bloqueos con el control de concurrencia.
+- Los logs pueden usarse posteriormente por el subsistema de backup/recuperación para restaurar el estado en caso de fallo.
+- El motor devuelve el resultado a la interfaz y de ahí al usuario.
+  
+#### 3.3.3 Diagrama 3: Flujo DDL (definición de esquema)
+
+```mermaid
+graph LR
+  U["Administrador /<br/>Aplicación"] --> UI["Interfaz / API"]
+  UI --> DDL["DDL:<br/>CREATE / ALTER / DROP"]
+  DDL --> SEC["Módulo de<br/>seguridad (permiso)"]
+  SEC --> CAT["Catálogo /<br/>Diccionario (metadatos)"]
+  DDL --> MOTOR["Motor<br/>de base de datos"]
+  MOTOR --> CAT
+  MOTOR --> UI
+  UI --> U
+```
+- Un administrador o aplicación envía una sentencia DDL (CREATE / ALTER / DROP) mediante la interfaz.
+- Antes de aplicar cambios críticos, el DDL puede pasar por el módulo de seguridad para verificar permisos.
+- El motor de base de datos procesa la sentencia DDL y actualiza la estructura física y lógica de la base de datos.
+- El motor actualiza el catálogo/diccionario de datos con la nueva información del esquema (tablas, columnas, restricciones, etc.).
+- El motor comunica el resultado de la operación a la interfaz y por tanto al administrador.
+  
+#### 3.3.4 Diagrama 4: Flujo DCL (gestión de permisos y control)
+
+```mermaid
+graph LR
+  U["Administrador"] --> UI["Interfaz / API"]
+  UI --> DCL["DCL:<br/>GRANT / REVOKE / ROLES"]
+  DCL --> SEC["Módulo de<br/>seguridad / autorización"]
+  SEC --> CAT["Catálogo<br/>(usuarios, roles, permisos)"]
+  SEC --> MOTOR["Motor<br/>de base de datos<br/>(aplica restricciones)"]
+  MOTOR --> UI
+  UI --> U
+```
+- Un administrador emite comandos DCL (por ejemplo GRANT o REVOKE) desde la interfaz.
+- El DCL se gestiona en el módulo de seguridad/autorización que administra usuarios, roles y privilegios.
+- El módulo de seguridad consulta y actualiza el catálogo donde se almacenan los metadatos de usuarios/roles/permisos.
+- Eventualmente el módulo de seguridad informa al motor para que aplique o haga cumplir las restricciones sobre operaciones futuras.
+- El resultado del cambio (éxito / fallo) se comunica de vuelta a la interfaz y al administrador.
+
+#### 3.3.5 Diagrama 5: Flujo de transacciones, concurrencia y recuperación
+
+```mermaid
+graph LR
+  U["Usuario / App"] --> UI["Interfaz / API"]
+  UI --> DML["DML:<br/>transacción"]
+  DML --> MOTOR["Motor<br/>de BD"]
+  MOTOR --> TRANS["Gestor<br/>de transacciones"]
+  TRANS --> CONC["Control de<br/>concurrencia (bloqueos)"]
+  TRANS --> LOG["Registro de<br/>transacciones (WAL / Logs)"]
+  LOG --> BACK["Backup /<br/>Recuperación"]
+  TRANS --> CAT["Actualiza metadatos /<br/>estadísticas en catálogo"]
+  CONC --> MOTOR
+  BACK --> MOTOR
+  MOTOR --> UI
+  UI --> U
+```
+- El usuario inicia una transacción (conjunto de operaciones DML) a través de la interfaz.
+- La transacción es procesada por el motor de BD y coordinada por el gestor de transacciones.
+- El gestor de transacciones usa el control de concurrencia para gestionar bloqueos y aislamientos entre transacciones concurrentes, evitando inconsistencias y conflictos.
+- Simultáneamente, el gestor de transacciones escribe registros en el log (WAL / transaction log) para garantizar durabilidad.
+- Los registros sirven para que el módulo de backup/recuperación pueda restaurar la base de datos hasta un estado consistente tras un fallo.
+- Durante la ejecución la transacción puede actualizar metadatos y estadísticas en el catálogo.
+- Cuando la transacción termina (commit o rollback), el motor devuelve el resultado a la interfaz y al usuario.
 
 ### 3.4 Tipos de sistemas gestores de bases de datos
 
