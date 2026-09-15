@@ -314,6 +314,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="1.2 Ficheros indexados">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#organizacion-del-indice-arboles-vs-hashing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Organización del índice: árboles vs. hashing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -635,6 +652,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="1.2 Ficheros indexados">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#organizacion-del-indice-arboles-vs-hashing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Organización del índice: árboles vs. hashing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -958,12 +992,73 @@
 <li>Además de los datos, se mantiene una <strong>estructura de índice</strong> (similar al índice de un libro) que asocia cada valor de una clave con la posición física del registro correspondiente en el fichero.</li>
 <li>Permiten <strong>dos formas de acceso</strong>: secuencial (recorriendo todos los registros) y <strong>por clave</strong> (a través del índice), combinando lo mejor de ambos mundos.</li>
 <li>El acceso mediante el índice es mucho más rápido que recorrer todo el fichero, ya que el índice suele organizarse en estructuras eficientes de búsqueda (por ejemplo, árboles B o B+).</li>
+<li><strong>Inconvenientes:</strong> ocupan más espacio (hay que guardar el índice además de los datos) y hay que mantener el índice actualizado cada vez que se modifica el fichero, lo que añade cierta sobrecarga en inserciones/borrados.</li>
+</ul>
+<h4 id="organizacion-del-indice-arboles-vs-hashing">Organización del índice: árboles vs. hashing<a class="headerlink" href="#organizacion-del-indice-arboles-vs-hashing" title="Permanent link">&para;</a></h4>
+<p>Los índices pueden organizarse internamente con diferentes estructuras. Las dos más comunes son los árboles (p. ej. B-tree / B+tree) y las tablas hash. A continuación se explica brevemente qué conlleva cada opción y se muestra un diagrama conceptual.</p>
+<ul>
+<li><strong>Árboles (B-tree / B+tree):</strong></li>
+<li><em>Características:</em> mantienen las claves ordenadas, permiten búsquedas, inserciones y borrados en tiempo O(log m) donde m es el número de entradas del índice. Son particularmente útiles cuando se necesitan operaciones de rango (por ejemplo, "todas las claves entre A y B").</li>
+<li><em>Sobrecarga:</em> requieren mantener el equilibrio del árbol y pueden implicar operaciones de reestructuración (divisiones/fusiones de nodos) en inserciones y borrados.</li>
+</ul>
+<p><pre class="mermaid"><code>graph TD
+  %% Ejemplo: insertar claves 1..5 en un B-tree de orden t=2 (max 3 claves por nodo hoja)
+  %% Tras insertar 1,2,3 el nodo hoja contiene [1,2,3]. Al insertar 4 se divide y promueve 3.
+  %% Tras insertar 5, la hoja derecha queda [3,4,5]. Resultado final:
+  root["Raíz: [3]"]
+  leafL["Hoja izquierda:\n[1,2]"]
+  leafR["Hoja derecha:\n[3,4,5]"]
+  root --&gt; leafL
+  root --&gt; leafR</code></pre>
+<strong>Ejemplo:</strong> <code>insertar claves 1..5 en un B-tree de orden t=2</code></p>
+<p>Explicación del ejemplo:
+- En un B‑tree (grado mínimo t = 2) cada nodo hoja puede contener como máximo 2t−1 = 3 claves y como mínimo t−1 = 1 clave. Eso explica el número «3» que aparece en la raíz: es la clave separadora (no significa que cada hoja deba tener 3 claves).</p>
+<ul>
+<li>Insertar 1,2,3 en la hoja inicial → hoja = [1,2,3].</li>
+<li>Insertar 4 provoca que la hoja exceda su capacidad (4 claves), se divide en dos hojas [1,2] y [3,4] y se promueve la clave 3 al nodo raíz.</li>
+<li>Insertar 5 va al segmento derecho → hoja derecha pasa a [3,4,5] (dentro del máximo permitido).</li>
+</ul>
+<p>Búsqueda de la clave 5 ( en este árbol sería: comparar con la raíz [3], 5&gt;3 → bajar por el puntero derecho y buscar en la hoja derecha.</p>
+<ul>
+<li><strong>Hashing (índice por dispersión):</strong></li>
+<li><em>Características:</em> una función hash convierte la clave en una posición (slot). La consulta suele ser O(1) en tiempo promedio para localizar la posición del registro. Es eficiente para búsquedas puntuales por clave.</li>
+<li><em>Sobrecarga:</em> debe gestionarse la resolución de colisiones (encadenamiento o sondeo) y no es eficiente para operaciones de rango o para mantener el orden de las claves.</li>
+</ul>
+<pre class="mermaid"><code>flowchart LR
+  subgraph HashTable
+    H0[slot0: 1,4]
+    H1[slot1: 2]
+    H2[slot2: 3,5]
+  end
+  H0 --&gt; Data0[(offset list)]
+  H1 --&gt; Data1[(offset list)]
+  H2 --&gt; Data2[(offset list)]</code></pre>
+<p><code>Explicación del ejemplo de hashing (claves 1..5):</code></p>
+<ul>
+<li>Definimos una función hash simple: <code>h(key) = key mod 3</code> (3 slots: 0,1,2).</li>
+<li>Nota: <code>mod</code> significa resto de la división entera. Por ejemplo <code>5 mod 3 = 2</code> porque 5 = 1*3 + 2.</li>
+<li>Insertamos claves 1,2,3,4,5 en ese orden:</li>
+<li>h(1) = 1 → slot1: [1]</li>
+<li>h(2) = 2 → slot2: [2]</li>
+<li>h(3) = 0 → slot0: [3]</li>
+<li>h(4) = 1 → slot1: [1,4] (colisión resuelta por encadenamiento)</li>
 <li>
-<p><strong>Inconvenientes:</strong> ocupan más espacio (hay que guardar el índice además de los datos) y hay que mantener el índice actualizado cada vez que se modifica el fichero, lo que añade cierta sobrecarga en inserciones/borrados.</p>
+<p>h(5) = 2 → slot2: [2,5] (colisión resuelta por encadenamiento)</p>
 </li>
 <li>
-<p><strong>Formato (texto o binario):</strong> los ficheros indexados suelen implementarse sobre formatos binarios que permiten direccionar con precisión offsets y manejar estructuras de índice (B-tree, B+tree) de forma eficiente. No obstante, también pueden existir soluciones híbridas: un fichero de datos en texto (CSV) con un índice externo binario que guarda offsets.</p>
+<p>Búsqueda de la clave 5:</p>
 </li>
+<li>calcular h(5)=2 → ir al <code>slot2</code></li>
+<li>recorrer la lista en <code>slot2</code> y localizar 5 (posible 1-2 comparaciones dependiendo de la posición)</li>
+<li>Operaciones típicas: 1 cálculo de hash + k comparaciones en la lista del slot (k es el número de elementos en el slot). En este ejemplo k=2, así que 1 cálculo + hasta 2 comparaciones.</li>
+</ul>
+<p>Consecuencias:
+- Hashing ofrece localizaciones rápidas en promedio, pero el rendimiento depende de la función hash y de la carga por slot (factor de carga). El encadenamiento es sencillo y flexible.</p>
+<p>En resumen: elegir árbol o hashing depende de los requisitos: 
+* búsquedas por rango y ordenadas → B-tree/B+tree 
+* búsquedas puntuales por clave con alta velocidad → hashing.</p>
+<ul>
+<li><strong>Formato (texto o binario):</strong> los ficheros indexados suelen implementarse sobre formatos binarios que permiten direccionar con precisión offsets y manejar estructuras de índice (B-tree, B+tree) de forma eficiente. No obstante, también pueden existir soluciones híbridas: un fichero de datos en texto (CSV) con un índice externo binario que guarda offsets.</li>
 </ul>
 <p><strong>Ejemplo práctico (indexado):</strong></p>
 <p>Supongamos un fichero de datos <code>clientes.dat</code> donde cada registro ocupa una posición física (por ejemplo, número de registro) y existe un fichero índice <code>clientes.idx</code> que asocia la clave (ID) con esa posición:</p>
@@ -1385,7 +1480,6 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
 <hr />
 <h2 id="6-actividades-propuestas-autoevaluacion">6. Actividades propuestas (autoevaluación)<a class="headerlink" href="#6-actividades-propuestas-autoevaluacion" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Explica la diferencia entre un fichero plano, uno indexado y uno de acceso directo, indicando una ventaja y un inconveniente de cada uno.</li>
 <li>Explica la diferencia entre un sistema de ficheros y una base de datos, indicando al menos tres ventajas de esta última.</li>
 <li>Pon un ejemplo real de empresa u organización que use una base de datos <strong>distribuida</strong> y explica por qué le conviene ese modelo frente a una centralizada.</li>
 <li>Indica qué modelo de datos utilizarías para: (a) una red social con relaciones de amistad, (b) el catálogo de un supermercado, (c) el registro de sesiones de una web con millones de accesos por segundo.</li>
