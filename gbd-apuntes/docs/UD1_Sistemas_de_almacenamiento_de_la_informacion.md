@@ -58,6 +58,75 @@ Imaginemos un fichero de texto plano llamado "clientes.txt" que almacena informa
 - El acceso mediante el índice es mucho más rápido que recorrer todo el fichero, ya que el índice suele organizarse en estructuras eficientes de búsqueda (por ejemplo, árboles B o B+).
 - **Inconvenientes:** ocupan más espacio (hay que guardar el índice además de los datos) y hay que mantener el índice actualizado cada vez que se modifica el fichero, lo que añade cierta sobrecarga en inserciones/borrados.
 
+#### Organización del índice: árboles vs. hashing
+
+Los índices pueden organizarse internamente con diferentes estructuras. Las dos más comunes son los árboles (p. ej. B-tree / B+tree) y las tablas hash. A continuación se explica brevemente qué conlleva cada opción y se muestra un diagrama conceptual.
+
+- **Árboles (B-tree / B+tree):**
+  - *Características:* mantienen las claves ordenadas, permiten búsquedas, inserciones y borrados en tiempo O(log m) donde m es el número de entradas del índice. Son particularmente útiles cuando se necesitan operaciones de rango (por ejemplo, "todas las claves entre A y B").
+  - *Sobrecarga:* requieren mantener el equilibrio del árbol y pueden implicar operaciones de reestructuración (divisiones/fusiones de nodos) en inserciones y borrados.
+
+```mermaid
+graph TD
+  %% Ejemplo: insertar claves 1..5 en un B-tree de orden t=2 (max 3 claves por nodo hoja)
+  %% Tras insertar 1,2,3 el nodo hoja contiene [1,2,3]. Al insertar 4 se divide y promueve 3.
+  %% Tras insertar 5, la hoja derecha queda [3,4,5]. Resultado final:
+  root["Raíz: [3]"]
+  leafL["Hoja izquierda:\n[1,2]"]
+  leafR["Hoja derecha:\n[3,4,5]"]
+  root --> leafL
+  root --> leafR
+```
+**Ejemplo:** `insertar claves 1..5 en un B-tree de orden t=2 `
+
+Explicación del ejemplo:
+- En un B‑tree (grado mínimo t = 2) cada nodo hoja puede contener como máximo 2t−1 = 3 claves y como mínimo t−1 = 1 clave. Eso explica el número «3» que aparece en la raíz: es la clave separadora (no significa que cada hoja deba tener 3 claves).
+  
+- Insertar 1,2,3 en la hoja inicial → hoja = [1,2,3].
+- Insertar 4 provoca que la hoja exceda su capacidad (4 claves), se divide en dos hojas [1,2] y [3,4] y se promueve la clave 3 al nodo raíz.
+- Insertar 5 va al segmento derecho → hoja derecha pasa a [3,4,5] (dentro del máximo permitido).
+
+Búsqueda de la clave 5 ( en este árbol sería: comparar con la raíz [3], 5>3 → bajar por el puntero derecho y buscar en la hoja derecha.
+
+- **Hashing (índice por dispersión):**
+  - *Características:* una función hash convierte la clave en una posición (slot). La consulta suele ser O(1) en tiempo promedio para localizar la posición del registro. Es eficiente para búsquedas puntuales por clave.
+  - *Sobrecarga:* debe gestionarse la resolución de colisiones (encadenamiento o sondeo) y no es eficiente para operaciones de rango o para mantener el orden de las claves.
+  
+```mermaid
+flowchart LR
+  subgraph HashTable
+    H0[slot0: 1,4]
+    H1[slot1: 2]
+    H2[slot2: 3,5]
+  end
+  H0 --> Data0[(offset list)]
+  H1 --> Data1[(offset list)]
+  H2 --> Data2[(offset list)]
+```
+
+`Explicación del ejemplo de hashing (claves 1..5):`
+
+- Definimos una función hash simple: `h(key) = key mod 3` (3 slots: 0,1,2).
+  - Nota: `mod` significa resto de la división entera. Por ejemplo `5 mod 3 = 2` porque 5 = 1*3 + 2.
+- Insertamos claves 1,2,3,4,5 en ese orden:
+  - h(1) = 1 → slot1: [1]
+  - h(2) = 2 → slot2: [2]
+  - h(3) = 0 → slot0: [3]
+  - h(4) = 1 → slot1: [1,4] (colisión resuelta por encadenamiento)
+  - h(5) = 2 → slot2: [2,5] (colisión resuelta por encadenamiento)
+
+- Búsqueda de la clave 5:
+  1. calcular h(5)=2 → ir al `slot2`
+  2. recorrer la lista en `slot2` y localizar 5 (posible 1-2 comparaciones dependiendo de la posición)
+  - Operaciones típicas: 1 cálculo de hash + k comparaciones en la lista del slot (k es el número de elementos en el slot). En este ejemplo k=2, así que 1 cálculo + hasta 2 comparaciones.
+
+Consecuencias:
+- Hashing ofrece localizaciones rápidas en promedio, pero el rendimiento depende de la función hash y de la carga por slot (factor de carga). El encadenamiento es sencillo y flexible.
+
+En resumen: elegir árbol o hashing depende de los requisitos: 
+* búsquedas por rango y ordenadas → B-tree/B+tree 
+* búsquedas puntuales por clave con alta velocidad → hashing.
+
 - **Formato (texto o binario):** los ficheros indexados suelen implementarse sobre formatos binarios que permiten direccionar con precisión offsets y manejar estructuras de índice (B-tree, B+tree) de forma eficiente. No obstante, también pueden existir soluciones híbridas: un fichero de datos en texto (CSV) con un índice externo binario que guarda offsets.
 
 **Ejemplo práctico (indexado):**
@@ -420,7 +489,7 @@ Sistemas de almacenamiento de la información
 
 ## 6. Actividades propuestas (autoevaluación)
 
-1. Explica la diferencia entre un fichero plano, uno indexado y uno de acceso directo, indicando una ventaja y un inconveniente de cada uno.
+
 2. Explica la diferencia entre un sistema de ficheros y una base de datos, indicando al menos tres ventajas de esta última.
 3. Pon un ejemplo real de empresa u organización que use una base de datos **distribuida** y explica por qué le conviene ese modelo frente a una centralizada.
 4. Indica qué modelo de datos utilizarías para: (a) una red social con relaciones de amistad, (b) el catálogo de un supermercado, (c) el registro de sesiones de una web con millones de accesos por segundo.
