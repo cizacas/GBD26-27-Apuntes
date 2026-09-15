@@ -7,6 +7,33 @@
 
 ---
 
+## Indice<!-- omit from toc -->
+- [1. Ficheros](#1-ficheros)
+  - [1.1 Ficheros planos (secuenciales)](#11-ficheros-planos-secuenciales)
+  - [1.2 Ficheros indexados](#12-ficheros-indexados)
+    - [Organización del índice: árboles vs. hashing](#organización-del-índice-árboles-vs-hashing)
+  - [1.3 Ficheros de acceso directo (aleatorio o relativo)](#13-ficheros-de-acceso-directo-aleatorio-o-relativo)
+  - [1.4 Comparativa de tipos de ficheros](#14-comparativa-de-tipos-de-ficheros)
+  - [1.5 Limitaciones de los sistemas de ficheros frente a las bases de datos](#15-limitaciones-de-los-sistemas-de-ficheros-frente-a-las-bases-de-datos)
+- [2. Bases de datos: conceptos, usos y tipos](#2-bases-de-datos-conceptos-usos-y-tipos)
+  - [2.1 Concepto de base de datos](#21-concepto-de-base-de-datos)
+  - [2.2 Usos de las bases de datos](#22-usos-de-las-bases-de-datos)
+  - [2.3 Tipos de bases de datos según el modelo de datos](#23-tipos-de-bases-de-datos-según-el-modelo-de-datos)
+  - [2.4 Tipos de bases de datos según la ubicación de la información](#24-tipos-de-bases-de-datos-según-la-ubicación-de-la-información)
+- [3. Sistemas gestores de bases de datos (SGBD): funciones, componentes y tipos](#3-sistemas-gestores-de-bases-de-datos-sgbd-funciones-componentes-y-tipos)
+  - [3.1 Concepto de SGBD](#31-concepto-de-sgbd)
+  - [3.2 Funciones de un SGBD](#32-funciones-de-un-sgbd)
+  - [3.3 Componentes (elementos) de un SGBD](#33-componentes-elementos-de-un-sgbd)
+    - [3.3.1 Diagrama 1: Visión general de componentes y flujos principales](#331-diagrama-1-visión-general-de-componentes-y-flujos-principales)
+    - [3.3.2 Diagrama 2: Flujo DML (consulta/actualización)](#332-diagrama-2-flujo-dml-consultaactualización)
+    - [3.3.3 Diagrama 3: Flujo DDL (definición de esquema)](#333-diagrama-3-flujo-ddl-definición-de-esquema)
+    - [3.3.4 Diagrama 4: Flujo DCL (gestión de permisos y control)](#334-diagrama-4-flujo-dcl-gestión-de-permisos-y-control)
+    - [3.3.5 Diagrama 5: Flujo de transacciones, concurrencia y recuperación](#335-diagrama-5-flujo-de-transacciones-concurrencia-y-recuperación)
+  - [3.4 Tipos de sistemas gestores de bases de datos](#34-tipos-de-sistemas-gestores-de-bases-de-datos)
+- [4. Esquema-resumen](#4-esquema-resumen)
+- [5. Glosario de términos clave](#5-glosario-de-términos-clave)
+
+
 ## 1. Ficheros
 
 *(CE-a: Se han analizado los distintos sistemas lógicos de almacenamiento y sus funciones)*
@@ -224,6 +251,27 @@ A diferencia de un simple conjunto de ficheros, una base de datos:
 - Permite compartir la información entre varios usuarios y aplicaciones a la vez.
 - Garantiza la **integridad**, **consistencia** y **seguridad** de los datos.
 
+Una base de datos se organiza en **tablas**, **colecciones**, **objetos** (depende del modelo de BD) que se relacionan entre si para que la información esté almacenada de forma ordenada y coherente. 
+
+**Conceptos básicos:**
+
+* **Dato:** Es una información concreta sobre algo y se caracteriza por pertenecer a un tipo. Por ejemplo 2026 es un dato que representa el año actual y su tipo es un número entero.
+* **Tipo de dato:** Indica la naturaleza del dato. Representa que conjunto de valores puede tomar. Son tipos de datos texto, carácter, numérico entero, numérico real, fecha, etc.
+* **Campo:** Es un representación de un conjunto de datos. Por ejemplo el campo para representar la fecha de nacimiento de los alumnos puede llamarse FechaNac.
+* **Registro:** Es un conjunto de datos referentes a un mismo elemento. Por ejemplo, un alumno concreto tendría varios datos como dni, nombre, apellidos, fecha de nacimiento, etc. 
+* **Tabla:** Es un conjunto de registros representado con un nombre que contiene toda la información de una parte del sistema de información. Una `base de datos relacional` se organiza en `tablas`. Por ejemplo, una base de datos de un centro de estudios podría tener las tablas profesores, alumnos, módulos, matriculaciones, etc.
+  
+![ejemplo de una tabla](img/tabla.png)
+
+* **Consulta:** Se trata de una instrucción para hacer peticiones de datos a una base de datos para que se haga una búsqueda en la base de datos de los registros que cumplen con las condiciones expresadas en la instrucción.
+* **Índice:** Es una estructura que almacena los campos clave de una tabla para que sea más rápido encontrar y ordenar los registros de la tabla.
+* **Clave primaria (PK):** Identificador único de cada registro; implícitamente suele tener un índice único. Explicación: la PK garantiza unicidad y el motor crea un índice para localizar filas por su valor rápidamente.
+* **Clave foránea (FK):** Valor que enlaza a la PK de otra tabla; no siempre crea índice automáticamente. Explicación: la FK mantiene la integridad referencial; conviene crear un índice en la columna FK para acelerar joins y comprobaciones de integridad.
+* **Vista:** Es una transformación que se hace de una o más tablas para obtener una tabla que será visible para determinados usuarios. Esta tabla es virtual, no permanece almacenada.
+* **Informe:** Es un documento que se genera como resultado de una consulta a la base de datos y que es fácilmente legible para los usuarios.
+* **Guiones o scripts:** Son conjuntos de instrucciones que realizan operaciones avanzadas de mantenimiento de los datos.
+
+
 ### 2.2 Usos de las bases de datos
 
 *(CE-d: Se ha reconocido la utilidad de un sistema gestor de bases de datos)*
@@ -263,6 +311,67 @@ El **modelo de datos** define cómo se organizan, estructuran y relacionan los d
 | **Centralizada** | Toda la información se almacena en un único lugar físico (un servidor o equipo). | Fácil de administrar, control y seguridad centralizados, menor coste inicial | Punto único de fallo, posibles cuellos de botella con muchos usuarios |
 | **Distribuida** | La información está repartida en varios equipos o ubicaciones físicas distintas, aunque el usuario la percibe como una única base de datos. | Mayor disponibilidad y tolerancia a fallos, mejor rendimiento, escalabilidad | Mayor complejidad de diseño y administración, problemas de sincronización entre nodos |
 
+**Modelo centralizado:** todos los datos y la lógica residen en un único servidor (SGBD). Los usuarios se conectan al mismo punto para consultar y modificar datos; la administración, backups y seguridad son centralizados. 
+
+```mermaid
+graph LR
+  subgraph Clientes["Usuarios / Clientes"]
+    C1[Usuario A]
+    C2[Usuario B]
+    C3[Usuario C]
+  end
+
+  subgraph Red["Red (LAN / Internet)"]
+    Internet((Internet / LAN))
+  end
+
+  Server["Servidor Central (SGBD y Datos)"]
+  DB[(Base de datos centralizada)]
+
+  C1 -->|conexión TCP/SQL| Internet --> Server
+  C2 -->|conexión TCP/SQL| Internet --> Server
+  C3 -->|conexión TCP/SQL| Internet --> Server
+  Server --> DB
+
+  classDef serverStyle fill:#ffe0b2,stroke:#c87500;
+  class Server serverStyle
+```
+
+**Modelo distribuido:** los usuarios se conectan a un punto de entrada (p. ej. balanceador), que reparte las solicitudes entre varios nodos de datos. Los nodos pueden replicarse entre sí o almacenar fragmentos diferentes. 
+* *Ventajas:* alta disponibilidad y escalabilidad.
+* *Inconvenientes:*  mayor complejidad en sincronización y administración.
+
+```mermaid
+graph LR
+  subgraph Clientes2["Usuarios / Clientes"]
+    U1[Usuario A]
+    U2[Usuario B]
+    U3[Usuario C]
+  end
+
+  LB["Punto de acceso / Load Balancer"]
+
+  subgraph Nodos["Nodos de datos (distribuidos)"]
+    DB1[(Nodo DB1)]
+    DB2[(Nodo DB2)]
+    DB3[(Nodo DB3)]
+  end
+
+  U1 -->|conexión| LB
+  U2 -->|conexión| LB
+  U3 -->|conexión| LB
+  LB --> DB1
+  LB --> DB2
+  LB --> DB3
+
+  DB1 <--> DB2:::rep
+  DB2 <--> DB3:::rep
+  DB1 <--> DB3:::rep
+
+  classDef rep stroke-dasharray: 5 5,stroke:#0b6;
+
+```
+
 Dentro de las bases de datos distribuidas se suelen distinguir además:
 
 - **Replicadas:** existen copias idénticas de los datos en distintas ubicaciones (mejora la disponibilidad y el rendimiento de lectura).
@@ -274,6 +383,8 @@ Dentro de las bases de datos distribuidas se suelen distinguir además:
 ## 3. Sistemas gestores de bases de datos (SGBD): funciones, componentes y tipos
 
 ### 3.1 Concepto de SGBD
+
+*(CE-d: Se ha reconocido la utilidad de un sistema gestor de bases de datos)*
 
 Un **Sistema Gestor de Bases de Datos (SGBD)**, en inglés *DBMS (Database Management System)*, es el software que permite **crear, definir, manipular y administrar** una base de datos, actuando como intermediario entre los usuarios/aplicaciones y los datos almacenados físicamente.
 
@@ -486,16 +597,3 @@ Sistemas de almacenamiento de la información
 - **Concurrencia:** acceso simultáneo de varios usuarios a los mismos datos.
 
 ---
-
-## 6. Actividades propuestas (autoevaluación)
-
-
-2. Explica la diferencia entre un sistema de ficheros y una base de datos, indicando al menos tres ventajas de esta última.
-3. Pon un ejemplo real de empresa u organización que use una base de datos **distribuida** y explica por qué le conviene ese modelo frente a una centralizada.
-4. Indica qué modelo de datos utilizarías para: (a) una red social con relaciones de amistad, (b) el catálogo de un supermercado, (c) el registro de sesiones de una web con millones de accesos por segundo.
-5. Enumera los componentes de un SGBD y explica con tus palabras qué función cumple el **diccionario de datos**.
-6. Clasifica los siguientes SGBD según su modelo de datos: MySQL, MongoDB, Neo4j, Redis, Oracle.
-7. ¿Qué significa que un SGBD garantice la **independencia de los datos**? Pon un ejemplo.
-
----
-
