@@ -283,6 +283,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#indice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indice
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#1-ficheros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -611,6 +622,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#indice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indice
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#1-ficheros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -925,6 +947,37 @@
 <p><strong>Módulo:</strong> Gestión de base de datos</p>
 <p><strong>RA1:</strong> Reconoce los elementos de las bases de datos, analizando sus funciones y valorando la utilidad de los sistemas gestores.</p>
 <hr />
+<h2 id="indice">Indice<!-- omit from toc --><a class="headerlink" href="#indice" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="#1-ficheros">1. Ficheros</a></li>
+<li><a href="#11-ficheros-planos-secuenciales">1.1 Ficheros planos (secuenciales)</a></li>
+<li><a href="#12-ficheros-indexados">1.2 Ficheros indexados</a><ul>
+<li><a href="#organización-del-índice-árboles-vs-hashing">Organización del índice: árboles vs. hashing</a></li>
+</ul>
+</li>
+<li><a href="#13-ficheros-de-acceso-directo-aleatorio-o-relativo">1.3 Ficheros de acceso directo (aleatorio o relativo)</a></li>
+<li><a href="#14-comparativa-de-tipos-de-ficheros">1.4 Comparativa de tipos de ficheros</a></li>
+<li><a href="#15-limitaciones-de-los-sistemas-de-ficheros-frente-a-las-bases-de-datos">1.5 Limitaciones de los sistemas de ficheros frente a las bases de datos</a></li>
+<li><a href="#2-bases-de-datos-conceptos-usos-y-tipos">2. Bases de datos: conceptos, usos y tipos</a></li>
+<li><a href="#21-concepto-de-base-de-datos">2.1 Concepto de base de datos</a></li>
+<li><a href="#22-usos-de-las-bases-de-datos">2.2 Usos de las bases de datos</a></li>
+<li><a href="#23-tipos-de-bases-de-datos-según-el-modelo-de-datos">2.3 Tipos de bases de datos según el modelo de datos</a></li>
+<li><a href="#24-tipos-de-bases-de-datos-según-la-ubicación-de-la-información">2.4 Tipos de bases de datos según la ubicación de la información</a></li>
+<li><a href="#3-sistemas-gestores-de-bases-de-datos-sgbd-funciones-componentes-y-tipos">3. Sistemas gestores de bases de datos (SGBD): funciones, componentes y tipos</a></li>
+<li><a href="#31-concepto-de-sgbd">3.1 Concepto de SGBD</a></li>
+<li><a href="#32-funciones-de-un-sgbd">3.2 Funciones de un SGBD</a></li>
+<li><a href="#33-componentes-elementos-de-un-sgbd">3.3 Componentes (elementos) de un SGBD</a><ul>
+<li><a href="#331-diagrama-1-visión-general-de-componentes-y-flujos-principales">3.3.1 Diagrama 1: Visión general de componentes y flujos principales</a></li>
+<li><a href="#332-diagrama-2-flujo-dml-consultaactualización">3.3.2 Diagrama 2: Flujo DML (consulta/actualización)</a></li>
+<li><a href="#333-diagrama-3-flujo-ddl-definición-de-esquema">3.3.3 Diagrama 3: Flujo DDL (definición de esquema)</a></li>
+<li><a href="#334-diagrama-4-flujo-dcl-gestión-de-permisos-y-control">3.3.4 Diagrama 4: Flujo DCL (gestión de permisos y control)</a></li>
+<li><a href="#335-diagrama-5-flujo-de-transacciones-concurrencia-y-recuperación">3.3.5 Diagrama 5: Flujo de transacciones, concurrencia y recuperación</a></li>
+</ul>
+</li>
+<li><a href="#34-tipos-de-sistemas-gestores-de-bases-de-datos">3.4 Tipos de sistemas gestores de bases de datos</a></li>
+<li><a href="#4-esquema-resumen">4. Esquema-resumen</a></li>
+<li><a href="#5-glosario-de-términos-clave">5. Glosario de términos clave</a></li>
+</ul>
 <h2 id="1-ficheros">1. Ficheros<a class="headerlink" href="#1-ficheros" title="Permanent link">&para;</a></h2>
 <p><em>(CE-a: Se han analizado los distintos sistemas lógicos de almacenamiento y sus funciones)</em></p>
 <ul>
@@ -1394,14 +1447,30 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
   TRANS --&gt; CONC["Gestor de&lt;br/&gt;concurrencia"]
   TRANS --&gt; BACK["Backup /&lt;br/&gt;Recuperación"]
   MOTOR --&gt; UI</code></pre>
-- El usuario o la aplicación envía solicitudes a través de la interfaz (UI / API).
-- Desde la interfaz se lanzan tres tipos de acciones: operaciones sobre los datos (DML), definiciones de esquema (DDL) y órdenes de control/permiso (DCL).
-- Las peticiones DML pasan por el optimizador de consultas y llegan al motor de base de datos para su ejecución física.
-- Las sentencias DDL se envían al motor para aplicar cambios en el esquema (creación/alteración/eliminación de objetos).
-- Las órdenes DCL se dirigen al módulo de seguridad para comprobar/gestionar permisos.
-- El motor accede al diccionario de datos / catálogo para leer metadatos y estadísticas, y coordina las operaciones mediante el gestor de transacciones.
-- El gestor de transacciones actúa sobre el control de concurrencia y los mecanismos de backup/recuperación.
-- Finalmente el motor devuelve resultados y estado a la interfaz para que lleguen al usuario.</p>
+- El usuario o la aplicación envía solicitudes a través de la interfaz (UI / API).</p>
+<ul>
+<li>
+<p>Desde la interfaz se lanzan tres tipos de acciones: operaciones sobre los datos (DML), definiciones de esquema (DDL) y órdenes de control/permiso (DCL).</p>
+</li>
+<li>
+<p>Las peticiones DML pasan por el optimizador de consultas y llegan al motor de base de datos para su ejecución física.</p>
+</li>
+<li>
+<p>Las sentencias DDL se envían al motor para aplicar cambios en el esquema (creación/alteración/eliminación de objetos).</p>
+</li>
+<li>
+<p>Las órdenes DCL se dirigen al módulo de seguridad para comprobar/gestionar permisos.</p>
+</li>
+<li>
+<p>El motor accede al diccionario de datos / catálogo para leer metadatos y estadísticas, y coordina las operaciones mediante el gestor de transacciones.</p>
+</li>
+<li>
+<p>El gestor de transacciones actúa sobre el control de concurrencia y los mecanismos de backup/recuperación.</p>
+</li>
+<li>
+<p>Finalmente el motor devuelve resultados y estado a la interfaz para que lleguen al usuario.</p>
+</li>
+</ul>
 <h4 id="332-diagrama-2-flujo-dml-consultaactualizacion">3.3.2 Diagrama 2: Flujo DML (consulta/actualización)<a class="headerlink" href="#332-diagrama-2-flujo-dml-consultaactualizacion" title="Permanent link">&para;</a></h4>
 <p><pre class="mermaid"><code>graph LR
   U["Usuarios&lt;br/&gt;/ Aplicaciones"] --&gt; UI["Interfaz / API"]
@@ -1415,12 +1484,24 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
   LOG --&gt; BACK["Backup /&lt;br/&gt;Recuperación"]
   MOTOR --&gt; UI
   UI --&gt; U</code></pre>
-- El usuario envía una consulta o modificación (SELECT/INSERT/UPDATE/DELETE) a través de la interfaz.
-- La petición DML llega al optimizador de consultas, que consulta el catálogo (estadísticas, índices y metadatos) para elegir un plan eficiente.
-- El optimizador entrega el plan al motor de base de datos, que ejecuta las operaciones físicas sobre los datos.
-- Durante la ejecución, el motor interactúa con el gestor de transacciones para asegurar propiedades ACID: registra las operaciones (WAL / logs) y coordina bloqueos con el control de concurrencia.
-- Los logs pueden usarse posteriormente por el subsistema de backup/recuperación para restaurar el estado en caso de fallo.
-- El motor devuelve el resultado a la interfaz y de ahí al usuario.</p>
+- El usuario envía una consulta o modificación (SELECT/INSERT/UPDATE/DELETE) a través de la interfaz.</p>
+<ul>
+<li>
+<p>La petición DML llega al optimizador de consultas, que consulta el catálogo (estadísticas, índices y metadatos) para elegir un plan eficiente.</p>
+</li>
+<li>
+<p>El optimizador entrega el plan al motor de base de datos, que ejecuta las operaciones físicas sobre los datos.</p>
+</li>
+<li>
+<p>Durante la ejecución, el motor interactúa con el gestor de transacciones para asegurar propiedades ACID: registra las operaciones (WAL / logs) y coordina bloqueos con el control de concurrencia.</p>
+</li>
+<li>
+<p>Los logs pueden usarse posteriormente por el subsistema de backup/recuperación para restaurar el estado en caso de fallo.</p>
+</li>
+<li>
+<p>El motor devuelve el resultado a la interfaz y de ahí al usuario.</p>
+</li>
+</ul>
 <h4 id="333-diagrama-3-flujo-ddl-definicion-de-esquema">3.3.3 Diagrama 3: Flujo DDL (definición de esquema)<a class="headerlink" href="#333-diagrama-3-flujo-ddl-definicion-de-esquema" title="Permanent link">&para;</a></h4>
 <p><pre class="mermaid"><code>graph LR
   U["Administrador /&lt;br/&gt;Aplicación"] --&gt; UI["Interfaz / API"]
@@ -1431,11 +1512,21 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
   MOTOR --&gt; CAT
   MOTOR --&gt; UI
   UI --&gt; U</code></pre>
-- Un administrador o aplicación envía una sentencia DDL (CREATE / ALTER / DROP) mediante la interfaz.
-- Antes de aplicar cambios críticos, el DDL puede pasar por el módulo de seguridad para verificar permisos.
-- El motor de base de datos procesa la sentencia DDL y actualiza la estructura física y lógica de la base de datos.
-- El motor actualiza el catálogo/diccionario de datos con la nueva información del esquema (tablas, columnas, restricciones, etc.).
-- El motor comunica el resultado de la operación a la interfaz y por tanto al administrador.</p>
+- Un administrador o aplicación envía una sentencia DDL (CREATE / ALTER / DROP) mediante la interfaz.</p>
+<ul>
+<li>
+<p>Antes de aplicar cambios críticos, el DDL puede pasar por el módulo de seguridad para verificar permisos.</p>
+</li>
+<li>
+<p>El motor de base de datos procesa la sentencia DDL y actualiza la estructura física y lógica de la base de datos.</p>
+</li>
+<li>
+<p>El motor actualiza el catálogo/diccionario de datos con la nueva información del esquema (tablas, columnas, restricciones, etc.).</p>
+</li>
+<li>
+<p>El motor comunica el resultado de la operación a la interfaz y por tanto al administrador.</p>
+</li>
+</ul>
 <h4 id="334-diagrama-4-flujo-dcl-gestion-de-permisos-y-control">3.3.4 Diagrama 4: Flujo DCL (gestión de permisos y control)<a class="headerlink" href="#334-diagrama-4-flujo-dcl-gestion-de-permisos-y-control" title="Permanent link">&para;</a></h4>
 <p><pre class="mermaid"><code>graph LR
   U["Administrador"] --&gt; UI["Interfaz / API"]
@@ -1445,11 +1536,21 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
   SEC --&gt; MOTOR["Motor&lt;br/&gt;de base de datos&lt;br/&gt;(aplica restricciones)"]
   MOTOR --&gt; UI
   UI --&gt; U</code></pre>
-- Un administrador emite comandos DCL (por ejemplo GRANT o REVOKE) desde la interfaz.
-- El DCL se gestiona en el módulo de seguridad/autorización que administra usuarios, roles y privilegios.
-- El módulo de seguridad consulta y actualiza el catálogo donde se almacenan los metadatos de usuarios/roles/permisos.
-- Eventualmente el módulo de seguridad informa al motor para que aplique o haga cumplir las restricciones sobre operaciones futuras.
-- El resultado del cambio (éxito / fallo) se comunica de vuelta a la interfaz y al administrador.</p>
+- Un administrador emite comandos DCL (por ejemplo GRANT o REVOKE) desde la interfaz.</p>
+<ul>
+<li>
+<p>El DCL se gestiona en el módulo de seguridad/autorización que administra usuarios, roles y privilegios.</p>
+</li>
+<li>
+<p>El módulo de seguridad consulta y actualiza el catálogo donde se almacenan los metadatos de usuarios/roles/permisos.</p>
+</li>
+<li>
+<p>Eventualmente el módulo de seguridad informa al motor para que aplique o haga cumplir las restricciones sobre operaciones futuras.</p>
+</li>
+<li>
+<p>El resultado del cambio (éxito / fallo) se comunica de vuelta a la interfaz y al administrador.</p>
+</li>
+</ul>
 <h4 id="335-diagrama-5-flujo-de-transacciones-concurrencia-y-recuperacion">3.3.5 Diagrama 5: Flujo de transacciones, concurrencia y recuperación<a class="headerlink" href="#335-diagrama-5-flujo-de-transacciones-concurrencia-y-recuperacion" title="Permanent link">&para;</a></h4>
 <p><pre class="mermaid"><code>graph LR
   U["Usuario / App"] --&gt; UI["Interfaz / API"]
@@ -1464,13 +1565,27 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
   BACK --&gt; MOTOR
   MOTOR --&gt; UI
   UI --&gt; U</code></pre>
-- El usuario inicia una transacción (conjunto de operaciones DML) a través de la interfaz.
-- La transacción es procesada por el motor de BD y coordinada por el gestor de transacciones.
-- El gestor de transacciones usa el control de concurrencia para gestionar bloqueos y aislamientos entre transacciones concurrentes, evitando inconsistencias y conflictos.
-- Simultáneamente, el gestor de transacciones escribe registros en el log (WAL / transaction log) para garantizar durabilidad.
-- Los registros sirven para que el módulo de backup/recuperación pueda restaurar la base de datos hasta un estado consistente tras un fallo.
-- Durante la ejecución la transacción puede actualizar metadatos y estadísticas en el catálogo.
-- Cuando la transacción termina (commit o rollback), el motor devuelve el resultado a la interfaz y al usuario.</p>
+- El usuario inicia una transacción (conjunto de operaciones DML) a través de la interfaz.</p>
+<ul>
+<li>
+<p>La transacción es procesada por el motor de BD y coordinada por el gestor de transacciones.</p>
+</li>
+<li>
+<p>El gestor de transacciones usa el control de concurrencia para gestionar bloqueos y aislamientos entre transacciones concurrentes, evitando inconsistencias y conflictos.</p>
+</li>
+<li>
+<p>Simultáneamente, el gestor de transacciones escribe registros en el log (WAL / transaction log) para garantizar durabilidad.</p>
+</li>
+<li>
+<p>Los registros sirven para que el módulo de backup/recuperación pueda restaurar la base de datos hasta un estado consistente tras un fallo.</p>
+</li>
+<li>
+<p>Durante la ejecución la transacción puede actualizar metadatos y estadísticas en el catálogo.</p>
+</li>
+<li>
+<p>Cuando la transacción termina (commit o rollback), el motor devuelve el resultado a la interfaz y al usuario.</p>
+</li>
+</ul>
 <h3 id="34-tipos-de-sistemas-gestores-de-bases-de-datos">3.4 Tipos de sistemas gestores de bases de datos<a class="headerlink" href="#34-tipos-de-sistemas-gestores-de-bases-de-datos" title="Permanent link">&para;</a></h3>
 <p><em>(CE-f: Se han clasificado los sistemas gestores de bases de datos)</em></p>
 <p>Los SGBD se pueden clasificar según varios criterios:</p>
