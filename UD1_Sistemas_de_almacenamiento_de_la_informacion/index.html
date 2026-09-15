@@ -576,17 +576,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#6-actividades-propuestas-autoevaluacion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. Actividades propuestas (autoevaluación)
-      
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -915,17 +904,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#6-actividades-propuestas-autoevaluacion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. Actividades propuestas (autoevaluación)
-      
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -1165,6 +1143,25 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
 <li>Permite compartir la información entre varios usuarios y aplicaciones a la vez.</li>
 <li>Garantiza la <strong>integridad</strong>, <strong>consistencia</strong> y <strong>seguridad</strong> de los datos.</li>
 </ul>
+<p>Una base de datos se organiza en <strong>tablas</strong>, <strong>colecciones</strong>, <strong>objetos</strong> (depende del modelo de BD) que se relacionan entre si para que la información esté almacenada de forma ordenada y coherente. </p>
+<p><strong>Conceptos básicos:</strong></p>
+<ul>
+<li><strong>Dato:</strong> Es una información concreta sobre algo y se caracteriza por pertenecer a un tipo. Por ejemplo 2026 es un dato que representa el año actual y su tipo es un número entero.</li>
+<li><strong>Tipo de dato:</strong> Indica la naturaleza del dato. Representa que conjunto de valores puede tomar. Son tipos de datos texto, carácter, numérico entero, numérico real, fecha, etc.</li>
+<li><strong>Campo:</strong> Es un representación de un conjunto de datos. Por ejemplo el campo para representar la fecha de nacimiento de los alumnos puede llamarse FechaNac.</li>
+<li><strong>Registro:</strong> Es un conjunto de datos referentes a un mismo elemento. Por ejemplo, un alumno concreto tendría varios datos como dni, nombre, apellidos, fecha de nacimiento, etc. </li>
+<li><strong>Tabla:</strong> Es un conjunto de registros representado con un nombre que contiene toda la información de una parte del sistema de información. Una <code>base de datos relacional</code> se organiza en <code>tablas</code>. Por ejemplo, una base de datos de un centro de estudios podría tener las tablas profesores, alumnos, módulos, matriculaciones, etc.</li>
+</ul>
+<p><img alt="ejemplo de una tabla" src="../img/tabla.png" /></p>
+<ul>
+<li><strong>Consulta:</strong> Se trata de una instrucción para hacer peticiones de datos a una base de datos para que se haga una búsqueda en la base de datos de los registros que cumplen con las condiciones expresadas en la instrucción.</li>
+<li><strong>Índice:</strong> Es una estructura que almacena los campos clave de una tabla para que sea más rápido encontrar y ordenar los registros de la tabla.</li>
+<li><strong>Clave primaria (PK):</strong> Identificador único de cada registro; implícitamente suele tener un índice único. Explicación: la PK garantiza unicidad y el motor crea un índice para localizar filas por su valor rápidamente.</li>
+<li><strong>Clave foránea (FK):</strong> Valor que enlaza a la PK de otra tabla; no siempre crea índice automáticamente. Explicación: la FK mantiene la integridad referencial; conviene crear un índice en la columna FK para acelerar joins y comprobaciones de integridad.</li>
+<li><strong>Vista:</strong> Es una transformación que se hace de una o más tablas para obtener una tabla que será visible para determinados usuarios. Esta tabla es virtual, no permanece almacenada.</li>
+<li><strong>Informe:</strong> Es un documento que se genera como resultado de una consulta a la base de datos y que es fácilmente legible para los usuarios.</li>
+<li><strong>Guiones o scripts:</strong> Son conjuntos de instrucciones que realizan operaciones avanzadas de mantenimiento de los datos.</li>
+</ul>
 <h3 id="22-usos-de-las-bases-de-datos">2.2 Usos de las bases de datos<a class="headerlink" href="#22-usos-de-las-bases-de-datos" title="Permanent link">&para;</a></h3>
 <p><em>(CE-d: Se ha reconocido la utilidad de un sistema gestor de bases de datos)</em></p>
 <p>Las bases de datos se utilizan prácticamente en cualquier ámbito donde haya que gestionar información de forma organizada:</p>
@@ -1249,6 +1246,59 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
 </tr>
 </tbody>
 </table>
+<p><strong>Modelo centralizado:</strong> todos los datos y la lógica residen en un único servidor (SGBD). Los usuarios se conectan al mismo punto para consultar y modificar datos; la administración, backups y seguridad son centralizados. </p>
+<pre class="mermaid"><code>graph LR
+  subgraph Clientes["Usuarios / Clientes"]
+    C1[Usuario A]
+    C2[Usuario B]
+    C3[Usuario C]
+  end
+
+  subgraph Red["Red (LAN / Internet)"]
+    Internet((Internet / LAN))
+  end
+
+  Server["Servidor Central (SGBD y Datos)"]
+  DB[(Base de datos centralizada)]
+
+  C1 --&gt;|conexión TCP/SQL| Internet --&gt; Server
+  C2 --&gt;|conexión TCP/SQL| Internet --&gt; Server
+  C3 --&gt;|conexión TCP/SQL| Internet --&gt; Server
+  Server --&gt; DB
+
+  classDef serverStyle fill:#ffe0b2,stroke:#c87500;
+  class Server serverStyle</code></pre>
+<p><strong>Modelo distribuido:</strong> los usuarios se conectan a un punto de entrada (p. ej. balanceador), que reparte las solicitudes entre varios nodos de datos. Los nodos pueden replicarse entre sí o almacenar fragmentos diferentes. 
+* <em>Ventajas:</em> alta disponibilidad y escalabilidad.
+* <em>Inconvenientes:</em>  mayor complejidad en sincronización y administración.</p>
+<pre class="mermaid"><code>graph LR
+  subgraph Clientes2["Usuarios / Clientes"]
+    U1[Usuario A]
+    U2[Usuario B]
+    U3[Usuario C]
+  end
+
+  LB["Punto de acceso / Load Balancer"]
+
+  subgraph Nodos["Nodos de datos (distribuidos)"]
+    DB1[(Nodo DB1)]
+    DB2[(Nodo DB2)]
+    DB3[(Nodo DB3)]
+  end
+
+  U1 --&gt;|conexión| LB
+  U2 --&gt;|conexión| LB
+  U3 --&gt;|conexión| LB
+  LB --&gt; DB1
+  LB --&gt; DB2
+  LB --&gt; DB3
+
+  DB1 &lt;--&gt; DB2:::rep
+  DB2 &lt;--&gt; DB3:::rep
+  DB1 &lt;--&gt; DB3:::rep
+
+  classDef rep stroke-dasharray: 5 5,stroke:#0b6;
+</code></pre>
 <p>Dentro de las bases de datos distribuidas se suelen distinguir además:</p>
 <ul>
 <li><strong>Replicadas:</strong> existen copias idénticas de los datos en distintas ubicaciones (mejora la disponibilidad y el rendimiento de lectura).</li>
@@ -1258,6 +1308,7 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
 <hr />
 <h2 id="3-sistemas-gestores-de-bases-de-datos-sgbd-funciones-componentes-y-tipos">3. Sistemas gestores de bases de datos (SGBD): funciones, componentes y tipos<a class="headerlink" href="#3-sistemas-gestores-de-bases-de-datos-sgbd-funciones-componentes-y-tipos" title="Permanent link">&para;</a></h2>
 <h3 id="31-concepto-de-sgbd">3.1 Concepto de SGBD<a class="headerlink" href="#31-concepto-de-sgbd" title="Permanent link">&para;</a></h3>
+<p><em>(CE-d: Se ha reconocido la utilidad de un sistema gestor de bases de datos)</em></p>
 <p>Un <strong>Sistema Gestor de Bases de Datos (SGBD)</strong>, en inglés <em>DBMS (Database Management System)</em>, es el software que permite <strong>crear, definir, manipular y administrar</strong> una base de datos, actuando como intermediario entre los usuarios/aplicaciones y los datos almacenados físicamente.</p>
 <h3 id="32-funciones-de-un-sgbd">3.2 Funciones de un SGBD<a class="headerlink" href="#32-funciones-de-un-sgbd" title="Permanent link">&para;</a></h3>
 <p><em>(CE-e: Se ha descrito la función de cada uno de los elementos de un sistema gestor de bases de datos)</em></p>
@@ -1477,16 +1528,6 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
 <li><strong>Redundancia:</strong> repetición innecesaria de datos.</li>
 <li><strong>Concurrencia:</strong> acceso simultáneo de varios usuarios a los mismos datos.</li>
 </ul>
-<hr />
-<h2 id="6-actividades-propuestas-autoevaluacion">6. Actividades propuestas (autoevaluación)<a class="headerlink" href="#6-actividades-propuestas-autoevaluacion" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Explica la diferencia entre un sistema de ficheros y una base de datos, indicando al menos tres ventajas de esta última.</li>
-<li>Pon un ejemplo real de empresa u organización que use una base de datos <strong>distribuida</strong> y explica por qué le conviene ese modelo frente a una centralizada.</li>
-<li>Indica qué modelo de datos utilizarías para: (a) una red social con relaciones de amistad, (b) el catálogo de un supermercado, (c) el registro de sesiones de una web con millones de accesos por segundo.</li>
-<li>Enumera los componentes de un SGBD y explica con tus palabras qué función cumple el <strong>diccionario de datos</strong>.</li>
-<li>Clasifica los siguientes SGBD según su modelo de datos: MySQL, MongoDB, Neo4j, Redis, Oracle.</li>
-<li>¿Qué significa que un SGBD garantice la <strong>independencia de los datos</strong>? Pon un ejemplo.</li>
-</ol>
 <hr />
 
 
