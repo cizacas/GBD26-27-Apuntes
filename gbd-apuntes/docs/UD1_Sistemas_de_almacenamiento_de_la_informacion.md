@@ -7,33 +7,6 @@
 
 ---
 
-## Indice<!-- omit from toc -->
-- [1. Ficheros](#1-ficheros)
-  - [1.1 Ficheros planos (secuenciales)](#11-ficheros-planos-secuenciales)
-  - [1.2 Ficheros indexados](#12-ficheros-indexados)
-    - [Organización del índice: árboles vs. hashing](#organización-del-índice-árboles-vs-hashing)
-  - [1.3 Ficheros de acceso directo (aleatorio o relativo)](#13-ficheros-de-acceso-directo-aleatorio-o-relativo)
-  - [1.4 Comparativa de tipos de ficheros](#14-comparativa-de-tipos-de-ficheros)
-  - [1.5 Limitaciones de los sistemas de ficheros frente a las bases de datos](#15-limitaciones-de-los-sistemas-de-ficheros-frente-a-las-bases-de-datos)
-- [2. Bases de datos: conceptos, usos y tipos](#2-bases-de-datos-conceptos-usos-y-tipos)
-  - [2.1 Concepto de base de datos](#21-concepto-de-base-de-datos)
-  - [2.2 Usos de las bases de datos](#22-usos-de-las-bases-de-datos)
-  - [2.3 Tipos de bases de datos según el modelo de datos](#23-tipos-de-bases-de-datos-según-el-modelo-de-datos)
-  - [2.4 Tipos de bases de datos según la ubicación de la información](#24-tipos-de-bases-de-datos-según-la-ubicación-de-la-información)
-- [3. Sistemas gestores de bases de datos (SGBD): funciones, componentes y tipos](#3-sistemas-gestores-de-bases-de-datos-sgbd-funciones-componentes-y-tipos)
-  - [3.1 Concepto de SGBD](#31-concepto-de-sgbd)
-  - [3.2 Funciones de un SGBD](#32-funciones-de-un-sgbd)
-  - [3.3 Componentes (elementos) de un SGBD](#33-componentes-elementos-de-un-sgbd)
-    - [3.3.1 Diagrama 1: Visión general de componentes y flujos principales](#331-diagrama-1-visión-general-de-componentes-y-flujos-principales)
-    - [3.3.2 Diagrama 2: Flujo DML (consulta/actualización)](#332-diagrama-2-flujo-dml-consultaactualización)
-    - [3.3.3 Diagrama 3: Flujo DDL (definición de esquema)](#333-diagrama-3-flujo-ddl-definición-de-esquema)
-    - [3.3.4 Diagrama 4: Flujo DCL (gestión de permisos y control)](#334-diagrama-4-flujo-dcl-gestión-de-permisos-y-control)
-    - [3.3.5 Diagrama 5: Flujo de transacciones, concurrencia y recuperación](#335-diagrama-5-flujo-de-transacciones-concurrencia-y-recuperación)
-  - [3.4 Tipos de sistemas gestores de bases de datos](#34-tipos-de-sistemas-gestores-de-bases-de-datos)
-- [4. Esquema-resumen](#4-esquema-resumen)
-- [5. Glosario de términos clave](#5-glosario-de-términos-clave)
-
-
 ## 1. Ficheros
 
 *(CE-a: Se han analizado los distintos sistemas lógicos de almacenamiento y sus funciones)*
@@ -439,12 +412,19 @@ graph LR
   MOTOR --> UI
 ```
 - El usuario o la aplicación envía solicitudes a través de la interfaz (UI / API).
+  
 - Desde la interfaz se lanzan tres tipos de acciones: operaciones sobre los datos (DML), definiciones de esquema (DDL) y órdenes de control/permiso (DCL).
+  
 - Las peticiones DML pasan por el optimizador de consultas y llegan al motor de base de datos para su ejecución física.
+  
 - Las sentencias DDL se envían al motor para aplicar cambios en el esquema (creación/alteración/eliminación de objetos).
+  
 - Las órdenes DCL se dirigen al módulo de seguridad para comprobar/gestionar permisos.
+  
 - El motor accede al diccionario de datos / catálogo para leer metadatos y estadísticas, y coordina las operaciones mediante el gestor de transacciones.
+  
 - El gestor de transacciones actúa sobre el control de concurrencia y los mecanismos de backup/recuperación.
+  
 - Finalmente el motor devuelve resultados y estado a la interfaz para que lleguen al usuario.
 
 #### 3.3.2 Diagrama 2: Flujo DML (consulta/actualización)
@@ -464,10 +444,15 @@ graph LR
   UI --> U
 ```
 - El usuario envía una consulta o modificación (SELECT/INSERT/UPDATE/DELETE) a través de la interfaz.
+  
 - La petición DML llega al optimizador de consultas, que consulta el catálogo (estadísticas, índices y metadatos) para elegir un plan eficiente.
+  
 - El optimizador entrega el plan al motor de base de datos, que ejecuta las operaciones físicas sobre los datos.
+
 - Durante la ejecución, el motor interactúa con el gestor de transacciones para asegurar propiedades ACID: registra las operaciones (WAL / logs) y coordina bloqueos con el control de concurrencia.
+
 - Los logs pueden usarse posteriormente por el subsistema de backup/recuperación para restaurar el estado en caso de fallo.
+
 - El motor devuelve el resultado a la interfaz y de ahí al usuario.
   
 #### 3.3.3 Diagrama 3: Flujo DDL (definición de esquema)
@@ -484,9 +469,13 @@ graph LR
   UI --> U
 ```
 - Un administrador o aplicación envía una sentencia DDL (CREATE / ALTER / DROP) mediante la interfaz.
+
 - Antes de aplicar cambios críticos, el DDL puede pasar por el módulo de seguridad para verificar permisos.
+
 - El motor de base de datos procesa la sentencia DDL y actualiza la estructura física y lógica de la base de datos.
+
 - El motor actualiza el catálogo/diccionario de datos con la nueva información del esquema (tablas, columnas, restricciones, etc.).
+
 - El motor comunica el resultado de la operación a la interfaz y por tanto al administrador.
   
 #### 3.3.4 Diagrama 4: Flujo DCL (gestión de permisos y control)
@@ -502,9 +491,13 @@ graph LR
   UI --> U
 ```
 - Un administrador emite comandos DCL (por ejemplo GRANT o REVOKE) desde la interfaz.
+
 - El DCL se gestiona en el módulo de seguridad/autorización que administra usuarios, roles y privilegios.
+
 - El módulo de seguridad consulta y actualiza el catálogo donde se almacenan los metadatos de usuarios/roles/permisos.
+
 - Eventualmente el módulo de seguridad informa al motor para que aplique o haga cumplir las restricciones sobre operaciones futuras.
+
 - El resultado del cambio (éxito / fallo) se comunica de vuelta a la interfaz y al administrador.
 
 #### 3.3.5 Diagrama 5: Flujo de transacciones, concurrencia y recuperación
@@ -525,11 +518,17 @@ graph LR
   UI --> U
 ```
 - El usuario inicia una transacción (conjunto de operaciones DML) a través de la interfaz.
+
 - La transacción es procesada por el motor de BD y coordinada por el gestor de transacciones.
+
 - El gestor de transacciones usa el control de concurrencia para gestionar bloqueos y aislamientos entre transacciones concurrentes, evitando inconsistencias y conflictos.
+
 - Simultáneamente, el gestor de transacciones escribe registros en el log (WAL / transaction log) para garantizar durabilidad.
+
 - Los registros sirven para que el módulo de backup/recuperación pueda restaurar la base de datos hasta un estado consistente tras un fallo.
+
 - Durante la ejecución la transacción puede actualizar metadatos y estadísticas en el catálogo.
+
 - Cuando la transacción termina (commit o rollback), el motor devuelve el resultado a la interfaz y al usuario.
 
 ### 3.4 Tipos de sistemas gestores de bases de datos
