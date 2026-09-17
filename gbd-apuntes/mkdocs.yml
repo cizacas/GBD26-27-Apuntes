@@ -2,6 +2,9 @@ site_name: Gestión de Bases de Datos
 site_url: https://cizacas.github.io/GBD26-27-Apuntes/
 theme:
   name: material
+  palette:
+    primary: 'green'
+    accent: 'lime'
   language: es
   
 markdown_extensions:
