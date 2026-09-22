@@ -1052,13 +1052,17 @@
 <p>Operaciones típicas: 1 cálculo de hash + k comparaciones en la lista del slot (k es el número de elementos en el slot). En este ejemplo k=2, así que 1 cálculo + hasta 2 comparaciones.</p>
 </li>
 </ul>
-<p><em>Consecuencias:</em>
-Hashing ofrece localizaciones rápidas en promedio, pero el rendimiento depende de la función hash y de la carga por slot (factor de carga). El encadenamiento es sencillo y flexible.</p>
-<p><em>En resumen: elegir árbol o hashing depende de los requisitos:</em>
-  * búsquedas por rango y ordenadas → B-tree/B+tree 
-  * búsquedas puntuales por clave con alta velocidad → hashing.</p>
+<p><em>Consecuencias:</em></p>
+<p>Hashing ofrece localizaciones rápidas en promedio, pero el rendimiento depende de la función hash y de la carga por slot (factor de carga). El encadenamiento es sencillo y flexible.</p>
+<p><em>En resumen: elegir árbol o hashing depende de los requisitos:</em></p>
 <ul>
-<li><strong>Formato (texto o binario):</strong> los ficheros indexados suelen implementarse sobre formatos binarios que permiten direccionar con precisión offsets y manejar estructuras de índice (B-tree, B+tree) de forma eficiente. No obstante, también pueden existir soluciones híbridas: un fichero de datos en texto (CSV) con un índice externo binario que guarda offsets.</li>
+<li>búsquedas por rango y ordenadas → B-tree/B+tree </li>
+<li>
+<p>búsquedas puntuales por clave con alta velocidad → hashing.</p>
+</li>
+<li>
+<p><strong>Formato (texto o binario):</strong> los ficheros indexados suelen implementarse sobre formatos binarios que permiten direccionar con precisión offsets y manejar estructuras de índice (B-tree, B+tree) de forma eficiente. No obstante, también pueden existir soluciones híbridas: un fichero de datos en texto (CSV) con un índice externo binario que guarda offsets.</p>
+</li>
 </ul>
 <p><strong>Ejemplo práctico (indexado):</strong></p>
 <p>Supongamos un fichero de datos <code>clientes.dat</code> donde cada registro ocupa una posición física (por ejemplo, número de registro) y existe un fichero índice <code>clientes.idx</code> que asocia la clave (ID) con esa posición:</p>
