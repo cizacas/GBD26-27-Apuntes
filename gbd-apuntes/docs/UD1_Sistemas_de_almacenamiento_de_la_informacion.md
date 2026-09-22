@@ -6,6 +6,33 @@
 **RA1:** Reconoce los elementos de las bases de datos, analizando sus funciones y valorando la utilidad de los sistemas gestores.
 
 ---
+## Indice <!-- omit from toc -->
+- [1. Ficheros](#1-ficheros)
+  - [1.1 Ficheros planos (secuenciales)](#11-ficheros-planos-secuenciales)
+  - [1.2 Ficheros indexados](#12-ficheros-indexados)
+    - [Organización del índice: árboles vs. hashing](#organización-del-índice-árboles-vs-hashing)
+  - [1.3 Ficheros de acceso directo (aleatorio o relativo)](#13-ficheros-de-acceso-directo-aleatorio-o-relativo)
+  - [1.4 Comparativa de tipos de ficheros](#14-comparativa-de-tipos-de-ficheros)
+  - [1.5 Limitaciones de los sistemas de ficheros frente a las bases de datos](#15-limitaciones-de-los-sistemas-de-ficheros-frente-a-las-bases-de-datos)
+- [2. Bases de datos: conceptos, usos y tipos](#2-bases-de-datos-conceptos-usos-y-tipos)
+  - [2.1 Concepto de base de datos](#21-concepto-de-base-de-datos)
+  - [2.2 Usos de las bases de datos](#22-usos-de-las-bases-de-datos)
+  - [2.3 Tipos de bases de datos según el modelo de datos](#23-tipos-de-bases-de-datos-según-el-modelo-de-datos)
+  - [2.4 Tipos de bases de datos según la ubicación de la información](#24-tipos-de-bases-de-datos-según-la-ubicación-de-la-información)
+- [3. Sistemas gestores de bases de datos (SGBD): funciones, componentes y tipos](#3-sistemas-gestores-de-bases-de-datos-sgbd-funciones-componentes-y-tipos)
+  - [3.1 Concepto de SGBD](#31-concepto-de-sgbd)
+  - [3.2 Funciones de un SGBD](#32-funciones-de-un-sgbd)
+  - [3.3 Componentes (elementos) de un SGBD](#33-componentes-elementos-de-un-sgbd)
+    - [3.3.1 Diagrama 1: Visión general de componentes y flujos principales](#331-diagrama-1-visión-general-de-componentes-y-flujos-principales)
+    - [3.3.2 Diagrama 2: Flujo DML (consulta/actualización)](#332-diagrama-2-flujo-dml-consultaactualización)
+    - [3.3.3 Diagrama 3: Flujo DDL (definición de esquema)](#333-diagrama-3-flujo-ddl-definición-de-esquema)
+    - [3.3.4 Diagrama 4: Flujo DCL (gestión de permisos y control)](#334-diagrama-4-flujo-dcl-gestión-de-permisos-y-control)
+    - [3.3.5 Diagrama 5: Flujo de transacciones, concurrencia y recuperación](#335-diagrama-5-flujo-de-transacciones-concurrencia-y-recuperación)
+  - [3.4 Tipos de sistemas gestores de bases de datos](#34-tipos-de-sistemas-gestores-de-bases-de-datos)
+- [4. Esquema-resumen](#4-esquema-resumen)
+- [5. Glosario de términos clave](#5-glosario-de-términos-clave)
+
+
 
 ## 1. Ficheros
 
@@ -16,7 +43,9 @@
 * Esta información almacenada debe estar adecuadamente organizada. 
 * Para poder organizar la información se utilizan `los ficheros o archivos`
 
-Antes de la aparición de las bases de datos, la información se almacenaba organizada en **ficheros** (archivos), gestionados directamente por los programas de aplicación o por el sistema operativo. Un **fichero** es un conjunto de **registros**, y cada registro está formado por **campos**.
+Antes de la aparición de las bases de datos, la información se almacenaba organizada en **ficheros** (archivos), gestionados directamente por los programas de aplicación o por el sistema operativo.
+
+Un **fichero** es un conjunto de **registros**, y cada registro está formado por **campos**.
 
 Según cómo se organizan y se accede a los registros dentro del fichero, distinguimos varios tipos:
 
@@ -24,8 +53,9 @@ Según cómo se organizan y se accede a los registros dentro del fichero, distin
 
 - Los registros se almacenan **uno detrás de otro**, en el orden en que se van grabando (o según un criterio de ordenación, como una clave).
 - Para acceder a un registro concreto hay que **leer desde el principio** hasta encontrarlo (acceso secuencial).
-- **Ventajas:** estructura simple, fácil de crear y mantener, muy eficiente cuando se procesan **todos** los registros uno tras otro (por ejemplo, generar un listado completo).
-- **Inconvenientes:** acceso lento a un registro concreto cuando el fichero es grande, ya que hay que recorrerlo desde el inicio; las operaciones de inserción/borrado en medio del fichero son costosas.
+    - **Ventajas:** estructura simple, fácil de crear y mantener, muy eficiente cuando se procesan todos los registros uno tras otro (por ejemplo, generar un listado completo).
+    - **Inconvenientes:** acceso lento a un registro concreto cuando el fichero es grande, ya que hay que recorrerlo desde el inicio; las operaciones de inserción/borrado en medio del fichero son costosas
+
 - **Ejemplo de uso:** ficheros de texto plano (`.txt`, `.csv`), copias de seguridad, procesos por lotes (*batch*).
 
 - **Formato (texto o binario):** los ficheros planos se encuentran habitualmente en formato de texto legible (por ejemplo CSV), pero también pueden almacenarse en formato binario. En texto cada registro suele ser una línea y los campos se separan por delimitadores; en binario los registros pueden tener campos de tamaño fijo y ocupan menos espacio y se procesan más rápido. La elección depende de la necesidad de legibilidad/intercambio (texto) frente a rendimiento/compactación (binario).
@@ -43,10 +73,10 @@ Imaginemos un fichero de texto plano llamado "clientes.txt" que almacena informa
 
 - Cada línea (por ejemplo `1,Garcia Perez,garcia@example.com,600123456`) es un **registro**: representa la información relacionada con una única entidad (aquí, un cliente).
 - Los **campos** son las partes que componen el registro, separadas por comas en este ejemplo:
-  - Campo 1: `1` (ID del cliente)
-  - Campo 2: `Garcia Perez` (nombre)
-  - Campo 3: `garcia@example.com` (correo electrónico)
-  - Campo 4: `600123456` (teléfono)
+    - Campo 1: `1` (ID del cliente)
+    - Campo 2: `Garcia Perez` (nombre)
+    - Campo 3: `garcia@example.com` (correo electrónico)
+    - Campo 4: `600123456` (teléfono)
 
 > 📌 Nota: En ficheros planos los campos pueden separarse por comas (CSV), tabuladores, punto y coma u otros separadores, o bien tener longitudes fijas. Su simplicidad los hace útiles para intercambio de datos y pequeños procesos por lotes, pero su estructura no protege contra inconsistencias (por ejemplo, distinta ordenación de campos, falta de delimitadores o problemas con comas dentro de los campos). Para mitigar esto, es común usar comillas para campos de texto, incluir una cabecera con nombres de campos o aplicar reglas de validación en el proceso de importación. Si se requiere integridad, control de concurrencia y consultas complejas, conviene usar un SGBD.
 
@@ -56,15 +86,15 @@ Imaginemos un fichero de texto plano llamado "clientes.txt" que almacena informa
 - Además de los datos, se mantiene una **estructura de índice** (similar al índice de un libro) que asocia cada valor de una clave con la posición física del registro correspondiente en el fichero.
 - Permiten **dos formas de acceso**: secuencial (recorriendo todos los registros) y **por clave** (a través del índice), combinando lo mejor de ambos mundos.
 - El acceso mediante el índice es mucho más rápido que recorrer todo el fichero, ya que el índice suele organizarse en estructuras eficientes de búsqueda (por ejemplo, árboles B o B+).
-- **Inconvenientes:** ocupan más espacio (hay que guardar el índice además de los datos) y hay que mantener el índice actualizado cada vez que se modifica el fichero, lo que añade cierta sobrecarga en inserciones/borrados.
+    - **Inconvenientes:** ocupan más espacio (hay que guardar el índice además de los datos) y hay que mantener el índice actualizado cada vez que se modifica el fichero, lo que añade cierta sobrecarga en inserciones/borrados.
 
 #### Organización del índice: árboles vs. hashing
 
 Los índices pueden organizarse internamente con diferentes estructuras. Las dos más comunes son los árboles (p. ej. B-tree / B+tree) y las tablas hash. A continuación se explica brevemente qué conlleva cada opción y se muestra un diagrama conceptual.
 
 - **Árboles (B-tree / B+tree):**
-  - *Características:* mantienen las claves ordenadas, permiten búsquedas, inserciones y borrados en tiempo O(log m) donde m es el número de entradas del índice. Son particularmente útiles cuando se necesitan operaciones de rango (por ejemplo, "todas las claves entre A y B").
-  - *Sobrecarga:* requieren mantener el equilibrio del árbol y pueden implicar operaciones de reestructuración (divisiones/fusiones de nodos) en inserciones y borrados.
+    - *Características:* mantienen las claves ordenadas, permiten búsquedas, inserciones y borrados en tiempo O(log m) donde m es el número de entradas del índice. Son particularmente útiles cuando se necesitan operaciones de rango (por ejemplo, "todas las claves entre A y B").
+    - *Sobrecarga:* requieren mantener el equilibrio del árbol y pueden implicar operaciones de reestructuración (divisiones/fusiones de nodos) en inserciones y borrados.
 
 ```mermaid
 graph TD
@@ -80,17 +110,17 @@ graph TD
 **Ejemplo:** `insertar claves 1..5 en un B-tree de orden t=2 `
 
 Explicación del ejemplo:
+
 - En un B‑tree (grado mínimo t = 2) cada nodo hoja puede contener como máximo 2t−1 = 3 claves y como mínimo t−1 = 1 clave. Eso explica el número «3» que aparece en la raíz: es la clave separadora (no significa que cada hoja deba tener 3 claves).
-  
-- Insertar 1,2,3 en la hoja inicial → hoja = [1,2,3].
-- Insertar 4 provoca que la hoja exceda su capacidad (4 claves), se divide en dos hojas [1,2] y [3,4] y se promueve la clave 3 al nodo raíz.
-- Insertar 5 va al segmento derecho → hoja derecha pasa a [3,4,5] (dentro del máximo permitido).
+    - Insertar 1,2,3 en la hoja inicial → hoja = [1,2,3].
+    - Insertar 4 provoca que la hoja exceda su capacidad (4 claves), se divide en dos hojas [1,2] y [3,4] y se promueve la clave 3 al nodo raíz.
+    - Insertar 5 va al segmento derecho → hoja derecha pasa a [3,4,5] (dentro del máximo permitido).
 
 Búsqueda de la clave 5 ( en este árbol sería: comparar con la raíz [3], 5>3 → bajar por el puntero derecho y buscar en la hoja derecha.
 
 - **Hashing (índice por dispersión):**
-  - *Características:* una función hash convierte la clave en una posición (slot). La consulta suele ser O(1) en tiempo promedio para localizar la posición del registro. Es eficiente para búsquedas puntuales por clave.
-  - *Sobrecarga:* debe gestionarse la resolución de colisiones (encadenamiento o sondeo) y no es eficiente para operaciones de rango o para mantener el orden de las claves.
+    - *Características:* una función hash convierte la clave en una posición (slot). La consulta suele ser O(1) en tiempo promedio para localizar la posición del registro. Es eficiente para búsquedas puntuales por clave.
+    - *Sobrecarga:* debe gestionarse la resolución de colisiones (encadenamiento o sondeo) y no es eficiente para operaciones de rango o para mantener el orden de las claves.
   
 ```mermaid
 flowchart LR
@@ -107,25 +137,29 @@ flowchart LR
 `Explicación del ejemplo de hashing (claves 1..5):`
 
 - Definimos una función hash simple: `h(key) = key mod 3` (3 slots: 0,1,2).
-  - Nota: `mod` significa resto de la división entera. Por ejemplo `5 mod 3 = 2` porque 5 = 1*3 + 2.
+    - Nota: `mod` significa resto de la división entera. Por ejemplo `5 mod 3 = 2` porque 5 = 1*3 + 2.
 - Insertamos claves 1,2,3,4,5 en ese orden:
-  - h(1) = 1 → slot1: [1]
-  - h(2) = 2 → slot2: [2]
-  - h(3) = 0 → slot0: [3]
-  - h(4) = 1 → slot1: [1,4] (colisión resuelta por encadenamiento)
-  - h(5) = 2 → slot2: [2,5] (colisión resuelta por encadenamiento)
+    - h(1) = 1 → slot1: [1]
+    - h(2) = 2 → slot2: [2]
+    - h(3) = 0 → slot0: [3]
+    - h(4) = 1 → slot1: [1,4] (colisión resuelta por encadenamiento)
+    - h(5) = 2 → slot2: [2,5] (colisión resuelta por encadenamiento)
 
 - Búsqueda de la clave 5:
-  1. calcular h(5)=2 → ir al `slot2`
-  2. recorrer la lista en `slot2` y localizar 5 (posible 1-2 comparaciones dependiendo de la posición)
-  - Operaciones típicas: 1 cálculo de hash + k comparaciones en la lista del slot (k es el número de elementos en el slot). En este ejemplo k=2, así que 1 cálculo + hasta 2 comparaciones.
+    - calcular h(5)=2 → ir al `slot2`
+    - recorrer la lista en `slot2` y localizar 5 (posible 1-2 comparaciones dependiendo de la posición)
 
-Consecuencias:
-- Hashing ofrece localizaciones rápidas en promedio, pero el rendimiento depende de la función hash y de la carga por slot (factor de carga). El encadenamiento es sencillo y flexible.
+- Operaciones típicas: 1 cálculo de hash + k comparaciones en la lista del slot (k es el número de elementos en el slot). En este ejemplo k=2, así que 1 cálculo + hasta 2 comparaciones.
 
-En resumen: elegir árbol o hashing depende de los requisitos: 
-* búsquedas por rango y ordenadas → B-tree/B+tree 
-* búsquedas puntuales por clave con alta velocidad → hashing.
+*Consecuencias:*
+
+Hashing ofrece localizaciones rápidas en promedio, pero el rendimiento depende de la función hash y de la carga por slot (factor de carga). El encadenamiento es sencillo y flexible.
+
+*En resumen: elegir árbol o hashing depende de los requisitos:*
+
+    - búsquedas por rango y ordenadas → B-tree/B+tree 
+    - búsquedas puntuales por clave con alta velocidad → hashing.
+
 
 - **Formato (texto o binario):** los ficheros indexados suelen implementarse sobre formatos binarios que permiten direccionar con precisión offsets y manejar estructuras de índice (B-tree, B+tree) de forma eficiente. No obstante, también pueden existir soluciones híbridas: un fichero de datos en texto (CSV) con un índice externo binario que guarda offsets.
 
@@ -155,8 +189,9 @@ Registro#3: 3|Sanchez Diaz|sanchez@example.com|600555000
 
 - Permiten acceder **directamente** a cualquier registro sin necesidad de recorrer los anteriores, normalmente calculando la posición física del registro a partir de su clave (por ejemplo, mediante una función *hash* o porque los registros tienen tamaño fijo y se calcula un desplazamiento).
 - También se conocen como ficheros de **acceso aleatorio** o de **acceso relativo**.
-- **Ventajas:** acceso muy rápido a un registro concreto, independientemente de su posición en el fichero.
-- **Inconvenientes:** es necesario conocer o calcular la posición del registro; no son eficientes para procesar todos los registros de forma ordenada; puede haber colisiones si dos claves generan la misma posición (en el caso de acceso por *hash*).
+    - **Ventajas:** acceso muy rápido a un registro concreto, independientemente de su posición en el fichero
+    - **Inconvenientes:** es necesario conocer o calcular la posición del registro; no son eficientes para procesar todos los registros de forma ordenada; puede haber colisiones si dos claves generan la misma posición (en el caso de acceso por *hash*).
+
 - **Formato (texto o binario):** los ficheros de acceso directo se implementan típicamente en formato binario con registros de tamaño fijo o estructuras que permitan calcular offsets fiables. Esto facilita el cálculo directo de posiciones y el acceso por hashing. Implementaciones que intentan usar texto para acceso directo existen (por ejemplo, manteniendo un mapa de offsets), pero suelen ser menos eficientes.
 
 **Ejemplo práctico (acceso directo mediante hashing):**
@@ -172,7 +207,9 @@ Hash(1000456) mod 1000 -> 456  => almacenar registro en slot 456
 Hash(2000102) mod 1000 -> 102  => almacenar registro en slot 102
 Hash(3000001) mod 1000 -> 1    => almacenar registro en slot 001
 ```
+
 - Para buscar la cuenta 2000102 se calcula su hash y se accede directamente al slot 102, sin necesidad de leer otros registros.
+
 - Si dos cuentas colisionan (mismo slot), el sistema debe resolver la colisión (por ejemplo, con encadenamiento -lista en ese slot- o con sondeo abierto).
 
 **Ejemplo práctico (acceso directo mediante desplazamiento fijo):**
@@ -219,10 +256,10 @@ Una **base de datos** es un conjunto de datos organizados, estructurados y relac
 
 A diferencia de un simple conjunto de ficheros, una base de datos:
 
-- Está gestionada por un software específico (el **SGBD**).
-- Los datos son **independientes** de los programas que los usan.
-- Permite compartir la información entre varios usuarios y aplicaciones a la vez.
-- Garantiza la **integridad**, **consistencia** y **seguridad** de los datos.
+  - Está gestionada por un software específico (el **SGBD**).
+  - Los datos son **independientes** de los programas que los usan.
+  - Permite compartir la información entre varios usuarios y aplicaciones a la vez.
+  - Garantiza la **integridad**, **consistencia** y **seguridad** de los datos.
 
 Una base de datos se organiza en **tablas**, **colecciones**, **objetos** (depende del modelo de BD) que se relacionan entre si para que la información esté almacenada de forma ordenada y coherente. 
 
@@ -311,6 +348,7 @@ graph LR
 ```
 
 **Modelo distribuido:** los usuarios se conectan a un punto de entrada (p. ej. balanceador), que reparte las solicitudes entre varios nodos de datos. Los nodos pueden replicarse entre sí o almacenar fragmentos diferentes. 
+
 * *Ventajas:* alta disponibilidad y escalabilidad.
 * *Inconvenientes:*  mayor complejidad en sincronización y administración.
 
@@ -411,6 +449,7 @@ graph LR
   TRANS --> BACK["Backup /<br/>Recuperación"]
   MOTOR --> UI
 ```
+
 - El usuario o la aplicación envía solicitudes a través de la interfaz (UI / API).
   
 - Desde la interfaz se lanzan tres tipos de acciones: operaciones sobre los datos (DML), definiciones de esquema (DDL) y órdenes de control/permiso (DCL).
@@ -443,6 +482,7 @@ graph LR
   MOTOR --> UI
   UI --> U
 ```
+
 - El usuario envía una consulta o modificación (SELECT/INSERT/UPDATE/DELETE) a través de la interfaz.
   
 - La petición DML llega al optimizador de consultas, que consulta el catálogo (estadísticas, índices y metadatos) para elegir un plan eficiente.
@@ -468,6 +508,7 @@ graph LR
   MOTOR --> UI
   UI --> U
 ```
+
 - Un administrador o aplicación envía una sentencia DDL (CREATE / ALTER / DROP) mediante la interfaz.
 
 - Antes de aplicar cambios críticos, el DDL puede pasar por el módulo de seguridad para verificar permisos.
@@ -490,6 +531,7 @@ graph LR
   MOTOR --> UI
   UI --> U
 ```
+
 - Un administrador emite comandos DCL (por ejemplo GRANT o REVOKE) desde la interfaz.
 
 - El DCL se gestiona en el módulo de seguridad/autorización que administra usuarios, roles y privilegios.
@@ -517,6 +559,7 @@ graph LR
   MOTOR --> UI
   UI --> U
 ```
+
 - El usuario inicia una transacción (conjunto de operaciones DML) a través de la interfaz.
 
 - La transacción es procesada por el motor de BD y coordinada por el gestor de transacciones.
@@ -539,15 +582,15 @@ Los SGBD se pueden clasificar según varios criterios:
 
 - **Según el modelo de datos que implementan:** jerárquicos, en red, relacionales (MySQL, PostgreSQL, Oracle, SQL Server), orientados a objetos, objeto-relacionales y NoSQL (documentales, clave-valor, columnares, grafos).
 - **Según el número de usuarios que soportan:**
-  - **Monousuario:** solo un usuario puede acceder a la vez (p. ej. Microsoft Access en modo local).
-  - **Multiusuario:** varios usuarios pueden acceder simultáneamente (p. ej. MySQL, Oracle, SQL Server).
+    - **Monousuario:** solo un usuario puede acceder a la vez (p. ej. Microsoft Access en modo local).
+    - **Multiusuario:** varios usuarios pueden acceder simultáneamente (p. ej. MySQL, Oracle, SQL Server).
 - **Según la ubicación de los datos que gestionan:** SGBD centralizados y SGBD distribuidos.
 - **Según la licencia:**
-  - **Libres / de código abierto:** MySQL (Community), MariaDB, PostgreSQL, SQLite.
-  - **Propietarios / comerciales:** Oracle Database, Microsoft SQL Server, IBM Db2.
+    - **Libres / de código abierto:** MySQL (Community), MariaDB, PostgreSQL, SQLite.
+    - **Propietarios / comerciales:** Oracle Database, Microsoft SQL Server, IBM Db2.
 - **Según el tamaño y ámbito de uso:**
-  - **De escritorio / embebidos:** SQLite, Microsoft Access (pequeñas aplicaciones, poco volumen de datos).
-  - **Empresariales / de gran capacidad:** Oracle, SQL Server, PostgreSQL, MySQL, Db2 (grandes volúmenes, alta concurrencia).
+    - **De escritorio / embebidos:** SQLite, Microsoft Access (pequeñas aplicaciones, poco volumen de datos).
+    - **Empresariales / de gran capacidad:** Oracle, SQL Server, PostgreSQL, MySQL, Db2 (grandes volúmenes, alta concurrencia).
 
 ---
 
