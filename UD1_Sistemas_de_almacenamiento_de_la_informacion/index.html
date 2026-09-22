@@ -946,13 +946,11 @@
 <h3 id="11-ficheros-planos-secuenciales">1.1 Ficheros planos (secuenciales)<a class="headerlink" href="#11-ficheros-planos-secuenciales" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Los registros se almacenan <strong>uno detrás de otro</strong>, en el orden en que se van grabando (o según un criterio de ordenación, como una clave).</li>
-<li>
-<p>Para acceder a un registro concreto hay que <strong>leer desde el principio</strong> hasta encontrarlo (acceso secuencial).</p>
-<ul>
+<li>Para acceder a un registro concreto hay que <strong>leer desde el principio</strong> hasta encontrarlo (acceso secuencial).</li>
 <li><strong>Ventajas:</strong> estructura simple, fácil de crear y mantener, muy eficiente cuando se procesan todos los registros uno tras otro (por ejemplo, generar un listado completo).</li>
-<li><strong>Inconvenientes:</strong> acceso lento a un registro concreto cuando el fichero es grande, ya que hay que recorrerlo desde el inicio; las operaciones de inserción/borrado en medio del fichero son costosas.</li>
-<li><strong>Ejemplo de uso:</strong> ficheros de texto plano (<code>.txt</code>, <code>.csv</code>), copias de seguridad, procesos por lotes (<em>batch</em>).</li>
-</ul>
+<li><strong>Inconvenientes:</strong> acceso lento a un registro concreto cuando el fichero es grande, ya que hay que recorrerlo desde el inicio; las operaciones de inserción/borrado en medio del fichero son costosas</li>
+<li>
+<p><strong>Ejemplo de uso:</strong> ficheros de texto plano (<code>.txt</code>, <code>.csv</code>), copias de seguridad, procesos por lotes (<em>batch</em>).</p>
 </li>
 <li>
 <p><strong>Formato (texto o binario):</strong> los ficheros planos se encuentran habitualmente en formato de texto legible (por ejemplo CSV), pero también pueden almacenarse en formato binario. En texto cada registro suele ser una línea y los campos se separan por delimitadores; en binario los registros pueden tener campos de tamaño fijo y ocupan menos espacio y se procesan más rápido. La elección depende de la necesidad de legibilidad/intercambio (texto) frente a rendimiento/compactación (binario).</p>
@@ -966,13 +964,11 @@
 </code></pre></div>
 <ul>
 <li>Cada línea (por ejemplo <code>1,Garcia Perez,garcia@example.com,600123456</code>) es un <strong>registro</strong>: representa la información relacionada con una única entidad (aquí, un cliente).</li>
-<li>Los <strong>campos</strong> son las partes que componen el registro, separadas por comas en este ejemplo:<ul>
+<li>Los <strong>campos</strong> son las partes que componen el registro, separadas por comas en este ejemplo:</li>
 <li>Campo 1: <code>1</code> (ID del cliente)</li>
 <li>Campo 2: <code>Garcia Perez</code> (nombre)</li>
 <li>Campo 3: <code>garcia@example.com</code> (correo electrónico)</li>
 <li>Campo 4: <code>600123456</code> (teléfono)</li>
-</ul>
-</li>
 </ul>
 <blockquote>
 <p>📌 Nota: En ficheros planos los campos pueden separarse por comas (CSV), tabuladores, punto y coma u otros separadores, o bien tener longitudes fijas. Su simplicidad los hace útiles para intercambio de datos y pequeños procesos por lotes, pero su estructura no protege contra inconsistencias (por ejemplo, distinta ordenación de campos, falta de delimitadores o problemas con comas dentro de los campos). Para mitigar esto, es común usar comillas para campos de texto, incluir una cabecera con nombres de campos o aplicar reglas de validación en el proceso de importación. Si se requiere integridad, control de concurrencia y consultas complejas, conviene usar un SGBD.</p>
@@ -981,19 +977,15 @@
 <ul>
 <li>Además de los datos, se mantiene una <strong>estructura de índice</strong> (similar al índice de un libro) que asocia cada valor de una clave con la posición física del registro correspondiente en el fichero.</li>
 <li>Permiten <strong>dos formas de acceso</strong>: secuencial (recorriendo todos los registros) y <strong>por clave</strong> (a través del índice), combinando lo mejor de ambos mundos.</li>
-<li>El acceso mediante el índice es mucho más rápido que recorrer todo el fichero, ya que el índice suele organizarse en estructuras eficientes de búsqueda (por ejemplo, árboles B o B+).<ul>
+<li>El acceso mediante el índice es mucho más rápido que recorrer todo el fichero, ya que el índice suele organizarse en estructuras eficientes de búsqueda (por ejemplo, árboles B o B+).</li>
 <li><strong>Inconvenientes:</strong> ocupan más espacio (hay que guardar el índice además de los datos) y hay que mantener el índice actualizado cada vez que se modifica el fichero, lo que añade cierta sobrecarga en inserciones/borrados.</li>
-</ul>
-</li>
 </ul>
 <h4 id="organizacion-del-indice-arboles-vs-hashing">Organización del índice: árboles vs. hashing<a class="headerlink" href="#organizacion-del-indice-arboles-vs-hashing" title="Permanent link">&para;</a></h4>
 <p>Los índices pueden organizarse internamente con diferentes estructuras. Las dos más comunes son los árboles (p. ej. B-tree / B+tree) y las tablas hash. A continuación se explica brevemente qué conlleva cada opción y se muestra un diagrama conceptual.</p>
 <ul>
-<li><strong>Árboles (B-tree / B+tree):</strong><ul>
+<li><strong>Árboles (B-tree / B+tree):</strong></li>
 <li><em>Características:</em> mantienen las claves ordenadas, permiten búsquedas, inserciones y borrados en tiempo O(log m) donde m es el número de entradas del índice. Son particularmente útiles cuando se necesitan operaciones de rango (por ejemplo, "todas las claves entre A y B").</li>
 <li><em>Sobrecarga:</em> requieren mantener el equilibrio del árbol y pueden implicar operaciones de reestructuración (divisiones/fusiones de nodos) en inserciones y borrados.</li>
-</ul>
-</li>
 </ul>
 <p><pre class="mermaid"><code>graph TD
   %% Ejemplo: insertar claves 1..5 en un B-tree de orden t=2 (max 3 claves por nodo hoja)
@@ -1016,11 +1008,9 @@
 </ul>
 <p>Búsqueda de la clave 5 ( en este árbol sería: comparar con la raíz [3], 5&gt;3 → bajar por el puntero derecho y buscar en la hoja derecha.</p>
 <ul>
-<li><strong>Hashing (índice por dispersión):</strong><ul>
+<li><strong>Hashing (índice por dispersión):</strong></li>
 <li><em>Características:</em> una función hash convierte la clave en una posición (slot). La consulta suele ser O(1) en tiempo promedio para localizar la posición del registro. Es eficiente para búsquedas puntuales por clave.</li>
 <li><em>Sobrecarga:</em> debe gestionarse la resolución de colisiones (encadenamiento o sondeo) y no es eficiente para operaciones de rango o para mantener el orden de las claves.</li>
-</ul>
-</li>
 </ul>
 <pre class="mermaid"><code>flowchart LR
   subgraph HashTable
@@ -1037,20 +1027,24 @@
 <li>Nota: <code>mod</code> significa resto de la división entera. Por ejemplo <code>5 mod 3 = 2</code> porque 5 = 1*3 + 2.</li>
 </ul>
 </li>
-<li>
-<p>Insertamos claves 1,2,3,4,5 en ese orden:</p>
-<ul>
+<li>Insertamos claves 1,2,3,4,5 en ese orden:</li>
 <li>h(1) = 1 → slot1: [1]</li>
 <li>h(2) = 2 → slot2: [2]</li>
 <li>h(3) = 0 → slot0: [3]</li>
 <li>h(4) = 1 → slot1: [1,4] (colisión resuelta por encadenamiento)</li>
-<li>h(5) = 2 → slot2: [2,5] (colisión resuelta por encadenamiento)</li>
-</ul>
+<li>
+<p>h(5) = 2 → slot2: [2,5] (colisión resuelta por encadenamiento)</p>
 </li>
 <li>
 <p>Búsqueda de la clave 5:</p>
+</li>
+<li>
 <ol>
 <li>calcular h(5)=2 → ir al <code>slot2</code></li>
+</ol>
+</li>
+<li>
+<ol>
 <li>recorrer la lista en <code>slot2</code> y localizar 5 (posible 1-2 comparaciones dependiendo de la posición)</li>
 </ol>
 </li>
@@ -1059,11 +1053,10 @@
 </li>
 </ul>
 <p><em>Consecuencias:</em>
-- Hashing ofrece localizaciones rápidas en promedio, pero el rendimiento depende de la función hash y de la carga por slot (factor de carga). El encadenamiento es sencillo y flexible.</p>
-<p><em>En resumen: elegir árbol o hashing depende de los requisitos:</em></p>
-<pre><code>* búsquedas por rango y ordenadas → B-tree/B+tree 
-* búsquedas puntuales por clave con alta velocidad → hashing.
-</code></pre>
+Hashing ofrece localizaciones rápidas en promedio, pero el rendimiento depende de la función hash y de la carga por slot (factor de carga). El encadenamiento es sencillo y flexible.</p>
+<p><em>En resumen: elegir árbol o hashing depende de los requisitos:</em>
+  * búsquedas por rango y ordenadas → B-tree/B+tree 
+  * búsquedas puntuales por clave con alta velocidad → hashing.</p>
 <ul>
 <li><strong>Formato (texto o binario):</strong> los ficheros indexados suelen implementarse sobre formatos binarios que permiten direccionar con precisión offsets y manejar estructuras de índice (B-tree, B+tree) de forma eficiente. No obstante, también pueden existir soluciones híbridas: un fichero de datos en texto (CSV) con un índice externo binario que guarda offsets.</li>
 </ul>
@@ -1089,11 +1082,9 @@ Registro#3: 3|Sanchez Diaz|sanchez@example.com|600555000
 <h3 id="13-ficheros-de-acceso-directo-aleatorio-o-relativo">1.3 Ficheros de acceso directo (aleatorio o relativo)<a class="headerlink" href="#13-ficheros-de-acceso-directo-aleatorio-o-relativo" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Permiten acceder <strong>directamente</strong> a cualquier registro sin necesidad de recorrer los anteriores, normalmente calculando la posición física del registro a partir de su clave (por ejemplo, mediante una función <em>hash</em> o porque los registros tienen tamaño fijo y se calcula un desplazamiento).</li>
-<li>También se conocen como ficheros de <strong>acceso aleatorio</strong> o de <strong>acceso relativo</strong>.<ul>
-<li><strong>Ventajas:</strong> acceso muy rápido a un registro concreto, independientemente de su posición en el fichero.</li>
+<li>También se conocen como ficheros de <strong>acceso aleatorio</strong> o de <strong>acceso relativo</strong>.</li>
+<li><strong>Ventajas:</strong> acceso muy rápido a un registro concreto, independientemente de su posición en el fichero</li>
 <li><strong>Inconvenientes:</strong> es necesario conocer o calcular la posición del registro; no son eficientes para procesar todos los registros de forma ordenada; puede haber colisiones si dos claves generan la misma posición (en el caso de acceso por <em>hash</em>).</li>
-</ul>
-</li>
 <li><strong>Formato (texto o binario):</strong> los ficheros de acceso directo se implementan típicamente en formato binario con registros de tamaño fijo o estructuras que permitan calcular offsets fiables. Esto facilita el cálculo directo de posiciones y el acceso por hashing. Implementaciones que intentan usar texto para acceso directo existen (por ejemplo, manteniendo un mapa de offsets), pero suelen ser menos eficientes.</li>
 </ul>
 <p><strong>Ejemplo práctico (acceso directo mediante hashing):</strong></p>
@@ -1299,9 +1290,11 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
 
   classDef serverStyle fill:#ffe0b2,stroke:#c87500;
   class Server serverStyle</code></pre>
-<p><strong>Modelo distribuido:</strong> los usuarios se conectan a un punto de entrada (p. ej. balanceador), que reparte las solicitudes entre varios nodos de datos. Los nodos pueden replicarse entre sí o almacenar fragmentos diferentes. 
-* <em>Ventajas:</em> alta disponibilidad y escalabilidad.
-* <em>Inconvenientes:</em>  mayor complejidad en sincronización y administración.</p>
+<p><strong>Modelo distribuido:</strong> los usuarios se conectan a un punto de entrada (p. ej. balanceador), que reparte las solicitudes entre varios nodos de datos. Los nodos pueden replicarse entre sí o almacenar fragmentos diferentes. </p>
+<ul>
+<li><em>Ventajas:</em> alta disponibilidad y escalabilidad.</li>
+<li><em>Inconvenientes:</em>  mayor complejidad en sincronización y administración.</li>
+</ul>
 <pre class="mermaid"><code>graph LR
   subgraph Clientes2["Usuarios / Clientes"]
     U1[Usuario A]
