@@ -941,14 +941,19 @@
 <li>Esta información almacenada debe estar adecuadamente organizada. </li>
 <li>Para poder organizar la información se utilizan <code>los ficheros o archivos</code></li>
 </ul>
-<p>Antes de la aparición de las bases de datos, la información se almacenaba organizada en <strong>ficheros</strong> (archivos), gestionados directamente por los programas de aplicación o por el sistema operativo. Un <strong>fichero</strong> es un conjunto de <strong>registros</strong>, y cada registro está formado por <strong>campos</strong>.</p>
+<p>Antes de la aparición de las bases de datos, la información se almacenaba organizada en <strong>ficheros</strong> (archivos), gestionados directamente por los programas de aplicación o por el sistema operativo.</p>
+<p>Un <strong>fichero</strong> es un conjunto de <strong>registros</strong>, y cada registro está formado por <strong>campos</strong>.</p>
 <p>Según cómo se organizan y se accede a los registros dentro del fichero, distinguimos varios tipos:</p>
 <h3 id="11-ficheros-planos-secuenciales">1.1 Ficheros planos (secuenciales)<a class="headerlink" href="#11-ficheros-planos-secuenciales" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Los registros se almacenan <strong>uno detrás de otro</strong>, en el orden en que se van grabando (o según un criterio de ordenación, como una clave).</li>
-<li>Para acceder a un registro concreto hay que <strong>leer desde el principio</strong> hasta encontrarlo (acceso secuencial).</li>
+<li>
+<p>Para acceder a un registro concreto hay que <strong>leer desde el principio</strong> hasta encontrarlo (acceso secuencial).</p>
+<ul>
 <li><strong>Ventajas:</strong> estructura simple, fácil de crear y mantener, muy eficiente cuando se procesan todos los registros uno tras otro (por ejemplo, generar un listado completo).</li>
 <li><strong>Inconvenientes:</strong> acceso lento a un registro concreto cuando el fichero es grande, ya que hay que recorrerlo desde el inicio; las operaciones de inserción/borrado en medio del fichero son costosas</li>
+</ul>
+</li>
 <li>
 <p><strong>Ejemplo de uso:</strong> ficheros de texto plano (<code>.txt</code>, <code>.csv</code>), copias de seguridad, procesos por lotes (<em>batch</em>).</p>
 </li>
@@ -964,11 +969,13 @@
 </code></pre></div>
 <ul>
 <li>Cada línea (por ejemplo <code>1,Garcia Perez,garcia@example.com,600123456</code>) es un <strong>registro</strong>: representa la información relacionada con una única entidad (aquí, un cliente).</li>
-<li>Los <strong>campos</strong> son las partes que componen el registro, separadas por comas en este ejemplo:</li>
+<li>Los <strong>campos</strong> son las partes que componen el registro, separadas por comas en este ejemplo:<ul>
 <li>Campo 1: <code>1</code> (ID del cliente)</li>
 <li>Campo 2: <code>Garcia Perez</code> (nombre)</li>
 <li>Campo 3: <code>garcia@example.com</code> (correo electrónico)</li>
 <li>Campo 4: <code>600123456</code> (teléfono)</li>
+</ul>
+</li>
 </ul>
 <blockquote>
 <p>📌 Nota: En ficheros planos los campos pueden separarse por comas (CSV), tabuladores, punto y coma u otros separadores, o bien tener longitudes fijas. Su simplicidad los hace útiles para intercambio de datos y pequeños procesos por lotes, pero su estructura no protege contra inconsistencias (por ejemplo, distinta ordenación de campos, falta de delimitadores o problemas con comas dentro de los campos). Para mitigar esto, es común usar comillas para campos de texto, incluir una cabecera con nombres de campos o aplicar reglas de validación en el proceso de importación. Si se requiere integridad, control de concurrencia y consultas complejas, conviene usar un SGBD.</p>
@@ -977,15 +984,19 @@
 <ul>
 <li>Además de los datos, se mantiene una <strong>estructura de índice</strong> (similar al índice de un libro) que asocia cada valor de una clave con la posición física del registro correspondiente en el fichero.</li>
 <li>Permiten <strong>dos formas de acceso</strong>: secuencial (recorriendo todos los registros) y <strong>por clave</strong> (a través del índice), combinando lo mejor de ambos mundos.</li>
-<li>El acceso mediante el índice es mucho más rápido que recorrer todo el fichero, ya que el índice suele organizarse en estructuras eficientes de búsqueda (por ejemplo, árboles B o B+).</li>
+<li>El acceso mediante el índice es mucho más rápido que recorrer todo el fichero, ya que el índice suele organizarse en estructuras eficientes de búsqueda (por ejemplo, árboles B o B+).<ul>
 <li><strong>Inconvenientes:</strong> ocupan más espacio (hay que guardar el índice además de los datos) y hay que mantener el índice actualizado cada vez que se modifica el fichero, lo que añade cierta sobrecarga en inserciones/borrados.</li>
+</ul>
+</li>
 </ul>
 <h4 id="organizacion-del-indice-arboles-vs-hashing">Organización del índice: árboles vs. hashing<a class="headerlink" href="#organizacion-del-indice-arboles-vs-hashing" title="Permanent link">&para;</a></h4>
 <p>Los índices pueden organizarse internamente con diferentes estructuras. Las dos más comunes son los árboles (p. ej. B-tree / B+tree) y las tablas hash. A continuación se explica brevemente qué conlleva cada opción y se muestra un diagrama conceptual.</p>
 <ul>
-<li><strong>Árboles (B-tree / B+tree):</strong></li>
+<li><strong>Árboles (B-tree / B+tree):</strong><ul>
 <li><em>Características:</em> mantienen las claves ordenadas, permiten búsquedas, inserciones y borrados en tiempo O(log m) donde m es el número de entradas del índice. Son particularmente útiles cuando se necesitan operaciones de rango (por ejemplo, "todas las claves entre A y B").</li>
 <li><em>Sobrecarga:</em> requieren mantener el equilibrio del árbol y pueden implicar operaciones de reestructuración (divisiones/fusiones de nodos) en inserciones y borrados.</li>
+</ul>
+</li>
 </ul>
 <p><pre class="mermaid"><code>graph TD
   %% Ejemplo: insertar claves 1..5 en un B-tree de orden t=2 (max 3 claves por nodo hoja)
@@ -1042,16 +1053,8 @@
 <li>
 <p>Búsqueda de la clave 5:</p>
 <ul>
-<li>
-<ol>
 <li>calcular h(5)=2 → ir al <code>slot2</code></li>
-</ol>
-</li>
-<li>
-<ol>
 <li>recorrer la lista en <code>slot2</code> y localizar 5 (posible 1-2 comparaciones dependiendo de la posición)</li>
-</ol>
-</li>
 </ul>
 </li>
 <li>
@@ -1113,9 +1116,15 @@ Registro#3: 3|Sanchez Diaz|sanchez@example.com|600555000
 <div class="highlight"><pre><span></span><code>Hash(1000456) mod 1000 -&gt; 456  =&gt; almacenar registro en slot 456
 Hash(2000102) mod 1000 -&gt; 102  =&gt; almacenar registro en slot 102
 Hash(3000001) mod 1000 -&gt; 1    =&gt; almacenar registro en slot 001
-</code></pre></div>
-- Para buscar la cuenta 2000102 se calcula su hash y se accede directamente al slot 102, sin necesidad de leer otros registros.
-- Si dos cuentas colisionan (mismo slot), el sistema debe resolver la colisión (por ejemplo, con encadenamiento -lista en ese slot- o con sondeo abierto).</p>
+</code></pre></div></p>
+<ul>
+<li>
+<p>Para buscar la cuenta 2000102 se calcula su hash y se accede directamente al slot 102, sin necesidad de leer otros registros.</p>
+</li>
+<li>
+<p>Si dos cuentas colisionan (mismo slot), el sistema debe resolver la colisión (por ejemplo, con encadenamiento -lista en ese slot- o con sondeo abierto).</p>
+</li>
+</ul>
 <p><strong>Ejemplo práctico (acceso directo mediante desplazamiento fijo):</strong></p>
 <p>Si los registros tienen tamaño fijo (por ejemplo 200 bytes), y conocemos el número de registro n, la posición física en bytes se calcula como:
 <div class="highlight"><pre><span></span><code>offset = (n - 1) * record_size
