@@ -1008,9 +1008,11 @@
 </ul>
 <p>Búsqueda de la clave 5 ( en este árbol sería: comparar con la raíz [3], 5&gt;3 → bajar por el puntero derecho y buscar en la hoja derecha.</p>
 <ul>
-<li><strong>Hashing (índice por dispersión):</strong></li>
+<li><strong>Hashing (índice por dispersión):</strong><ul>
 <li><em>Características:</em> una función hash convierte la clave en una posición (slot). La consulta suele ser O(1) en tiempo promedio para localizar la posición del registro. Es eficiente para búsquedas puntuales por clave.</li>
 <li><em>Sobrecarga:</em> debe gestionarse la resolución de colisiones (encadenamiento o sondeo) y no es eficiente para operaciones de rango o para mantener el orden de las claves.</li>
+</ul>
+</li>
 </ul>
 <pre class="mermaid"><code>flowchart LR
   subgraph HashTable
@@ -1027,17 +1029,19 @@
 <li>Nota: <code>mod</code> significa resto de la división entera. Por ejemplo <code>5 mod 3 = 2</code> porque 5 = 1*3 + 2.</li>
 </ul>
 </li>
-<li>Insertamos claves 1,2,3,4,5 en ese orden:</li>
+<li>
+<p>Insertamos claves 1,2,3,4,5 en ese orden:</p>
+<ul>
 <li>h(1) = 1 → slot1: [1]</li>
 <li>h(2) = 2 → slot2: [2]</li>
 <li>h(3) = 0 → slot0: [3]</li>
 <li>h(4) = 1 → slot1: [1,4] (colisión resuelta por encadenamiento)</li>
-<li>
-<p>h(5) = 2 → slot2: [2,5] (colisión resuelta por encadenamiento)</p>
+<li>h(5) = 2 → slot2: [2,5] (colisión resuelta por encadenamiento)</li>
+</ul>
 </li>
 <li>
 <p>Búsqueda de la clave 5:</p>
-</li>
+<ul>
 <li>
 <ol>
 <li>calcular h(5)=2 → ir al <code>slot2</code></li>
@@ -1047,6 +1051,8 @@
 <ol>
 <li>recorrer la lista en <code>slot2</code> y localizar 5 (posible 1-2 comparaciones dependiendo de la posición)</li>
 </ol>
+</li>
+</ul>
 </li>
 <li>
 <p>Operaciones típicas: 1 cálculo de hash + k comparaciones en la lista del slot (k es el número de elementos en el slot). En este ejemplo k=2, así que 1 cálculo + hasta 2 comparaciones.</p>
@@ -1086,10 +1092,16 @@ Registro#3: 3|Sanchez Diaz|sanchez@example.com|600555000
 <h3 id="13-ficheros-de-acceso-directo-aleatorio-o-relativo">1.3 Ficheros de acceso directo (aleatorio o relativo)<a class="headerlink" href="#13-ficheros-de-acceso-directo-aleatorio-o-relativo" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Permiten acceder <strong>directamente</strong> a cualquier registro sin necesidad de recorrer los anteriores, normalmente calculando la posición física del registro a partir de su clave (por ejemplo, mediante una función <em>hash</em> o porque los registros tienen tamaño fijo y se calcula un desplazamiento).</li>
-<li>También se conocen como ficheros de <strong>acceso aleatorio</strong> o de <strong>acceso relativo</strong>.</li>
+<li>
+<p>También se conocen como ficheros de <strong>acceso aleatorio</strong> o de <strong>acceso relativo</strong>.</p>
+<ul>
 <li><strong>Ventajas:</strong> acceso muy rápido a un registro concreto, independientemente de su posición en el fichero</li>
 <li><strong>Inconvenientes:</strong> es necesario conocer o calcular la posición del registro; no son eficientes para procesar todos los registros de forma ordenada; puede haber colisiones si dos claves generan la misma posición (en el caso de acceso por <em>hash</em>).</li>
-<li><strong>Formato (texto o binario):</strong> los ficheros de acceso directo se implementan típicamente en formato binario con registros de tamaño fijo o estructuras que permitan calcular offsets fiables. Esto facilita el cálculo directo de posiciones y el acceso por hashing. Implementaciones que intentan usar texto para acceso directo existen (por ejemplo, manteniendo un mapa de offsets), pero suelen ser menos eficientes.</li>
+</ul>
+</li>
+<li>
+<p><strong>Formato (texto o binario):</strong> los ficheros de acceso directo se implementan típicamente en formato binario con registros de tamaño fijo o estructuras que permitan calcular offsets fiables. Esto facilita el cálculo directo de posiciones y el acceso por hashing. Implementaciones que intentan usar texto para acceso directo existen (por ejemplo, manteniendo un mapa de offsets), pero suelen ser menos eficientes.</p>
+</li>
 </ul>
 <p><strong>Ejemplo práctico (acceso directo mediante hashing):</strong></p>
 <p>Imaginemos un fichero <code>cuentas.dat</code> en el que queremos almacenar cuentas bancarias y acceder por número de cuenta. Usando hashing, definimos una función simple que convierte el número de cuenta en una posición (slot) del fichero:</p>
