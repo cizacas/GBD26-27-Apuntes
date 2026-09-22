@@ -946,11 +946,13 @@
 <h3 id="11-ficheros-planos-secuenciales">1.1 Ficheros planos (secuenciales)<a class="headerlink" href="#11-ficheros-planos-secuenciales" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Los registros se almacenan <strong>uno detrás de otro</strong>, en el orden en que se van grabando (o según un criterio de ordenación, como una clave).</li>
-<li>Para acceder a un registro concreto hay que <strong>leer desde el principio</strong> hasta encontrarlo (acceso secuencial).</li>
-<li><strong>Ventajas:</strong> estructura simple, fácil de crear y mantener, muy eficiente cuando se procesan <strong>todos</strong> los registros uno tras otro (por ejemplo, generar un listado completo).</li>
-<li><strong>Inconvenientes:</strong> acceso lento a un registro concreto cuando el fichero es grande, ya que hay que recorrerlo desde el inicio; las operaciones de inserción/borrado en medio del fichero son costosas.</li>
 <li>
-<p><strong>Ejemplo de uso:</strong> ficheros de texto plano (<code>.txt</code>, <code>.csv</code>), copias de seguridad, procesos por lotes (<em>batch</em>).</p>
+<p>Para acceder a un registro concreto hay que <strong>leer desde el principio</strong> hasta encontrarlo (acceso secuencial).</p>
+<ul>
+<li><strong>Ventajas:</strong> estructura simple, fácil de crear y mantener, muy eficiente cuando se procesan todos los registros uno tras otro (por ejemplo, generar un listado completo).</li>
+<li><strong>Inconvenientes:</strong> acceso lento a un registro concreto cuando el fichero es grande, ya que hay que recorrerlo desde el inicio; las operaciones de inserción/borrado en medio del fichero son costosas.</li>
+<li><strong>Ejemplo de uso:</strong> ficheros de texto plano (<code>.txt</code>, <code>.csv</code>), copias de seguridad, procesos por lotes (<em>batch</em>).</li>
+</ul>
 </li>
 <li>
 <p><strong>Formato (texto o binario):</strong> los ficheros planos se encuentran habitualmente en formato de texto legible (por ejemplo CSV), pero también pueden almacenarse en formato binario. En texto cada registro suele ser una línea y los campos se separan por delimitadores; en binario los registros pueden tener campos de tamaño fijo y ocupan menos espacio y se procesan más rápido. La elección depende de la necesidad de legibilidad/intercambio (texto) frente a rendimiento/compactación (binario).</p>
@@ -964,11 +966,13 @@
 </code></pre></div>
 <ul>
 <li>Cada línea (por ejemplo <code>1,Garcia Perez,garcia@example.com,600123456</code>) es un <strong>registro</strong>: representa la información relacionada con una única entidad (aquí, un cliente).</li>
-<li>Los <strong>campos</strong> son las partes que componen el registro, separadas por comas en este ejemplo:</li>
+<li>Los <strong>campos</strong> son las partes que componen el registro, separadas por comas en este ejemplo:<ul>
 <li>Campo 1: <code>1</code> (ID del cliente)</li>
 <li>Campo 2: <code>Garcia Perez</code> (nombre)</li>
 <li>Campo 3: <code>garcia@example.com</code> (correo electrónico)</li>
 <li>Campo 4: <code>600123456</code> (teléfono)</li>
+</ul>
+</li>
 </ul>
 <blockquote>
 <p>📌 Nota: En ficheros planos los campos pueden separarse por comas (CSV), tabuladores, punto y coma u otros separadores, o bien tener longitudes fijas. Su simplicidad los hace útiles para intercambio de datos y pequeños procesos por lotes, pero su estructura no protege contra inconsistencias (por ejemplo, distinta ordenación de campos, falta de delimitadores o problemas con comas dentro de los campos). Para mitigar esto, es común usar comillas para campos de texto, incluir una cabecera con nombres de campos o aplicar reglas de validación en el proceso de importación. Si se requiere integridad, control de concurrencia y consultas complejas, conviene usar un SGBD.</p>
@@ -977,15 +981,19 @@
 <ul>
 <li>Además de los datos, se mantiene una <strong>estructura de índice</strong> (similar al índice de un libro) que asocia cada valor de una clave con la posición física del registro correspondiente en el fichero.</li>
 <li>Permiten <strong>dos formas de acceso</strong>: secuencial (recorriendo todos los registros) y <strong>por clave</strong> (a través del índice), combinando lo mejor de ambos mundos.</li>
-<li>El acceso mediante el índice es mucho más rápido que recorrer todo el fichero, ya que el índice suele organizarse en estructuras eficientes de búsqueda (por ejemplo, árboles B o B+).</li>
+<li>El acceso mediante el índice es mucho más rápido que recorrer todo el fichero, ya que el índice suele organizarse en estructuras eficientes de búsqueda (por ejemplo, árboles B o B+).<ul>
 <li><strong>Inconvenientes:</strong> ocupan más espacio (hay que guardar el índice además de los datos) y hay que mantener el índice actualizado cada vez que se modifica el fichero, lo que añade cierta sobrecarga en inserciones/borrados.</li>
+</ul>
+</li>
 </ul>
 <h4 id="organizacion-del-indice-arboles-vs-hashing">Organización del índice: árboles vs. hashing<a class="headerlink" href="#organizacion-del-indice-arboles-vs-hashing" title="Permanent link">&para;</a></h4>
 <p>Los índices pueden organizarse internamente con diferentes estructuras. Las dos más comunes son los árboles (p. ej. B-tree / B+tree) y las tablas hash. A continuación se explica brevemente qué conlleva cada opción y se muestra un diagrama conceptual.</p>
 <ul>
-<li><strong>Árboles (B-tree / B+tree):</strong></li>
+<li><strong>Árboles (B-tree / B+tree):</strong><ul>
 <li><em>Características:</em> mantienen las claves ordenadas, permiten búsquedas, inserciones y borrados en tiempo O(log m) donde m es el número de entradas del índice. Son particularmente útiles cuando se necesitan operaciones de rango (por ejemplo, "todas las claves entre A y B").</li>
 <li><em>Sobrecarga:</em> requieren mantener el equilibrio del árbol y pueden implicar operaciones de reestructuración (divisiones/fusiones de nodos) en inserciones y borrados.</li>
+</ul>
+</li>
 </ul>
 <p><pre class="mermaid"><code>graph TD
   %% Ejemplo: insertar claves 1..5 en un B-tree de orden t=2 (max 3 claves por nodo hoja)
@@ -997,18 +1005,22 @@
   root --&gt; leafL
   root --&gt; leafR</code></pre>
 <strong>Ejemplo:</strong> <code>insertar claves 1..5 en un B-tree de orden t=2</code></p>
-<p>Explicación del ejemplo:
-- En un B‑tree (grado mínimo t = 2) cada nodo hoja puede contener como máximo 2t−1 = 3 claves y como mínimo t−1 = 1 clave. Eso explica el número «3» que aparece en la raíz: es la clave separadora (no significa que cada hoja deba tener 3 claves).</p>
+<p>Explicación del ejemplo:</p>
 <ul>
+<li>En un B‑tree (grado mínimo t = 2) cada nodo hoja puede contener como máximo 2t−1 = 3 claves y como mínimo t−1 = 1 clave. Eso explica el número «3» que aparece en la raíz: es la clave separadora (no significa que cada hoja deba tener 3 claves).<ul>
 <li>Insertar 1,2,3 en la hoja inicial → hoja = [1,2,3].</li>
 <li>Insertar 4 provoca que la hoja exceda su capacidad (4 claves), se divide en dos hojas [1,2] y [3,4] y se promueve la clave 3 al nodo raíz.</li>
 <li>Insertar 5 va al segmento derecho → hoja derecha pasa a [3,4,5] (dentro del máximo permitido).</li>
 </ul>
+</li>
+</ul>
 <p>Búsqueda de la clave 5 ( en este árbol sería: comparar con la raíz [3], 5&gt;3 → bajar por el puntero derecho y buscar en la hoja derecha.</p>
 <ul>
-<li><strong>Hashing (índice por dispersión):</strong></li>
+<li><strong>Hashing (índice por dispersión):</strong><ul>
 <li><em>Características:</em> una función hash convierte la clave en una posición (slot). La consulta suele ser O(1) en tiempo promedio para localizar la posición del registro. Es eficiente para búsquedas puntuales por clave.</li>
 <li><em>Sobrecarga:</em> debe gestionarse la resolución de colisiones (encadenamiento o sondeo) y no es eficiente para operaciones de rango o para mantener el orden de las claves.</li>
+</ul>
+</li>
 </ul>
 <pre class="mermaid"><code>flowchart LR
   subgraph HashTable
@@ -1021,28 +1033,37 @@
   H2 --&gt; Data2[(offset list)]</code></pre>
 <p><code>Explicación del ejemplo de hashing (claves 1..5):</code></p>
 <ul>
-<li>Definimos una función hash simple: <code>h(key) = key mod 3</code> (3 slots: 0,1,2).</li>
+<li>Definimos una función hash simple: <code>h(key) = key mod 3</code> (3 slots: 0,1,2).<ul>
 <li>Nota: <code>mod</code> significa resto de la división entera. Por ejemplo <code>5 mod 3 = 2</code> porque 5 = 1*3 + 2.</li>
-<li>Insertamos claves 1,2,3,4,5 en ese orden:</li>
+</ul>
+</li>
+<li>
+<p>Insertamos claves 1,2,3,4,5 en ese orden:</p>
+<ul>
 <li>h(1) = 1 → slot1: [1]</li>
 <li>h(2) = 2 → slot2: [2]</li>
 <li>h(3) = 0 → slot0: [3]</li>
 <li>h(4) = 1 → slot1: [1,4] (colisión resuelta por encadenamiento)</li>
-<li>
-<p>h(5) = 2 → slot2: [2,5] (colisión resuelta por encadenamiento)</p>
+<li>h(5) = 2 → slot2: [2,5] (colisión resuelta por encadenamiento)</li>
+</ul>
 </li>
 <li>
 <p>Búsqueda de la clave 5:</p>
-</li>
+<ol>
 <li>calcular h(5)=2 → ir al <code>slot2</code></li>
 <li>recorrer la lista en <code>slot2</code> y localizar 5 (posible 1-2 comparaciones dependiendo de la posición)</li>
-<li>Operaciones típicas: 1 cálculo de hash + k comparaciones en la lista del slot (k es el número de elementos en el slot). En este ejemplo k=2, así que 1 cálculo + hasta 2 comparaciones.</li>
+</ol>
+</li>
+<li>
+<p>Operaciones típicas: 1 cálculo de hash + k comparaciones en la lista del slot (k es el número de elementos en el slot). En este ejemplo k=2, así que 1 cálculo + hasta 2 comparaciones.</p>
+</li>
 </ul>
-<p>Consecuencias:
+<p><em>Consecuencias:</em>
 - Hashing ofrece localizaciones rápidas en promedio, pero el rendimiento depende de la función hash y de la carga por slot (factor de carga). El encadenamiento es sencillo y flexible.</p>
-<p>En resumen: elegir árbol o hashing depende de los requisitos: 
-* búsquedas por rango y ordenadas → B-tree/B+tree 
-* búsquedas puntuales por clave con alta velocidad → hashing.</p>
+<p><em>En resumen: elegir árbol o hashing depende de los requisitos:</em></p>
+<pre><code>* búsquedas por rango y ordenadas → B-tree/B+tree 
+* búsquedas puntuales por clave con alta velocidad → hashing.
+</code></pre>
 <ul>
 <li><strong>Formato (texto o binario):</strong> los ficheros indexados suelen implementarse sobre formatos binarios que permiten direccionar con precisión offsets y manejar estructuras de índice (B-tree, B+tree) de forma eficiente. No obstante, también pueden existir soluciones híbridas: un fichero de datos en texto (CSV) con un índice externo binario que guarda offsets.</li>
 </ul>
@@ -1068,9 +1089,11 @@ Registro#3: 3|Sanchez Diaz|sanchez@example.com|600555000
 <h3 id="13-ficheros-de-acceso-directo-aleatorio-o-relativo">1.3 Ficheros de acceso directo (aleatorio o relativo)<a class="headerlink" href="#13-ficheros-de-acceso-directo-aleatorio-o-relativo" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Permiten acceder <strong>directamente</strong> a cualquier registro sin necesidad de recorrer los anteriores, normalmente calculando la posición física del registro a partir de su clave (por ejemplo, mediante una función <em>hash</em> o porque los registros tienen tamaño fijo y se calcula un desplazamiento).</li>
-<li>También se conocen como ficheros de <strong>acceso aleatorio</strong> o de <strong>acceso relativo</strong>.</li>
+<li>También se conocen como ficheros de <strong>acceso aleatorio</strong> o de <strong>acceso relativo</strong>.<ul>
 <li><strong>Ventajas:</strong> acceso muy rápido a un registro concreto, independientemente de su posición en el fichero.</li>
 <li><strong>Inconvenientes:</strong> es necesario conocer o calcular la posición del registro; no son eficientes para procesar todos los registros de forma ordenada; puede haber colisiones si dos claves generan la misma posición (en el caso de acceso por <em>hash</em>).</li>
+</ul>
+</li>
 <li><strong>Formato (texto o binario):</strong> los ficheros de acceso directo se implementan típicamente en formato binario con registros de tamaño fijo o estructuras que permitan calcular offsets fiables. Esto facilita el cálculo directo de posiciones y el acceso por hashing. Implementaciones que intentan usar texto para acceso directo existen (por ejemplo, manteniendo un mapa de offsets), pero suelen ser menos eficientes.</li>
 </ul>
 <p><strong>Ejemplo práctico (acceso directo mediante hashing):</strong></p>
@@ -1389,7 +1412,7 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
 </tbody>
 </table>
 <h4 id="331-diagrama-1-vision-general-de-componentes-y-flujos-principales">3.3.1 Diagrama 1: Visión general de componentes y flujos principales<a class="headerlink" href="#331-diagrama-1-vision-general-de-componentes-y-flujos-principales" title="Permanent link">&para;</a></h4>
-<p><pre class="mermaid"><code>graph LR
+<pre class="mermaid"><code>graph LR
   U["Usuarios&lt;br/&gt;/ Aplicaciones"] --&gt; UI["Interfaz de usuario&lt;br/&gt;/ API"]
   UI --&gt; DML["DML&lt;br/&gt;(Consultas / Manipulación)"]
   UI --&gt; DDL["DDL&lt;br/&gt;(Definición de esquema)"]
@@ -1402,8 +1425,10 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
   TRANS --&gt; CONC["Gestor de&lt;br/&gt;concurrencia"]
   TRANS --&gt; BACK["Backup /&lt;br/&gt;Recuperación"]
   MOTOR --&gt; UI</code></pre>
-- El usuario o la aplicación envía solicitudes a través de la interfaz (UI / API).</p>
 <ul>
+<li>
+<p>El usuario o la aplicación envía solicitudes a través de la interfaz (UI / API).</p>
+</li>
 <li>
 <p>Desde la interfaz se lanzan tres tipos de acciones: operaciones sobre los datos (DML), definiciones de esquema (DDL) y órdenes de control/permiso (DCL).</p>
 </li>
@@ -1427,7 +1452,7 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
 </li>
 </ul>
 <h4 id="332-diagrama-2-flujo-dml-consultaactualizacion">3.3.2 Diagrama 2: Flujo DML (consulta/actualización)<a class="headerlink" href="#332-diagrama-2-flujo-dml-consultaactualizacion" title="Permanent link">&para;</a></h4>
-<p><pre class="mermaid"><code>graph LR
+<pre class="mermaid"><code>graph LR
   U["Usuarios&lt;br/&gt;/ Aplicaciones"] --&gt; UI["Interfaz / API"]
   UI --&gt; DML["DML:&lt;br/&gt;SELECT / INSERT / UPDATE / DELETE"]
   DML --&gt; OPT["Optimizador&lt;br/&gt;de consultas"]
@@ -1439,8 +1464,10 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
   LOG --&gt; BACK["Backup /&lt;br/&gt;Recuperación"]
   MOTOR --&gt; UI
   UI --&gt; U</code></pre>
-- El usuario envía una consulta o modificación (SELECT/INSERT/UPDATE/DELETE) a través de la interfaz.</p>
 <ul>
+<li>
+<p>El usuario envía una consulta o modificación (SELECT/INSERT/UPDATE/DELETE) a través de la interfaz.</p>
+</li>
 <li>
 <p>La petición DML llega al optimizador de consultas, que consulta el catálogo (estadísticas, índices y metadatos) para elegir un plan eficiente.</p>
 </li>
@@ -1458,7 +1485,7 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
 </li>
 </ul>
 <h4 id="333-diagrama-3-flujo-ddl-definicion-de-esquema">3.3.3 Diagrama 3: Flujo DDL (definición de esquema)<a class="headerlink" href="#333-diagrama-3-flujo-ddl-definicion-de-esquema" title="Permanent link">&para;</a></h4>
-<p><pre class="mermaid"><code>graph LR
+<pre class="mermaid"><code>graph LR
   U["Administrador /&lt;br/&gt;Aplicación"] --&gt; UI["Interfaz / API"]
   UI --&gt; DDL["DDL:&lt;br/&gt;CREATE / ALTER / DROP"]
   DDL --&gt; SEC["Módulo de&lt;br/&gt;seguridad (permiso)"]
@@ -1467,8 +1494,10 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
   MOTOR --&gt; CAT
   MOTOR --&gt; UI
   UI --&gt; U</code></pre>
-- Un administrador o aplicación envía una sentencia DDL (CREATE / ALTER / DROP) mediante la interfaz.</p>
 <ul>
+<li>
+<p>Un administrador o aplicación envía una sentencia DDL (CREATE / ALTER / DROP) mediante la interfaz.</p>
+</li>
 <li>
 <p>Antes de aplicar cambios críticos, el DDL puede pasar por el módulo de seguridad para verificar permisos.</p>
 </li>
@@ -1483,7 +1512,7 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
 </li>
 </ul>
 <h4 id="334-diagrama-4-flujo-dcl-gestion-de-permisos-y-control">3.3.4 Diagrama 4: Flujo DCL (gestión de permisos y control)<a class="headerlink" href="#334-diagrama-4-flujo-dcl-gestion-de-permisos-y-control" title="Permanent link">&para;</a></h4>
-<p><pre class="mermaid"><code>graph LR
+<pre class="mermaid"><code>graph LR
   U["Administrador"] --&gt; UI["Interfaz / API"]
   UI --&gt; DCL["DCL:&lt;br/&gt;GRANT / REVOKE / ROLES"]
   DCL --&gt; SEC["Módulo de&lt;br/&gt;seguridad / autorización"]
@@ -1491,8 +1520,10 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
   SEC --&gt; MOTOR["Motor&lt;br/&gt;de base de datos&lt;br/&gt;(aplica restricciones)"]
   MOTOR --&gt; UI
   UI --&gt; U</code></pre>
-- Un administrador emite comandos DCL (por ejemplo GRANT o REVOKE) desde la interfaz.</p>
 <ul>
+<li>
+<p>Un administrador emite comandos DCL (por ejemplo GRANT o REVOKE) desde la interfaz.</p>
+</li>
 <li>
 <p>El DCL se gestiona en el módulo de seguridad/autorización que administra usuarios, roles y privilegios.</p>
 </li>
@@ -1507,7 +1538,7 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
 </li>
 </ul>
 <h4 id="335-diagrama-5-flujo-de-transacciones-concurrencia-y-recuperacion">3.3.5 Diagrama 5: Flujo de transacciones, concurrencia y recuperación<a class="headerlink" href="#335-diagrama-5-flujo-de-transacciones-concurrencia-y-recuperacion" title="Permanent link">&para;</a></h4>
-<p><pre class="mermaid"><code>graph LR
+<pre class="mermaid"><code>graph LR
   U["Usuario / App"] --&gt; UI["Interfaz / API"]
   UI --&gt; DML["DML:&lt;br/&gt;transacción"]
   DML --&gt; MOTOR["Motor&lt;br/&gt;de BD"]
@@ -1520,8 +1551,10 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
   BACK --&gt; MOTOR
   MOTOR --&gt; UI
   UI --&gt; U</code></pre>
-- El usuario inicia una transacción (conjunto de operaciones DML) a través de la interfaz.</p>
 <ul>
+<li>
+<p>El usuario inicia una transacción (conjunto de operaciones DML) a través de la interfaz.</p>
+</li>
 <li>
 <p>La transacción es procesada por el motor de BD y coordinada por el gestor de transacciones.</p>
 </li>
@@ -1546,16 +1579,22 @@ Así, para leer el registro nº 10 el sistema salta directamente a offset = 9 * 
 <p>Los SGBD se pueden clasificar según varios criterios:</p>
 <ul>
 <li><strong>Según el modelo de datos que implementan:</strong> jerárquicos, en red, relacionales (MySQL, PostgreSQL, Oracle, SQL Server), orientados a objetos, objeto-relacionales y NoSQL (documentales, clave-valor, columnares, grafos).</li>
-<li><strong>Según el número de usuarios que soportan:</strong></li>
+<li><strong>Según el número de usuarios que soportan:</strong><ul>
 <li><strong>Monousuario:</strong> solo un usuario puede acceder a la vez (p. ej. Microsoft Access en modo local).</li>
 <li><strong>Multiusuario:</strong> varios usuarios pueden acceder simultáneamente (p. ej. MySQL, Oracle, SQL Server).</li>
+</ul>
+</li>
 <li><strong>Según la ubicación de los datos que gestionan:</strong> SGBD centralizados y SGBD distribuidos.</li>
-<li><strong>Según la licencia:</strong></li>
+<li><strong>Según la licencia:</strong><ul>
 <li><strong>Libres / de código abierto:</strong> MySQL (Community), MariaDB, PostgreSQL, SQLite.</li>
 <li><strong>Propietarios / comerciales:</strong> Oracle Database, Microsoft SQL Server, IBM Db2.</li>
-<li><strong>Según el tamaño y ámbito de uso:</strong></li>
+</ul>
+</li>
+<li><strong>Según el tamaño y ámbito de uso:</strong><ul>
 <li><strong>De escritorio / embebidos:</strong> SQLite, Microsoft Access (pequeñas aplicaciones, poco volumen de datos).</li>
 <li><strong>Empresariales / de gran capacidad:</strong> Oracle, SQL Server, PostgreSQL, MySQL, Db2 (grandes volúmenes, alta concurrencia).</li>
+</ul>
+</li>
 </ul>
 <hr />
 <h2 id="4-esquema-resumen">4. Esquema-resumen<a class="headerlink" href="#4-esquema-resumen" title="Permanent link">&para;</a></h2>
