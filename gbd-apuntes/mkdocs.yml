@@ -25,3 +25,4 @@ extra_javascript:
 nav:
   - 'Introducción': 'index.md'
   - 'Unidad 1: Sistemas de Almacenamiento de la información': 'UD1_Sistemas_de_almacenamiento_de_la_informacion.md'
+  - 'Unidad 2: Diseño lógico de bases de datos': 'UD2_Diseño_logico_de_bases_de_datos.md'
