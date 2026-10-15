@@ -15,6 +15,7 @@
   - [2.4 Cardinalidad](#24-cardinalidad)
   - [2.5 Entidades débiles](#25-entidades-débiles)
   - [2.6 Herramientas gráficas](#26-herramientas-gráficas)
+  - [2.7 Ejemplo completo con notación de Chen](#27-ejemplo-completo-con-notación-de-chen)
 - [3. El modelo E/R ampliado](#3-el-modelo-er-ampliado)
 - [4. El modelo relacional](#4-el-modelo-relacional)
   - [4.1 Terminología](#41-terminología)
@@ -97,11 +98,38 @@ En la notación **pata de gallo** (crow's foot), muy usada en herramientas, las 
 
 - **Entidad:** objeto o concepto sobre el que se guarda información. Se nombra en singular y se distingue entre **tipo de entidad** (ALUMNO) y **ocurrencia** o instancia (el alumno Pedro).
 - **Atributo:** propiedad que describe a la entidad. Tipos:
-    - **Simple / compuesto:** `nombre` frente a `dirección` (calle, número, CP).
-    - **Monovalorado / multivalorado:** un único valor o varios (teléfonos).
-    - **Obligatorio / opcional:** admite o no valor nulo.
-    - **Derivado:** calculable a partir de otros (edad desde fecha_nacimiento).
+    - **Simple / compuesto:** `nombre` es simple; `domicilio` es compuesto si se desglosa en `calle`, `localidad` y `código_postal`.
+    - **Monovalorado / multivalorado:** `fecha_nacimiento` tiene un valor por persona; `teléfono` puede tener varios.
+    - **Obligatorio / opcional:** `nombre` es obligatorio; `segundo_apellido` puede ser opcional si no todas las personas lo tienen.
+    - **Derivado:** `edad` puede calcularse a partir de `fecha_nacimiento`.
 - **Identificador (clave candidata):** atributo o conjunto de atributos que identifica de forma única cada ocurrencia. El elegido es el **identificador principal**.
+
+Ejemplo de atributos de `PERSONA` con simbología de Chen:
+
+```mermaid
+flowchart LR
+    PERSONA[PERSONA]
+    ID_PERSONA(["<u>id_persona</u>"]) --- PERSONA
+    NOMBRE(["nombre"]) --- PERSONA
+    DOMICILIO(["domicilio"]) --- PERSONA
+    CALLE(["calle"]) --- DOMICILIO
+    LOCALIDAD(["localidad"]) --- DOMICILIO
+    CP(["código_postal"]) --- DOMICILIO
+    FECHA_NAC(["fecha_nacimiento"]) --- PERSONA
+    TELEFONO(["teléfono"]):::multivalorado --- PERSONA
+    SEGUNDO_APELLIDO(["segundo_apellido (opcional)"]) --- PERSONA
+    EDAD(["edad"]):::derivado --- PERSONA
+
+    classDef multivalorado stroke-width:4px
+    classDef derivado stroke-dasharray:5 5
+```
+
+- `PERSONA` es la **entidad** (rectángulo); cada atributo se conecta a ella con una línea. `id_persona` está subrayado porque es el identificador.
+- `nombre` es un atributo **simple** y **monovalorado**; se considera **obligatorio** en este ejemplo. `fecha_nacimiento` también es monovalorado.
+- `domicilio` es **compuesto**: se desglosa en `calle`, `localidad` y `código_postal`, que se conectan al atributo compuesto.
+- `teléfono` es **multivalorado**: una persona puede tener varios teléfonos. En Chen se representa con una **elipse doble**; Mermaid no dispone de una forma de doble elipse, por lo que aquí se indica con un borde más grueso.
+- `segundo_apellido` es **opcional** en este ejemplo. En la notación básica de Chen, la opcionalidad no tiene una forma propia de atributo, así que se aclara en la etiqueta.
+- `edad` es **derivado** de `fecha_nacimiento`; en Chen se representa con una elipse discontinua, indicada aquí con el borde discontinuo.
 
 ### 2.3 Relaciones
 
@@ -109,12 +137,47 @@ Una **relación** asocia dos o más entidades. Se nombra con un verbo (Imparte, 
 
 - **Grado:** número de entidades que participan: 
     
-    - **unaria/reflexiva** (1)
-    - **binaria** (2) 
-    - **ternaria** (3)
+    - **Unaria/reflexiva** (1): un `EMPLEADO` supervisa a otro `EMPLEADO`. Como participa la misma entidad en dos papeles, se indican los roles **supervisor** y **subordinado**.
+    - **Binaria** (2): un `ALUMNO` cursa una `ASIGNATURA`.
+    - **Ternaria** (3): un `PROVEEDOR` suministra un `PRODUCTO` a un `PROYECTO`.
     - …
-- Una relación puede tener **atributos propios** (nota en la relación ALUMNO–ASIGNATURA).
-- **Rol:** función de una entidad en la relación, imprescindible en relaciones reflexivas (EMPLEADO *jefe* / *subordinado*).
+- Una relación puede tener **atributos propios**, que describen la asociación y no una entidad. Por ejemplo, `calificación` depende de la matrícula concreta de un alumno en una asignatura.
+- **Rol:** función que desempeña una entidad en una relación; es imprescindible en las relaciones reflexivas, donde la misma entidad participa con papeles distintos.
+
+Ejemplo de relación **unaria/reflexiva** en notación de Chen:
+
+```mermaid
+flowchart LR
+    EMPLEADO[EMPLEADO]
+    SUPERVISA{SUPERVISA}
+    EMPLEADO ---|supervisor| SUPERVISA
+    SUPERVISA ---|subordinado| EMPLEADO
+```
+
+Las dos líneas conectan la misma entidad con la relación, pero con roles diferentes: quien supervisa es el **supervisor** y quien recibe la supervisión es el **subordinado**.
+
+Ejemplo de relación **binaria** con un atributo propio en notación de Chen:
+
+```mermaid
+flowchart LR
+    ALUMNO[ALUMNO] --- MATRICULA{CURSA}
+    MATRICULA --- ASIGNATURA[ASIGNATURA]
+    CALIFICACION([calificación]) --- MATRICULA
+```
+
+`CURSA` es binaria porque relaciona dos entidades (`ALUMNO` y `ASIGNATURA`). `calificación` se conecta al rombo porque es un atributo de la relación: registra la nota obtenida por ese alumno en esa asignatura.
+
+Ejemplo de relación **ternaria** en notación de Chen:
+
+```mermaid
+flowchart LR
+    PROVEEDOR[PROVEEDOR] --- SUMINISTRA{SUMINISTRA}
+    SUMINISTRA --- PRODUCTO[PRODUCTO]
+    SUMINISTRA --- PROYECTO[PROYECTO]
+    CANTIDAD([cantidad]) --- SUMINISTRA
+```
+
+`SUMINISTRA` es ternaria porque asocia simultáneamente tres entidades. Cada ocurrencia indica qué proveedor suministra qué producto y a qué proyecto. `cantidad` es un atributo propio de esa combinación: el mismo proveedor puede enviar distintas cantidades de un producto a proyectos diferentes. El rombo único conectado a las tres entidades representa la relación ternaria; no debe sustituirse por tres relaciones binarias si se necesita conservar el significado conjunto.
 
 ### 2.4 Cardinalidad
 
@@ -126,7 +189,7 @@ Indica **cuántas ocurrencias** de una entidad se asocian con una de la otra.
 |---|---|---|
 | **1:1** | Una ocurrencia de A con una de B | EMPLEADO – PLAZA_PARKING |
 | **1:N** | Una de A con muchas de B | DEPARTAMENTO – EMPLEADO |
-| **N:M** | Muchas de A con muchas de B | ALUMNO – ASIGNATURA |
+| **N:M** | Muchas de A con muchas de B | ALUMNO – MÓDULOS |
 
 **Cardinalidad mínima / participación:** 
 
@@ -138,10 +201,15 @@ Se expresa como par **(mín, máx)**: (0,1), (1,1), (0,N), (1,N).
 > Atención: en la notación (mín,máx) de Chen/Merise, cada par se coloca junto a la entidad **a la que se refiere**; en la notación de tipo 1:N, la N queda del lado "muchos".
 
 ```mermaid
-erDiagram
-    DEPARTAMENTO ||--o{ EMPLEADO : "tiene"
-    ALUMNO }o--o{ ASIGNATURA : "cursa"
-    EMPLEADO |o--o| PLAZA_PARKING : "usa"
+flowchart LR
+    DEPARTAMENTO[DEPARTAMENTO] ---|"(0,N)"| TIENE{TIENE}
+    TIENE ---|"(1,1)"| EMPLEADO_DPTO[EMPLEADO]
+
+    ALUMNO[ALUMNO] ---|"(0,N)"| CURSA{CURSA}
+    CURSA ---|"(0,N)"| ASIGNATURA[ASIGNATURA]
+
+    EMPLEADO_PLAZA[EMPLEADO] ---|"(0,1)"| USA{USA}
+    USA ---|"(0,1)"| PLAZA[PLAZA_PARKING]
 ```
 
 ### 2.5 Entidades débiles
@@ -155,18 +223,20 @@ Una **entidad débil** no tiene atributos suficientes para identificarse por sí
 Ejemplo: `EDIFICIO` (cod_edificio) y `AULA` (nº de aula). El aula "101" se repite en cada edificio, así que AULA se identifica con (cod_edificio, num_aula).
 
 ```mermaid
-erDiagram
-    EDIFICIO ||--|{ AULA : "contiene"
-    EDIFICIO {
-        int cod_edificio PK
-        string nombre
-    }
-    AULA {
-        int cod_edificio PK, FK
-        int num_aula PK
-        int capacidad
-    }
+flowchart LR
+    EDIFICIO[EDIFICIO] ---|"(1,N)"| CONTIENE{CONTIENE}:::identificadora
+    CONTIENE ---|"(1,1)"| AULA[[AULA]]:::debil
+
+    COD(["<u>cod_edificio</u>"]) --- EDIFICIO
+    NOMBRE(["nombre"]) --- EDIFICIO
+    NUM(["<u>num_aula</u>"]) --- AULA
+    CAPACIDAD(["capacidad"]) --- AULA
+
+    classDef identificadora stroke-width:4px
+    classDef debil stroke-width:4px
 ```
+
+En Chen, `AULA` se representa con **rectángulo doble** porque es débil y `CONTIENE` con **rombo doble** porque es la relación identificadora. Mermaid no ofrece formas nativas de doble rectángulo ni de doble rombo; en el diagrama se indican mediante nodos de borde grueso (y la forma de subrutina para `AULA`) como aproximación visual. `num_aula` es el **discriminador** o clave parcial: se subraya para señalar que, junto con `cod_edificio`, identifica cada aula. Así, la clave completa de AULA es `(cod_edificio, num_aula)`.
 
 ### 2.6 Herramientas gráficas
 
@@ -182,6 +252,37 @@ erDiagram
 | **Lucidchart, ER/Studio, Visual Paradigm** | Comerciales | Modelado profesional |
 
 Buenas prácticas: nombres claros y coherentes, mostrar claves y cardinalidades, un solo diagrama legible por tema.
+
+### 2.7 Ejemplo completo con notación de Chen
+
+**Contexto:** un centro de formación quiere registrar qué módulos cursa cada alumno en cada curso académico y la calificación final que obtiene. Todo alumno matriculado cursa al menos un módulo y cada módulo ofertado tiene al menos un alumno; ambos pueden estar asociados a varios. Para evitar confundir matrículas de cursos académicos distintos, cada matrícula queda identificada por el alumno, el módulo y el curso académico.
+
+**Definición del modelo:** `ALUMNO` y `MÓDULO` son entidades porque representan objetos sobre los que el centro guarda información. `SE MATRICULA` es una relación muchos a muchos (N:M) que expresa que un alumno cursa un módulo. `curso_académico` y `calificación` son atributos de esa relación: describen cada matrícula, no al alumno ni al módulo por separado. Las claves subrayadas identifican de forma única cada entidad; para la matrícula, la combinación de las claves de ambas entidades y el curso académico identifica cada ocurrencia.
+
+```mermaid
+flowchart LR
+    ALUMNO[ALUMNO]
+    MATRICULA{SE MATRICULA}
+    MODULO[MÓDULO]
+
+    ALUMNO ---|"(1,N)"| MATRICULA
+    MATRICULA ---|"(1,N)"| MODULO
+
+    ID_ALUMNO(["<u>id_alumno</u>"]) --- ALUMNO
+    NOMBRE_ALUMNO(["nombre"]) --- ALUMNO
+    ID_MODULO(["<u>id_módulo</u>"]) --- MODULO
+    NOMBRE_MODULO(["nombre"]) --- MODULO
+
+    CURSO(["<u>curso_académico</u>"]) --- MATRICULA
+    CALIFICACION(["calificación"]) --- MATRICULA
+```
+
+**Cómo leerlo:**
+
+- Los **rectángulos** son entidades, el **rombo** es la relación y las **elipses** son atributos, siguiendo la simbología clásica de Chen. Las claves de las entidades aparecen subrayadas; también se subraya `curso_académico` porque completa la identificación de cada matrícula.
+- `(1,N)` junto a `ALUMNO` indica que todo alumno participa en la relación al menos una vez y puede cursar varios módulos. Junto a `MÓDULO` indica que todo módulo ofertado tiene al menos un alumno y puede tener varios. Cada ocurrencia de la relación corresponde a un único alumno y a un único módulo.
+- `curso_académico` forma parte de la identificación de una matrícula: un mismo alumno puede volver a cursar el mismo módulo en otro curso. Por tanto, la clave de `SE MATRICULA` es `(id_alumno, id_módulo, curso_académico)`.
+- `calificación` pertenece a la relación porque depende de la matrícula concreta. Así, el alumno puede obtener calificaciones diferentes en distintos módulos o cursos.
 
 ---
 
@@ -201,23 +302,26 @@ Restricciones de la jerarquía:
 
 Otros conceptos del modelo ampliado: **agregación** (una relación se trata como entidad para relacionarla con otra), **atributos compuestos**, **relaciones ternarias** y **restricciones de participación**.
 
+Ejemplo: una empresa registra personas como empleados o clientes. En este caso, la especialización es **disjunta** (`d`) y **total**: cada persona pertenece exactamente a uno de los dos subtipos.
+
 ```mermaid
-erDiagram
-    PERSONA ||--o| EMPLEADO : "es"
-    PERSONA ||--o| CLIENTE : "es"
-    PERSONA {
-        int id PK
-        string nombre
-    }
-    EMPLEADO {
-        int id PK, FK
-        decimal salario
-    }
-    CLIENTE {
-        int id PK, FK
-        string num_cliente
-    }
+flowchart TB
+    PERSONA[PERSONA]
+    ISA["△<br/>(d, total)"]
+    EMPLEADO[EMPLEADO]
+    CLIENTE[CLIENTE]
+
+    PERSONA --- ISA
+    ISA --- EMPLEADO
+    ISA --- CLIENTE
+
+    ID(["<u>id_persona</u>"]) --- PERSONA
+    NOMBRE(["nombre"]) --- PERSONA
+    SALARIO(["salario"]) --- EMPLEADO
+    NUM_CLIENTE(["num_cliente"]) --- CLIENTE
 ```
+
+El rectángulo `PERSONA` es la superentidad; el triángulo `△` representa la especialización ISA. La anotación `(d, total)` indica que los subtipos son disjuntos y que toda persona pertenece a uno de ellos. Las líneas conectan la superentidad con `EMPLEADO` y `CLIENTE`, que heredan `id_persona` y `nombre`; cada subtipo añade su atributo específico.
 
 ---
 
@@ -335,14 +439,14 @@ CREATE TABLE empleado (
 
 ### 5.2 Ejemplo completo
 
-Enunciado: un instituto tiene **departamentos** con varios **profesores**; los **alumnos** se matriculan en **asignaturas** y obtienen una **nota**; las asignaturas las imparte un profesor.
+Enunciado: un instituto tiene **departamentos** con varios **profesores**; los **alumnos** se matriculan en **modulos** y obtienen una **nota**; los módulos los imparte un profesor.
 
 ```mermaid
 erDiagram
-    DEPARTAMENTO ||--o{ PROFESOR : "pertenece"
-    PROFESOR ||--o{ ASIGNATURA : "imparte"
-    ALUMNO ||--o{ MATRICULA : "realiza"
-    ASIGNATURA ||--o{ MATRICULA : "incluye"
+    DEPARTAMENTO ||--o{ PROFESOR : "tiene"
+    PROFESOR ||--o{ MODULO : "imparte"
+    ALUMNO ||--|{ MATRICULA : "realiza"
+    MODULO ||--o{ MATRICULA : "incluye"
     DEPARTAMENTO {
         int cod_dep PK
         string nombre
@@ -352,8 +456,8 @@ erDiagram
         string nombre
         int cod_dep FK
     }
-    ASIGNATURA {
-        int cod_asig PK
+    MODULO {
+        int cod_mod PK
         string nombre
         char dni_profesor FK
     }
@@ -364,22 +468,30 @@ erDiagram
     }
     MATRICULA {
         char dni_alumno PK, FK
-        int cod_asig PK, FK
+        int cod_mod PK, FK
         decimal nota
     }
 ```
+
+> **Lectura de símbolos y cardinalidades:** `||` significa **uno y solo uno**; `o{` significa **cero o muchos**; `|{` significa **uno o muchos**. El símbolo situado junto a cada entidad indica cuántas de sus ocurrencias pueden asociarse con una ocurrencia de la entidad opuesta. Por ejemplo, en `DEPARTAMENTO ||--o{ PROFESOR`, cada profesor pertenece a un único departamento, mientras que un departamento puede tener cero o muchos profesores. Del mismo modo, un profesor puede impartir cero o muchos módulos, y cada módulo lo imparte un único profesor; cada alumno debe tener una o muchas matrículas, y cada matrícula corresponde a un único alumno y un único módulo.
 
 Esquema relacional resultante (PK subrayada con `_`, FK con `#`):
 
 ```
 DEPARTAMENTO(_cod_dep_, nombre)
 PROFESOR(_dni_, nombre, #cod_dep)
-ASIGNATURA(_cod_asig_, nombre, #dni_profesor)
+MODULO(_cod_mod_, nombre, #dni_profesor)
 ALUMNO(_dni_, nombre, fecha_nac)
-MATRICULA(_#dni_alumno_, _#cod_asig_, nota)
+MATRICULA(_#dni_alumno_, _#cod_mod_, nota)
 ```
 
-Procedimiento: 1) una tabla por entidad, 2) 1:N → FK en el lado N, 3) N:M → tabla `MATRICULA`, 4) los atributos de la relación (`nota`) van a la tabla intermedia, 5) definir PK, FK y acciones referenciales.
+Procedimiento: 
+
+1) una tabla por entidad 
+2) 1:N → FK en el lado N
+3) N:M → tabla `MATRICULA`
+4) los atributos de la relación (`nota`) van a la tabla intermedia 
+5) definir PK, FK y acciones referenciales.
 
 ### 5.3 Restricciones que no pueden plasmarse en el diseño lógico
 
@@ -389,9 +501,9 @@ Algunas reglas del problema **no se pueden expresar** con tablas, claves y relac
 
 Ejemplos:
 
-- Un alumno no puede matricularse en más de 8 asignaturas por curso.
+- Un alumno no puede matricularse en más de 8 módulos por curso.
 - La nota debe estar entre 0 y 10 y solo puede ponerse si la matrícula está abierta.
-- Un profesor no puede impartir dos asignaturas a la misma hora.
+- Un profesor no puede impartir dos módulos a la misma hora.
 - Una jerarquía **total/disjunta** (garantizar que cada persona sea exactamente de un subtipo).
 - Un departamento debe tener al menos un profesor (cardinalidad mínima 1 en el lado "muchos").
 - La fecha de fin debe ser posterior a la de inicio entre columnas de distintas tablas.
@@ -401,7 +513,7 @@ Formato recomendado de documentación:
 
 | Nº | Restricción | Tablas implicadas | Cómo se implementará |
 |---|---|---|---|
-| R1 | Máx. 8 asignaturas por alumno y curso | MATRICULA | Trigger |
+| R1 | Máx. 8 módulos por alumno y curso | MATRICULA | Trigger |
 | R2 | Departamento con al menos un profesor | DEPARTAMENTO, PROFESOR | Aplicación / trigger |
 
 ---
@@ -477,7 +589,7 @@ Ejemplo: `IMPARTE(alumno, asignatura, profesor)` con `profesor → asignatura` (
 Proceso de normalización:
 
 ```mermaid
-flowchart TD
+flowchart LR
     A[Tabla inicial] --> B{¿Valores atómicos?}
     B -- No --> B1[Aplicar 1FN]
     B -- Sí --> C{¿Dependencias parciales?}
@@ -529,5 +641,3 @@ flowchart TD
 | **Relación (E/R)** | Asociación entre entidades |
 | **Relación (modelo relacional)** | Tabla |
 | **Tupla** | Fila de una tabla |
-
-
