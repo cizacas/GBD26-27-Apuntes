@@ -107,7 +107,12 @@ En la notación **pata de gallo** (crow's foot), muy usada en herramientas, las 
 
 Una **relación** asocia dos o más entidades. Se nombra con un verbo (Imparte, Matricula).
 
-- **Grado:** número de entidades que participan: **unaria/reflexiva** (1), **binaria** (2), **ternaria** (3)…
+- **Grado:** número de entidades que participan: 
+    
+    - **unaria/reflexiva** (1)
+    - **binaria** (2) 
+    - **ternaria** (3)
+    - …
 - Una relación puede tener **atributos propios** (nota en la relación ALUMNO–ASIGNATURA).
 - **Rol:** función de una entidad en la relación, imprescindible en relaciones reflexivas (EMPLEADO *jefe* / *subordinado*).
 
@@ -123,7 +128,12 @@ Indica **cuántas ocurrencias** de una entidad se asocian con una de la otra.
 | **1:N** | Una de A con muchas de B | DEPARTAMENTO – EMPLEADO |
 | **N:M** | Muchas de A con muchas de B | ALUMNO – ASIGNATURA |
 
-**Cardinalidad mínima / participación:** **0** (opcional, participación parcial) o **1** (obligatoria, participación total). Se expresa como par **(mín, máx)**: (0,1), (1,1), (0,N), (1,N).
+**Cardinalidad mínima / participación:** 
+
+- **0** (opcional, participación parcial) 
+- **1** (obligatoria, participación total). 
+
+Se expresa como par **(mín, máx)**: (0,1), (1,1), (0,N), (1,N).
 
 > Atención: en la notación (mín,máx) de Chen/Merise, cada par se coloca junto a la entidad **a la que se refiere**; en la notación de tipo 1:N, la N queda del lado "muchos".
 
