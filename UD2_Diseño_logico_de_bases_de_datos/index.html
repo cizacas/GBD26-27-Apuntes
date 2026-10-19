@@ -1,0 +1,2150 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://cizacas.github.io/GBD26-27-Apuntes/UD2_Dise%C3%B1o_logico_de_bases_de_datos/">
+      
+      
+        <link rel="prev" href="../UD1_Sistemas_de_almacenamiento_de_la_informacion/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Unidad 2: Diseño lógico de bases de datos - Gestión de Bases de Datos</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="lime">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#unidad-2-diseno-logico-de-base-de-datos" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="Gestión de Bases de Datos" class="md-header__button md-logo" aria-label="Gestión de Bases de Datos" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Gestión de Bases de Datos
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Unidad 2: Diseño lógico de bases de datos
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Gestión de Bases de Datos" class="md-nav__button md-logo" aria-label="Gestión de Bases de Datos" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Gestión de Bases de Datos
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introducción
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../UD1_Sistemas_de_almacenamiento_de_la_informacion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unidad 1: Sistemas de Almacenamiento de la información
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unidad 2: Diseño lógico de bases de datos
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unidad 2: Diseño lógico de bases de datos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#indice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Índice
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-modelo-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Modelo de datos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-el-modelo-entidadrelacion-er" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. El modelo Entidad/Relación (E/R)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. El modelo Entidad/Relación (E/R)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-simbologia-del-diagrama-er" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Simbología del diagrama E/R
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-entidades-y-atributos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Entidades y atributos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-relaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Relaciones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-cardinalidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Cardinalidad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-entidades-debiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Entidades débiles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-herramientas-graficas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 Herramientas gráficas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-ejemplo-completo-con-notacion-de-chen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7 Ejemplo completo con notación de Chen
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.7 Ejemplo completo con notación de Chen">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variante-compacta-atributos-fuera-de-las-entidades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variante compacta: atributos fuera de las entidades
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-el-modelo-er-ampliado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. El modelo E/R ampliado
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-el-modelo-relacional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. El modelo relacional
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. El modelo relacional">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-terminologia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Terminología
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-caracteristicas-de-una-relacion-tabla" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Características de una relación (tabla)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-claves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Claves
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-reglas-de-integridad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Reglas de integridad
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-paso-del-diagrama-er-al-modelo-relacional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Paso del diagrama E/R al modelo relacional
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Paso del diagrama E/R al modelo relacional">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-reglas-de-transformacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Reglas de transformación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-ejemplo-completo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Ejemplo completo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-restricciones-que-no-pueden-plasmarse-en-el-diseno-logico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Restricciones que no pueden plasmarse en el diseño lógico
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-normalizacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Normalización
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Normalización">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-dependencias-funcionales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Dependencias funcionales
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-primera-forma-normal-1fn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Primera forma normal (1FN)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-segunda-forma-normal-2fn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Segunda forma normal (2FN)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-tercera-forma-normal-3fn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 Tercera forma normal (3FN)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-forma-normal-de-boyce-codd-fnbc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 Forma normal de Boyce-Codd (FNBC)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-hasta-que-nivel-normalizar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6 Hasta qué nivel normalizar
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-esquema-resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Esquema-resumen
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-glosario-de-terminos-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Glosario de términos clave
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#indice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Índice
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-modelo-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Modelo de datos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-el-modelo-entidadrelacion-er" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. El modelo Entidad/Relación (E/R)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. El modelo Entidad/Relación (E/R)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-simbologia-del-diagrama-er" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Simbología del diagrama E/R
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-entidades-y-atributos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Entidades y atributos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-relaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Relaciones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-cardinalidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Cardinalidad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-entidades-debiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Entidades débiles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-herramientas-graficas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 Herramientas gráficas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-ejemplo-completo-con-notacion-de-chen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7 Ejemplo completo con notación de Chen
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.7 Ejemplo completo con notación de Chen">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variante-compacta-atributos-fuera-de-las-entidades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variante compacta: atributos fuera de las entidades
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-el-modelo-er-ampliado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. El modelo E/R ampliado
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-el-modelo-relacional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. El modelo relacional
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. El modelo relacional">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-terminologia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Terminología
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-caracteristicas-de-una-relacion-tabla" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Características de una relación (tabla)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-claves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Claves
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-reglas-de-integridad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Reglas de integridad
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-paso-del-diagrama-er-al-modelo-relacional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Paso del diagrama E/R al modelo relacional
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Paso del diagrama E/R al modelo relacional">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-reglas-de-transformacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Reglas de transformación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-ejemplo-completo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Ejemplo completo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-restricciones-que-no-pueden-plasmarse-en-el-diseno-logico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Restricciones que no pueden plasmarse en el diseño lógico
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-normalizacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Normalización
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Normalización">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-dependencias-funcionales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Dependencias funcionales
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-primera-forma-normal-1fn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Primera forma normal (1FN)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-segunda-forma-normal-2fn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Segunda forma normal (2FN)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-tercera-forma-normal-3fn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 Tercera forma normal (3FN)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-forma-normal-de-boyce-codd-fnbc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 Forma normal de Boyce-Codd (FNBC)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-hasta-que-nivel-normalizar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6 Hasta qué nivel normalizar
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-esquema-resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Esquema-resumen
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-glosario-de-terminos-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Glosario de términos clave
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="unidad-2-diseno-logico-de-base-de-datos">Unidad 2 - Diseño lógico de base de datos <!-- omit from toc --><a class="headerlink" href="#unidad-2-diseno-logico-de-base-de-datos" title="Permanent link">&para;</a></h1>
+<p><strong>Módulo:</strong> Gestión de base de datos</p>
+<p><strong>RA2:</strong> Diseña modelos lógicos normalizados interpretando diagramas entidad/relación.</p>
+<hr />
+<h2 id="indice">Índice <!-- omit from toc --><a class="headerlink" href="#indice" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="#1-modelo-de-datos">1. Modelo de datos</a></li>
+<li><a href="#2-el-modelo-entidadrelación-er">2. El modelo Entidad/Relación (E/R)</a></li>
+<li><a href="#21-simbología-del-diagrama-er">2.1 Simbología del diagrama E/R</a></li>
+<li><a href="#22-entidades-y-atributos">2.2 Entidades y atributos</a></li>
+<li><a href="#23-relaciones">2.3 Relaciones</a></li>
+<li><a href="#24-cardinalidad">2.4 Cardinalidad</a></li>
+<li><a href="#25-entidades-débiles">2.5 Entidades débiles</a></li>
+<li><a href="#26-herramientas-gráficas">2.6 Herramientas gráficas</a></li>
+<li><a href="#27-ejemplo-completo-con-notación-de-chen">2.7 Ejemplo completo con notación de Chen</a><ul>
+<li><a href="#variante-compacta-atributos-fuera-de-las-entidades">Variante compacta: atributos fuera de las entidades</a></li>
+</ul>
+</li>
+<li><a href="#3-el-modelo-er-ampliado">3. El modelo E/R ampliado</a></li>
+<li><a href="#4-el-modelo-relacional">4. El modelo relacional</a></li>
+<li><a href="#41-terminología">4.1 Terminología</a></li>
+<li><a href="#42-características-de-una-relación-tabla">4.2 Características de una relación (tabla)</a></li>
+<li><a href="#43-claves">4.3 Claves</a></li>
+<li><a href="#44-reglas-de-integridad">4.4 Reglas de integridad</a></li>
+<li><a href="#5-paso-del-diagrama-er-al-modelo-relacional">5. Paso del diagrama E/R al modelo relacional</a></li>
+<li><a href="#51-reglas-de-transformación">5.1 Reglas de transformación</a></li>
+<li><a href="#52-ejemplo-completo">5.2 Ejemplo completo</a></li>
+<li><a href="#53-restricciones-que-no-pueden-plasmarse-en-el-diseño-lógico">5.3 Restricciones que no pueden plasmarse en el diseño lógico</a></li>
+<li><a href="#6-normalización">6. Normalización</a></li>
+<li><a href="#61-dependencias-funcionales">6.1 Dependencias funcionales</a></li>
+<li><a href="#62-primera-forma-normal-1fn">6.2 Primera forma normal (1FN)</a></li>
+<li><a href="#63-segunda-forma-normal-2fn">6.3 Segunda forma normal (2FN)</a></li>
+<li><a href="#64-tercera-forma-normal-3fn">6.4 Tercera forma normal (3FN)</a></li>
+<li><a href="#65-forma-normal-de-boyce-codd-fnbc">6.5 Forma normal de Boyce-Codd (FNBC)</a></li>
+<li><a href="#66-hasta-qué-nivel-normalizar">6.6 Hasta qué nivel normalizar</a></li>
+<li><a href="#7-esquema-resumen">7. Esquema-resumen</a></li>
+<li><a href="#8-glosario-de-términos-clave">8. Glosario de términos clave</a></li>
+</ul>
+<hr />
+<h2 id="1-modelo-de-datos">1. Modelo de datos<a class="headerlink" href="#1-modelo-de-datos" title="Permanent link">&para;</a></h2>
+<p><em>(CE-a: Se ha identificado el significado de la simbología propia de los diagramas entidad/relación)</em></p>
+<p>Un <strong>modelo de datos</strong> es un conjunto de herramientas conceptuales para describir los datos, sus relaciones, su semántica y las restricciones de consistencia. Permite pasar de un problema del mundo real a una base de datos implementada.</p>
+<p>El diseño de una base de datos se hace en tres niveles de abstracción:</p>
+<table>
+<thead>
+<tr>
+<th>Nivel</th>
+<th>Modelo</th>
+<th>Qué describe</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Conceptual</strong></td>
+<td>Entidad/Relación</td>
+<td>Qué datos hay y cómo se relacionan, independiente del SGBD</td>
+<td>Diagrama E/R</td>
+</tr>
+<tr>
+<td><strong>Lógico</strong></td>
+<td>Relacional</td>
+<td>Estructura en tablas, campos, claves; depende del tipo de SGBD, no del producto</td>
+<td>Esquema relacional</td>
+</tr>
+<tr>
+<td><strong>Físico</strong></td>
+<td>Específico del SGBD</td>
+<td>Tipos de datos, índices, almacenamiento</td>
+<td>Script SQL de MySQL/PostgreSQL</td>
+</tr>
+</tbody>
+</table>
+<pre class="mermaid"><code>flowchart LR
+    A[Problema real / requisitos] --&gt; B[Diseño conceptual&lt;br/&gt;Diagrama E/R]
+    B --&gt; C[Diseño lógico&lt;br/&gt;Modelo relacional + normalización]
+    C --&gt; D[Diseño físico&lt;br/&gt;SQL en un SGBD]</code></pre>
+<p>Esta unidad se centra en el paso <strong>conceptual → lógico</strong>.</p>
+<hr />
+<h2 id="2-el-modelo-entidadrelacion-er">2. El modelo Entidad/Relación (E/R)<a class="headerlink" href="#2-el-modelo-entidadrelacion-er" title="Permanent link">&para;</a></h2>
+<p>Propuesto por Peter Chen (1976). Representa la realidad mediante <strong>entidades</strong>, <strong>atributos</strong> y <strong>relaciones</strong>, usando un diagrama.</p>
+<h3 id="21-simbologia-del-diagrama-er">2.1 Simbología del diagrama E/R<a class="headerlink" href="#21-simbologia-del-diagrama-er" title="Permanent link">&para;</a></h3>
+<p>Existen varias notaciones. La clásica de Chen usa:</p>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Símbolo (Chen)</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entidad</td>
+<td>Rectángulo</td>
+<td>Objeto del mundo real distinguible (Alumno, Curso)</td>
+</tr>
+<tr>
+<td>Entidad débil</td>
+<td>Rectángulo doble</td>
+<td>Entidad que depende de otra para identificarse</td>
+</tr>
+<tr>
+<td>Relación</td>
+<td>Rombo</td>
+<td>Asociación entre entidades (Matricula)</td>
+</tr>
+<tr>
+<td>Relación identificadora</td>
+<td>Rombo doble</td>
+<td>Relación que une una entidad débil con su fuerte</td>
+</tr>
+<tr>
+<td>Atributo</td>
+<td>Elipse</td>
+<td>Propiedad de una entidad o relación</td>
+</tr>
+<tr>
+<td>Atributo clave</td>
+<td>Elipse con nombre subrayado</td>
+<td>Identifica de forma única cada ocurrencia</td>
+</tr>
+<tr>
+<td>Atributo multivalorado</td>
+<td>Elipse doble</td>
+<td>Puede tener varios valores</td>
+</tr>
+<tr>
+<td>Atributo derivado</td>
+<td>Elipse discontinua</td>
+<td>Se calcula a partir de otros (edad)</td>
+</tr>
+<tr>
+<td>Cardinalidad</td>
+<td>Etiqueta (1, N, M) o (min,max) en la línea</td>
+<td>Nº de ocurrencias que intervienen</td>
+</tr>
+<tr>
+<td>Línea</td>
+<td>Segmento</td>
+<td>Une entidades con relaciones y atributos</td>
+</tr>
+<tr>
+<td>Jerarquía (ISA)</td>
+<td>Triángulo</td>
+<td>Generalización/especialización</td>
+</tr>
+</tbody>
+</table>
+<p>En algunos materiales se usa también una <strong>variante compacta inspirada en Chen</strong>: los atributos se escriben fuera del rectángulo de la entidad y se conectan a este, pero se omiten las elipses de Chen clásico. En la variante del ejemplo de abajo, un círculo precede a cada atributo:</p>
+<ul>
+<li><code>●</code> <strong>atributo obligatorio</strong>: debe tener un valor.</li>
+<li><code>○</code> <strong>atributo opcional</strong>: puede no tener valor.</li>
+</ul>
+<p>Estos círculos indican obligatoriedad, <strong>no si el atributo es clave</strong>. Para mostrar las claves en este ejemplo, se subrayan sus nombres, como en Chen clásico. La convención de los círculos puede variar entre materiales y herramientas, por lo que conviene incluir una leyenda que explique los símbolos.</p>
+<p>En la notación <strong>pata de gallo</strong> (crow's foot), muy usada en herramientas, las relaciones son líneas y la cardinalidad se dibuja en los extremos:</p>
+<table>
+<thead>
+<tr>
+<th>Símbolo</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\|\|</code></td>
+<td>Uno y solo uno (1,1)</td>
+</tr>
+<tr>
+<td><code>o\|</code></td>
+<td>Cero o uno (0,1)</td>
+</tr>
+<tr>
+<td><code>\|{</code></td>
+<td>Uno o muchos (1,N)</td>
+</tr>
+<tr>
+<td><code>o{</code></td>
+<td>Cero o muchos (0,N)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-entidades-y-atributos">2.2 Entidades y atributos<a class="headerlink" href="#22-entidades-y-atributos" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Entidad:</strong> objeto o concepto sobre el que se guarda información. Se nombra en singular y se distingue entre <strong>tipo de entidad</strong> (ALUMNO) y <strong>ocurrencia</strong> o instancia (el alumno Pedro).</li>
+<li><strong>Atributo:</strong> propiedad que describe a la entidad. Tipos:<ul>
+<li><strong>Simple / compuesto:</strong> <code>nombre</code> es simple; <code>domicilio</code> es compuesto si se desglosa en <code>calle</code>, <code>localidad</code> y <code>código_postal</code>.</li>
+<li><strong>Monovalorado / multivalorado:</strong> <code>fecha_nacimiento</code> tiene un valor por persona; <code>teléfono</code> puede tener varios.</li>
+<li><strong>Obligatorio / opcional:</strong> <code>nombre</code> es obligatorio; <code>segundo_apellido</code> puede ser opcional si no todas las personas lo tienen.</li>
+<li><strong>Derivado:</strong> <code>edad</code> puede calcularse a partir de <code>fecha_nacimiento</code>.</li>
+</ul>
+</li>
+<li><strong>Identificador (clave candidata):</strong> atributo o conjunto de atributos que identifica de forma única cada ocurrencia. El elegido es el <strong>identificador principal</strong>.</li>
+</ul>
+<p>Ejemplo de atributos de <code>PERSONA</code> con simbología de Chen:</p>
+<pre class="mermaid"><code>flowchart LR
+    PERSONA[PERSONA]
+    ID_PERSONA(["&lt;u&gt;id_persona&lt;/u&gt;"]) --- PERSONA
+    NOMBRE(["nombre"]) --- PERSONA
+    DOMICILIO(["domicilio"]) --- PERSONA
+    CALLE(["calle"]) --- DOMICILIO
+    LOCALIDAD(["localidad"]) --- DOMICILIO
+    CP(["código_postal"]) --- DOMICILIO
+    FECHA_NAC(["fecha_nacimiento"]) --- PERSONA
+    TELEFONO(["teléfono"]):::multivalorado --- PERSONA
+    SEGUNDO_APELLIDO(["segundo_apellido (opcional)"]) --- PERSONA
+    EDAD(["edad"]):::derivado --- PERSONA
+
+    classDef multivalorado stroke-width:4px
+    classDef derivado stroke-dasharray:5 5</code></pre>
+<ul>
+<li><code>PERSONA</code> es la <strong>entidad</strong> (rectángulo); cada atributo se conecta a ella con una línea. <code>id_persona</code> está subrayado porque es el identificador.</li>
+<li><code>nombre</code> es un atributo <strong>simple</strong> y <strong>monovalorado</strong>; se considera <strong>obligatorio</strong> en este ejemplo. <code>fecha_nacimiento</code> también es monovalorado.</li>
+<li><code>domicilio</code> es <strong>compuesto</strong>: se desglosa en <code>calle</code>, <code>localidad</code> y <code>código_postal</code>, que se conectan al atributo compuesto.</li>
+<li><code>teléfono</code> es <strong>multivalorado</strong>: una persona puede tener varios teléfonos. En Chen se representa con una <strong>elipse doble</strong>; Mermaid no dispone de una forma de doble elipse, por lo que aquí se indica con un borde más grueso.</li>
+<li><code>segundo_apellido</code> es <strong>opcional</strong> en este ejemplo. En la notación básica de Chen, la opcionalidad no tiene una forma propia de atributo, así que se aclara en la etiqueta.</li>
+<li><code>edad</code> es <strong>derivado</strong> de <code>fecha_nacimiento</code>; en Chen se representa con una elipse discontinua, indicada aquí con el borde discontinuo.</li>
+</ul>
+<h3 id="23-relaciones">2.3 Relaciones<a class="headerlink" href="#23-relaciones" title="Permanent link">&para;</a></h3>
+<p>Una <strong>relación</strong> asocia dos o más entidades. Se nombra con un verbo (Imparte, Matricula).</p>
+<ul>
+<li>
+<p><strong>Grado:</strong> número de entidades que participan: </p>
+<ul>
+<li><strong>Unaria/reflexiva</strong> (1): un <code>EMPLEADO</code> supervisa a otro <code>EMPLEADO</code>. Como participa la misma entidad en dos papeles, se indican los roles <strong>supervisor</strong> y <strong>subordinado</strong>.</li>
+<li><strong>Binaria</strong> (2): un <code>ALUMNO</code> cursa una <code>ASIGNATURA</code>.</li>
+<li><strong>Ternaria</strong> (3): un <code>PROVEEDOR</code> suministra un <code>PRODUCTO</code> a un <code>PROYECTO</code>.</li>
+<li>…</li>
+<li>Una relación puede tener <strong>atributos propios</strong>, que describen la asociación y no una entidad. Por ejemplo, <code>calificación</code> depende de la matrícula concreta de un alumno en una asignatura.</li>
+<li><strong>Rol:</strong> función que desempeña una entidad en una relación; es imprescindible en las relaciones reflexivas, donde la misma entidad participa con papeles distintos.</li>
+</ul>
+</li>
+</ul>
+<p>Ejemplo de relación <strong>unaria/reflexiva</strong> en notación de Chen:</p>
+<pre class="mermaid"><code>flowchart LR
+    EMPLEADO[EMPLEADO]
+    SUPERVISA{SUPERVISA}
+    EMPLEADO ---|supervisor| SUPERVISA
+    SUPERVISA ---|subordinado| EMPLEADO</code></pre>
+<p>Las dos líneas conectan la misma entidad con la relación, pero con roles diferentes: quien supervisa es el <strong>supervisor</strong> y quien recibe la supervisión es el <strong>subordinado</strong>.</p>
+<p>Ejemplo de relación <strong>binaria</strong> con un atributo propio en notación de Chen:</p>
+<pre class="mermaid"><code>flowchart LR
+    ALUMNO[ALUMNO] --- MATRICULA{CURSA}
+    MATRICULA --- ASIGNATURA[ASIGNATURA]
+    CALIFICACION([calificación]) --- MATRICULA</code></pre>
+<p><code>CURSA</code> es binaria porque relaciona dos entidades (<code>ALUMNO</code> y <code>ASIGNATURA</code>). <code>calificación</code> se conecta al rombo porque es un atributo de la relación: registra la nota obtenida por ese alumno en esa asignatura.</p>
+<p>Ejemplo de relación <strong>ternaria</strong> en notación de Chen:</p>
+<pre class="mermaid"><code>flowchart LR
+    PROVEEDOR[PROVEEDOR] --- SUMINISTRA{SUMINISTRA}
+    SUMINISTRA --- PRODUCTO[PRODUCTO]
+    SUMINISTRA --- PROYECTO[PROYECTO]
+    CANTIDAD([cantidad]) --- SUMINISTRA</code></pre>
+<p><code>SUMINISTRA</code> es ternaria porque asocia simultáneamente tres entidades. Cada ocurrencia indica qué proveedor suministra qué producto y a qué proyecto. <code>cantidad</code> es un atributo propio de esa combinación: el mismo proveedor puede enviar distintas cantidades de un producto a proyectos diferentes. El rombo único conectado a las tres entidades representa la relación ternaria; no debe sustituirse por tres relaciones binarias si se necesita conservar el significado conjunto.</p>
+<h3 id="24-cardinalidad">2.4 Cardinalidad<a class="headerlink" href="#24-cardinalidad" title="Permanent link">&para;</a></h3>
+<p>Indica <strong>cuántas ocurrencias</strong> de una entidad se asocian con una de la otra.</p>
+<p><strong>Cardinalidad máxima</strong> (tipo de correspondencia):</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Significado</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1:1</strong></td>
+<td>Una ocurrencia de A con una de B</td>
+<td>EMPLEADO – PLAZA_PARKING</td>
+</tr>
+<tr>
+<td><strong>1:N</strong></td>
+<td>Una de A con muchas de B</td>
+<td>DEPARTAMENTO – EMPLEADO</td>
+</tr>
+<tr>
+<td><strong>N:M</strong></td>
+<td>Muchas de A con muchas de B</td>
+<td>ALUMNO – MÓDULOS</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cardinalidad mínima / participación:</strong> </p>
+<ul>
+<li><strong>0</strong> (opcional, participación parcial) </li>
+<li><strong>1</strong> (obligatoria, participación total). </li>
+</ul>
+<p>Se expresa como par <strong>(mín, máx)</strong>: (0,1), (1,1), (0,N), (1,N).</p>
+<blockquote>
+<p>Atención: en la notación (mín,máx) de Chen/Merise, cada par se coloca junto a la entidad <strong>a la que se refiere</strong>; en la notación de tipo 1:N, la N queda del lado "muchos".</p>
+</blockquote>
+<pre class="mermaid"><code>flowchart LR
+    DEPARTAMENTO[DEPARTAMENTO] ---|"(0,N)"| TIENE{TIENE}
+    TIENE ---|"(1,1)"| EMPLEADO_DPTO[EMPLEADO]
+
+    ALUMNO[ALUMNO] ---|"(0,N)"| CURSA{CURSA}
+    CURSA ---|"(0,N)"| ASIGNATURA[ASIGNATURA]
+
+    EMPLEADO_PLAZA[EMPLEADO] ---|"(0,1)"| USA{USA}
+    USA ---|"(0,1)"| PLAZA[PLAZA_PARKING]</code></pre>
+<h3 id="25-entidades-debiles">2.5 Entidades débiles<a class="headerlink" href="#25-entidades-debiles" title="Permanent link">&para;</a></h3>
+<p>Una <strong>entidad débil</strong> no tiene atributos suficientes para identificarse por sí misma: su existencia y su identificación <strong>dependen de otra entidad fuerte</strong> (propietaria).</p>
+<ul>
+<li><strong>Dependencia en existencia:</strong> si se borra la fuerte, desaparecen las débiles.</li>
+<li><strong>Dependencia en identificación:</strong> la clave de la débil = clave de la fuerte + un <strong>discriminador</strong> (atributo parcial que distingue entre las débiles de una misma fuerte).</li>
+<li>Se une con una relación identificadora 1:N, con participación total de la débil.</li>
+</ul>
+<p>Ejemplo: <code>EDIFICIO</code> (cod_edificio) y <code>AULA</code> (nº de aula). El aula "101" se repite en cada edificio, así que AULA se identifica con (cod_edificio, num_aula).</p>
+<pre class="mermaid"><code>flowchart LR
+    EDIFICIO[EDIFICIO] ---|"(1,N)"| CONTIENE{CONTIENE}:::identificadora
+    CONTIENE ---|"(1,1)"| AULA[[AULA]]:::debil
+
+    COD(["&lt;u&gt;cod_edificio&lt;/u&gt;"]) --- EDIFICIO
+    NOMBRE(["nombre"]) --- EDIFICIO
+    NUM(["&lt;u&gt;num_aula&lt;/u&gt;"]) --- AULA
+    CAPACIDAD(["capacidad"]) --- AULA
+
+    classDef identificadora stroke-width:4px
+    classDef debil stroke-width:4px</code></pre>
+<p>En Chen, <code>AULA</code> se representa con <strong>rectángulo doble</strong> porque es débil y <code>CONTIENE</code> con <strong>rombo doble</strong> porque es la relación identificadora. Mermaid no ofrece formas nativas de doble rectángulo ni de doble rombo; en el diagrama se indican mediante nodos de borde grueso (y la forma de subrutina para <code>AULA</code>) como aproximación visual. <code>num_aula</code> es el <strong>discriminador</strong> o clave parcial: se subraya para señalar que, junto con <code>cod_edificio</code>, identifica cada aula. Así, la clave completa de AULA es <code>(cod_edificio, num_aula)</code>.</p>
+<h3 id="26-herramientas-graficas">2.6 Herramientas gráficas<a class="headerlink" href="#26-herramientas-graficas" title="Permanent link">&para;</a></h3>
+<p><em>(CE-b: Se han utilizado herramientas gráficas para representar el diseño lógico)</em></p>
+<table>
+<thead>
+<tr>
+<th>Herramienta</th>
+<th>Tipo</th>
+<th>Notas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MySQL Workbench</strong></td>
+<td>Escritorio, gratuita</td>
+<td>Diseño EER, genera SQL y hace ingeniería inversa</td>
+</tr>
+<tr>
+<td><strong>draw.io (diagrams.net)</strong></td>
+<td>Web/escritorio, gratuita</td>
+<td>Diagramas genéricos, plantillas E/R</td>
+</tr>
+<tr>
+<td><strong>dbdiagram.io</strong></td>
+<td>Web</td>
+<td>Diagramas a partir de código DBML</td>
+</tr>
+<tr>
+<td><strong>Mermaid</strong></td>
+<td>Texto → diagrama</td>
+<td>Se integra en Markdown (los de estos apuntes)</td>
+</tr>
+<tr>
+<td><strong>pgModeler / DBeaver</strong></td>
+<td>Escritorio</td>
+<td>Modelado y diagramas para PostgreSQL, ER automáticos</td>
+</tr>
+<tr>
+<td><strong>Lucidchart, ER/Studio, Visual Paradigm</strong></td>
+<td>Comerciales</td>
+<td>Modelado profesional</td>
+</tr>
+</tbody>
+</table>
+<p>Buenas prácticas: nombres claros y coherentes, mostrar claves y cardinalidades, un solo diagrama legible por tema.</p>
+<h3 id="27-ejemplo-completo-con-notacion-de-chen">2.7 Ejemplo completo con notación de Chen<a class="headerlink" href="#27-ejemplo-completo-con-notacion-de-chen" title="Permanent link">&para;</a></h3>
+<p><strong>Contexto:</strong> un centro de formación quiere registrar qué módulos cursa cada alumno en cada curso académico y la calificación final que obtiene. Todo alumno matriculado cursa al menos un módulo y cada módulo ofertado tiene al menos un alumno; ambos pueden estar asociados a varios. Para evitar confundir matrículas de cursos académicos distintos, cada matrícula queda identificada por el alumno, el módulo y el curso académico.</p>
+<p><strong>Definición del modelo:</strong> <code>ALUMNO</code> y <code>MÓDULO</code> son entidades porque representan objetos sobre los que el centro guarda información. <code>SE MATRICULA</code> es una relación muchos a muchos (N:M) que expresa que un alumno cursa un módulo. <code>curso_académico</code> y <code>calificación</code> son atributos de esa relación: describen cada matrícula, no al alumno ni al módulo por separado. Las claves subrayadas identifican de forma única cada entidad; para la matrícula, la combinación de las claves de ambas entidades y el curso académico identifica cada ocurrencia.</p>
+<pre class="mermaid"><code>flowchart LR
+    ALUMNO[ALUMNO]
+    MATRICULA{SE MATRICULA}
+    MODULO[MÓDULO]
+
+    ALUMNO ---|"(1,N)"| MATRICULA
+    MATRICULA ---|"(1,N)"| MODULO
+
+    ID_ALUMNO(["&lt;u&gt;id_alumno&lt;/u&gt;"]) --- ALUMNO
+    NOMBRE_ALUMNO(["nombre"]) --- ALUMNO
+    ID_MODULO(["&lt;u&gt;id_módulo&lt;/u&gt;"]) --- MODULO
+    NOMBRE_MODULO(["nombre"]) --- MODULO
+
+    CURSO(["&lt;u&gt;curso_académico&lt;/u&gt;"]) --- MATRICULA
+    CALIFICACION(["calificación"]) --- MATRICULA</code></pre>
+<p><strong>Cómo leerlo:</strong></p>
+<ul>
+<li>Los <strong>rectángulos</strong> son entidades, el <strong>rombo</strong> es la relación y las <strong>elipses</strong> son atributos, siguiendo la simbología clásica de Chen. Las claves de las entidades aparecen subrayadas; también se subraya <code>curso_académico</code> porque completa la identificación de cada matrícula.</li>
+<li><code>(1,N)</code> junto a <code>ALUMNO</code> indica que todo alumno participa en la relación al menos una vez y puede cursar varios módulos. Junto a <code>MÓDULO</code> indica que todo módulo ofertado tiene al menos un alumno y puede tener varios. Cada ocurrencia de la relación corresponde a un único alumno y a un único módulo.</li>
+<li><code>curso_académico</code> forma parte de la identificación de una matrícula: un mismo alumno puede volver a cursar el mismo módulo en otro curso. Por tanto, la clave de <code>SE MATRICULA</code> es <code>(id_alumno, id_módulo, curso_académico)</code>.</li>
+<li><code>calificación</code> pertenece a la relación porque depende de la matrícula concreta. Así, el alumno puede obtener calificaciones diferentes en distintos módulos o cursos.</li>
+</ul>
+<h4 id="variante-compacta-atributos-fuera-de-las-entidades">Variante compacta: atributos fuera de las entidades<a class="headerlink" href="#variante-compacta-atributos-fuera-de-las-entidades" title="Permanent link">&para;</a></h4>
+<p>El siguiente diagrama representa <strong>el mismo ejemplo ALUMNO–MÓDULO</strong> de esta sección, ahora con la variante compacta. Los atributos no se representan con  una elipse por cada uno. <code>curso_académico</code> y <code>calificación</code> se conectan al rombo <code>SE MATRICULA</code> porque describen cada matrícula concreta.</p>
+<pre class="mermaid"><code>%%{init: {"flowchart": {"rankSpacing": 12, "nodeSpacing": 35, "padding": 0}}}%%
+flowchart LR
+    ALUMNO[ALUMNO]
+    MATRICULA{SE MATRICULA}
+    MODULO[MÓDULO]
+
+    A_ID_ALUMNO["&lt;u&gt;id_alumno&lt;/u&gt;"]:::atributo
+    A_NOMBRE_ALUMNO["nombre"]:::atributo
+    A_ID_MODULO["&lt;u&gt;id_módulo&lt;/u&gt;"]:::atributo
+    A_NOMBRE_MODULO["nombre"]:::atributo
+    A_CURSO["&lt;u&gt;curso_académico&lt;/u&gt;"]:::atributo
+    A_CALIFICACION["calificación"]:::atributo
+
+    ALUMNO ---o A_ID_ALUMNO
+    ALUMNO ---o A_NOMBRE_ALUMNO
+    MODULO ---o A_ID_MODULO
+    MODULO ---o A_NOMBRE_MODULO
+    MATRICULA ---o A_CURSO
+    MATRICULA ---o A_CALIFICACION
+
+    ALUMNO ---|"(1,N)"| MATRICULA
+    MATRICULA ---|"(1,N)"| MODULO
+
+    classDef atributo fill:transparent,stroke:transparent,color:#222</code></pre>
+<p>En este modelo todos los atributos se consideran obligatorios, por eso aparecen con <code>●</code>; si, por ejemplo, la calificación pudiera no estar registrada todavía, se marcaría con <code>○</code>. Los atributos subrayados son identificadores. La clave de cada matrícula se forma con <code>id_alumno</code>, <code>id_módulo</code> y <code>curso_académico</code>. Los pares <code>(mín,máx)</code> y las relaciones son los mismos que en el diagrama clásico.</p>
+<hr />
+<h2 id="3-el-modelo-er-ampliado">3. El modelo E/R ampliado<a class="headerlink" href="#3-el-modelo-er-ampliado" title="Permanent link">&para;</a></h2>
+<p>El <strong>modelo E/R extendido (EER)</strong> añade conceptos para modelar situaciones más complejas, sobre todo <strong>jerarquías</strong>:</p>
+<ul>
+<li><strong>Generalización:</strong> varias entidades con características comunes se agrupan en una <strong>superentidad</strong> (EMPLEADO y CLIENTE → PERSONA).</li>
+<li><strong>Especialización:</strong> una entidad se divide en <strong>subentidades</strong> con atributos propios (VEHICULO → COCHE, MOTO). Las subentidades <strong>heredan</strong> los atributos y relaciones de la superentidad.</li>
+</ul>
+<p>Restricciones de la jerarquía:</p>
+<table>
+<thead>
+<tr>
+<th>Restricción</th>
+<th>Opciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Solapamiento</strong></td>
+<td><strong>Disjunta (d):</strong> un ejemplar pertenece a una sola subentidad. <strong>Solapada (o):</strong> puede pertenecer a varias</td>
+</tr>
+<tr>
+<td><strong>Cobertura</strong></td>
+<td><strong>Total:</strong> todo ejemplar de la superentidad está en alguna subentidad. <strong>Parcial:</strong> puede no estar en ninguna</td>
+</tr>
+</tbody>
+</table>
+<p>Otros conceptos del modelo ampliado: <strong>agregación</strong> (una relación se trata como entidad para relacionarla con otra), <strong>atributos compuestos</strong>, <strong>relaciones ternarias</strong> y <strong>restricciones de participación</strong>.</p>
+<p>Ejemplo: una empresa registra personas como empleados o clientes. En este caso, la especialización es <strong>disjunta</strong> (<code>d</code>) y <strong>total</strong>: cada persona pertenece exactamente a uno de los dos subtipos.</p>
+<pre class="mermaid"><code>flowchart TB
+    PERSONA[PERSONA]
+    ISA["△&lt;br/&gt;(d, total)"]
+    EMPLEADO[EMPLEADO]
+    CLIENTE[CLIENTE]
+
+    PERSONA --- ISA
+    ISA --- EMPLEADO
+    ISA --- CLIENTE
+
+    ID(["&lt;u&gt;id_persona&lt;/u&gt;"]) --- PERSONA
+    NOMBRE(["nombre"]) --- PERSONA
+    SALARIO(["salario"]) --- EMPLEADO
+    NUM_CLIENTE(["num_cliente"]) --- CLIENTE</code></pre>
+<p>El rectángulo <code>PERSONA</code> es la superentidad; el triángulo <code>△</code> representa la especialización ISA. La anotación <code>(d, total)</code> indica que los subtipos son disjuntos y que toda persona pertenece a uno de ellos. Las líneas conectan la superentidad con <code>EMPLEADO</code> y <code>CLIENTE</code>, que heredan <code>id_persona</code> y <code>nombre</code>; cada subtipo añade su atributo específico.</p>
+<hr />
+<h2 id="4-el-modelo-relacional">4. El modelo relacional<a class="headerlink" href="#4-el-modelo-relacional" title="Permanent link">&para;</a></h2>
+<p>Propuesto por E. F. Codd (1970), basado en la teoría de conjuntos y la lógica de predicados. Es el modelo lógico más extendido. Los datos se organizan en <strong>relaciones</strong> (tablas).</p>
+<h3 id="41-terminologia">4.1 Terminología<a class="headerlink" href="#41-terminologia" title="Permanent link">&para;</a></h3>
+<p><em>(CE-c: Se han identificado las tablas del diseño lógico; CE-d: Se han identificado los campos que forman parte de las tablas)</em></p>
+<table>
+<thead>
+<tr>
+<th>Término formal</th>
+<th>Término habitual (SQL)</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Relación</strong></td>
+<td>Tabla</td>
+<td>Conjunto de filas con la misma estructura</td>
+</tr>
+<tr>
+<td><strong>Tupla</strong></td>
+<td>Fila / registro</td>
+<td>Una ocurrencia de la entidad</td>
+</tr>
+<tr>
+<td><strong>Atributo</strong></td>
+<td>Columna / campo</td>
+<td>Propiedad con un nombre</td>
+</tr>
+<tr>
+<td><strong>Dominio</strong></td>
+<td>Tipo de dato + restricciones</td>
+<td>Conjunto de valores válidos de un atributo</td>
+</tr>
+<tr>
+<td><strong>Grado</strong></td>
+<td>Nº de columnas</td>
+<td>Número de atributos</td>
+</tr>
+<tr>
+<td><strong>Cardinalidad</strong></td>
+<td>Nº de filas</td>
+<td>Número de tuplas</td>
+</tr>
+<tr>
+<td><strong>Esquema</strong></td>
+<td>Cabecera</td>
+<td><code>ALUMNO(dni, nombre, fecha_nac)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Notación de esquema: <code>ALUMNO(</code><u>dni</u><code>, nombre, fecha_nac)</code> — la clave primaria se subraya y las claves ajenas se marcan con <code>#</code> o en cursiva.</p>
+<p>Ejemplo de tabla:</p>
+<table>
+<thead>
+<tr>
+<th><u>dni</u></th>
+<th>nombre</th>
+<th>fecha_nac</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11111111A</td>
+<td>Ana</td>
+<td>2005-03-02</td>
+</tr>
+<tr>
+<td>22222222B</td>
+<td>Luis</td>
+<td>2004-11-20</td>
+</tr>
+</tbody>
+</table>
+<h3 id="42-caracteristicas-de-una-relacion-tabla">4.2 Características de una relación (tabla)<a class="headerlink" href="#42-caracteristicas-de-una-relacion-tabla" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Cada tabla tiene un <strong>nombre único</strong> en el esquema.</li>
+<li>Cada columna tiene un <strong>nombre único</strong> dentro de la tabla.</li>
+<li>Los valores de cada atributo son <strong>atómicos</strong> (un solo valor, no listas) y del mismo dominio.</li>
+<li><strong>No hay tuplas duplicadas.</strong></li>
+<li><strong>El orden de filas y columnas no es significativo.</strong></li>
+<li>Debe existir una <strong>clave primaria</strong> que identifique cada fila.</li>
+</ul>
+<h3 id="43-claves">4.3 Claves<a class="headerlink" href="#43-claves" title="Permanent link">&para;</a></h3>
+<p><em>(CE-f: Se han definido los campos clave)</em></p>
+<table>
+<thead>
+<tr>
+<th>Clave</th>
+<th>Definición</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Superclave</strong></td>
+<td>Conjunto de atributos que identifica unívocamente una tupla</td>
+</tr>
+<tr>
+<td><strong>Clave candidata</strong></td>
+<td>Superclave <strong>mínima</strong> (si quitas un atributo deja de identificar)</td>
+</tr>
+<tr>
+<td><strong>Clave primaria (PK)</strong></td>
+<td>Clave candidata elegida; no admite nulos ni repetidos</td>
+</tr>
+<tr>
+<td><strong>Clave alternativa</strong></td>
+<td>Candidata no elegida como primaria (se declara <code>UNIQUE</code>)</td>
+</tr>
+<tr>
+<td><strong>Clave ajena / foránea (FK)</strong></td>
+<td>Atributo(s) cuyos valores deben existir como clave primaria (o candidata) de otra tabla (o la misma)</td>
+</tr>
+<tr>
+<td><strong>Clave compuesta</strong></td>
+<td>Clave formada por varios atributos</td>
+</tr>
+<tr>
+<td><strong>Clave subrogada (surrogate)</strong></td>
+<td>Identificador artificial (autonumérico) sin significado real</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo: en <code>ALUMNO(dni, nº_expediente, email, nombre)</code>, <code>dni</code>, <code>nº_expediente</code> y <code>email</code> son candidatas; se elige <code>dni</code> como PK y las otras son alternativas.</p>
+<blockquote>
+<p>Criterios para elegir la PK: estable (no cambia), no nula, corta y sencilla, única siempre.</p>
+</blockquote>
+<h3 id="44-reglas-de-integridad">4.4 Reglas de integridad<a class="headerlink" href="#44-reglas-de-integridad" title="Permanent link">&para;</a></h3>
+<p><em>(CE-g: Se han aplicado las reglas de integridad)</em></p>
+<ol>
+<li><strong>Integridad de entidad:</strong> ningún atributo de la clave primaria puede ser nulo.</li>
+<li><strong>Integridad referencial:</strong> una clave ajena debe ser <strong>nula</strong> (si se permite) o coincidir con un valor existente de la clave referenciada.</li>
+<li><strong>Integridad de dominio:</strong> cada valor debe pertenecer al dominio del atributo (tipo, rango, <code>CHECK</code>).</li>
+<li><strong>Unicidad y obligatoriedad:</strong> <code>UNIQUE</code>, <code>NOT NULL</code>.</li>
+<li><strong>Integridad definida por el usuario (reglas de negocio):</strong> <code>CHECK</code>, disparadores…</li>
+</ol>
+<p><strong>Acciones referenciales</strong> al borrar o modificar la fila referenciada:</p>
+<table>
+<thead>
+<tr>
+<th>Opción</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RESTRICT</code> / <code>NO ACTION</code></td>
+<td>Impide la operación si hay filas dependientes</td>
+</tr>
+<tr>
+<td><code>CASCADE</code></td>
+<td>Propaga el borrado/modificación a las filas dependientes</td>
+</tr>
+<tr>
+<td><code>SET NULL</code></td>
+<td>Pone la clave ajena a NULL</td>
+</tr>
+<tr>
+<td><code>SET DEFAULT</code></td>
+<td>Pone el valor por defecto</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">empleado</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">dni</span><span class="w">        </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">nombre</span><span class="w">     </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">salario</span><span class="w">    </span><span class="nb">DECIMAL</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">salario</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span>
+<span class="w">    </span><span class="n">cod_dep</span><span class="w">    </span><span class="nb">INT</span><span class="p">,</span>
+<span class="w">    </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">cod_dep</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">departamento</span><span class="p">(</span><span class="n">cod_dep</span><span class="p">)</span>
+<span class="w">        </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">CASCADE</span>
+<span class="p">);</span>
+</code></pre></div>
+<hr />
+<h2 id="5-paso-del-diagrama-er-al-modelo-relacional">5. Paso del diagrama E/R al modelo relacional<a class="headerlink" href="#5-paso-del-diagrama-er-al-modelo-relacional" title="Permanent link">&para;</a></h2>
+<p><em>(CE-e: Se han identificado las relaciones entre las tablas del diseño lógico)</em></p>
+<h3 id="51-reglas-de-transformacion">5.1 Reglas de transformación<a class="headerlink" href="#51-reglas-de-transformacion" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Elemento del E/R</th>
+<th>Resultado en el modelo relacional</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Entidad</strong></td>
+<td>Una <strong>tabla</strong>; sus atributos son columnas; el identificador pasa a ser <strong>PK</strong></td>
+</tr>
+<tr>
+<td><strong>Atributo compuesto</strong></td>
+<td>Se divide en sus componentes (una columna por cada uno)</td>
+</tr>
+<tr>
+<td><strong>Atributo derivado</strong></td>
+<td>Normalmente no se almacena (se calcula)</td>
+</tr>
+<tr>
+<td><strong>Atributo multivalorado</strong></td>
+<td>Nueva tabla con PK = (PK de la entidad + atributo), FK a la entidad</td>
+</tr>
+<tr>
+<td><strong>Relación 1:1</strong></td>
+<td>La PK de una tabla se añade como <strong>FK (UNIQUE)</strong> en la otra. Se coloca en la de participación total u obligatoria. Si ambas son totales, se pueden fundir en una sola tabla</td>
+</tr>
+<tr>
+<td><strong>Relación 1:N</strong></td>
+<td>La PK del lado "1" se añade como <strong>FK</strong> en la tabla del lado "N"</td>
+</tr>
+<tr>
+<td><strong>Relación N:M</strong></td>
+<td>Nueva <strong>tabla intermedia</strong> con las PK de ambas como FK; su PK es la combinación de ambas (+ atributos de la relación)</td>
+</tr>
+<tr>
+<td><strong>Relación ternaria N:M:P</strong></td>
+<td>Tabla con las tres claves ajenas; PK compuesta adecuada según cardinalidades</td>
+</tr>
+<tr>
+<td><strong>Relación reflexiva</strong></td>
+<td>1:N: FK a la propia tabla. N:M: tabla intermedia con dos FK a la misma tabla</td>
+</tr>
+<tr>
+<td><strong>Entidad débil</strong></td>
+<td>Tabla con PK = (PK de la fuerte + discriminador); la PK de la fuerte es FK (<code>ON DELETE CASCADE</code>)</td>
+</tr>
+<tr>
+<td><strong>Jerarquía (ISA)</strong></td>
+<td>Tres opciones, ver abajo</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Opciones para jerarquías:</strong></p>
+<ol>
+<li><strong>Una tabla por la superentidad y otra por cada subentidad</strong> (la PK de la sub es FK a la super). Es la más general y flexible.</li>
+<li><strong>Solo tablas para las subentidades</strong>, repitiendo los atributos comunes (válida para jerarquías disjuntas y totales).</li>
+<li><strong>Una única tabla</strong> con todos los atributos y un campo <code>tipo</code> (genera muchos nulos).</li>
+</ol>
+<h3 id="52-ejemplo-completo">5.2 Ejemplo completo<a class="headerlink" href="#52-ejemplo-completo" title="Permanent link">&para;</a></h3>
+<p>Enunciado: un instituto tiene <strong>departamentos</strong> con varios <strong>profesores</strong>; los <strong>alumnos</strong> se matriculan en <strong>modulos</strong> y obtienen una <strong>nota</strong>; los módulos los imparte un profesor.</p>
+<pre class="mermaid"><code>erDiagram
+    DEPARTAMENTO ||--o{ PROFESOR : "tiene"
+    PROFESOR ||--o{ MODULO : "imparte"
+    ALUMNO ||--|{ MATRICULA : "realiza"
+    MODULO ||--o{ MATRICULA : "incluye"
+    DEPARTAMENTO {
+        int cod_dep PK
+        string nombre
+    }
+    PROFESOR {
+        char dni PK
+        string nombre
+        int cod_dep FK
+    }
+    MODULO {
+        int cod_mod PK
+        string nombre
+        char dni_profesor FK
+    }
+    ALUMNO {
+        char dni PK
+        string nombre
+        date fecha_nac
+    }
+    MATRICULA {
+        char dni_alumno PK, FK
+        int cod_mod PK, FK
+        decimal nota
+    }</code></pre>
+<blockquote>
+<p><strong>Lectura de símbolos y cardinalidades:</strong> <code>||</code> significa <strong>uno y solo uno</strong>; <code>o{</code> significa <strong>cero o muchos</strong>; <code>|{</code> significa <strong>uno o muchos</strong>. El símbolo situado junto a cada entidad indica cuántas de sus ocurrencias pueden asociarse con una ocurrencia de la entidad opuesta. Por ejemplo, en <code>DEPARTAMENTO ||--o{ PROFESOR</code>, cada profesor pertenece a un único departamento, mientras que un departamento puede tener cero o muchos profesores. Del mismo modo, un profesor puede impartir cero o muchos módulos, y cada módulo lo imparte un único profesor; cada alumno debe tener una o muchas matrículas, y cada matrícula corresponde a un único alumno y un único módulo.</p>
+</blockquote>
+<p>Esquema relacional resultante (PK subrayada con <code>_</code>, FK con <code>#</code>):</p>
+<div class="highlight"><pre><span></span><code>DEPARTAMENTO(_cod_dep_, nombre)
+PROFESOR(_dni_, nombre, #cod_dep)
+MODULO(_cod_mod_, nombre, #dni_profesor)
+ALUMNO(_dni_, nombre, fecha_nac)
+MATRICULA(_#dni_alumno_, _#cod_mod_, nota)
+</code></pre></div>
+<p>Procedimiento: </p>
+<p>1) una tabla por entidad 
+2) 1:N → FK en el lado N
+3) N:M → tabla <code>MATRICULA</code>
+4) los atributos de la relación (<code>nota</code>) van a la tabla intermedia 
+5) definir PK, FK y acciones referenciales.</p>
+<h3 id="53-restricciones-que-no-pueden-plasmarse-en-el-diseno-logico">5.3 Restricciones que no pueden plasmarse en el diseño lógico<a class="headerlink" href="#53-restricciones-que-no-pueden-plasmarse-en-el-diseno-logico" title="Permanent link">&para;</a></h3>
+<p><em>(CE-i: Se han identificado y documentado las restricciones que no pueden plasmarse en el diseño lógico)</em></p>
+<p>Algunas reglas del problema <strong>no se pueden expresar</strong> con tablas, claves y relaciones. Deben <strong>documentarse</strong> (en un apartado del diseño) para implementarlas después con <code>CHECK</code>, disparadores (<em>triggers</em>), procedimientos o en la aplicación.</p>
+<p>Ejemplos:</p>
+<ul>
+<li>Un alumno no puede matricularse en más de 8 módulos por curso.</li>
+<li>La nota debe estar entre 0 y 10 y solo puede ponerse si la matrícula está abierta.</li>
+<li>Un profesor no puede impartir dos módulos a la misma hora.</li>
+<li>Una jerarquía <strong>total/disjunta</strong> (garantizar que cada persona sea exactamente de un subtipo).</li>
+<li>Un departamento debe tener al menos un profesor (cardinalidad mínima 1 en el lado "muchos").</li>
+<li>La fecha de fin debe ser posterior a la de inicio entre columnas de distintas tablas.</li>
+<li>Los atributos derivados (edad, total del pedido).</li>
+</ul>
+<p>Formato recomendado de documentación:</p>
+<table>
+<thead>
+<tr>
+<th>Nº</th>
+<th>Restricción</th>
+<th>Tablas implicadas</th>
+<th>Cómo se implementará</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R1</td>
+<td>Máx. 8 módulos por alumno y curso</td>
+<td>MATRICULA</td>
+<td>Trigger</td>
+</tr>
+<tr>
+<td>R2</td>
+<td>Departamento con al menos un profesor</td>
+<td>DEPARTAMENTO, PROFESOR</td>
+<td>Aplicación / trigger</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-normalizacion">6. Normalización<a class="headerlink" href="#6-normalizacion" title="Permanent link">&para;</a></h2>
+<p><em>(CE-h: Se han aplicado las reglas de normalización hasta un nivel adecuado)</em></p>
+<p>La <strong>normalización</strong> es el proceso de organizar las tablas para <strong>eliminar redundancia</strong> y evitar <strong>anomalías</strong> de inserción, borrado y modificación, mediante la descomposición en tablas más pequeñas <strong>sin pérdida de información</strong>. Se basa en las <strong>dependencias funcionales</strong>.</p>
+<p>Ejemplo de tabla mal diseñada:</p>
+<table>
+<thead>
+<tr>
+<th>id_pedido</th>
+<th>cod_cli</th>
+<th>nombre_cli</th>
+<th>ciudad_cli</th>
+<th>cod_prod</th>
+<th>desc_prod</th>
+<th>cant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>C1</td>
+<td>Ana</td>
+<td>Madrid</td>
+<td>P1</td>
+<td>Ratón</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1</td>
+<td>C1</td>
+<td>Ana</td>
+<td>Madrid</td>
+<td>P2</td>
+<td>Teclado</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>Anomalías: si Ana cambia de ciudad hay que actualizarlo en varias filas (<strong>modificación</strong>); no se puede guardar un producto sin pedido (<strong>inserción</strong>); borrar el único pedido de un cliente elimina al cliente (<strong>borrado</strong>).</p>
+<h3 id="61-dependencias-funcionales">6.1 Dependencias funcionales<a class="headerlink" href="#61-dependencias-funcionales" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Dependencia funcional (DF):</strong> <code>A → B</code> si cada valor de A determina un único valor de B. (<code>dni → nombre</code>).</li>
+<li><strong>DF completa:</strong> B depende de toda la clave compuesta, no de una parte.</li>
+<li><strong>DF parcial:</strong> B depende solo de una parte de la clave compuesta.</li>
+<li><strong>DF transitiva:</strong> <code>A → B</code> y <code>B → C</code> (con B no clave) entonces <code>A → C</code> de forma transitiva.</li>
+</ul>
+<h3 id="62-primera-forma-normal-1fn">6.2 Primera forma normal (1FN)<a class="headerlink" href="#62-primera-forma-normal-1fn" title="Permanent link">&para;</a></h3>
+<p>Una tabla está en <strong>1FN</strong> si todos sus atributos son <strong>atómicos</strong> (sin grupos repetitivos ni multivalorados) y tiene clave primaria.</p>
+<table>
+<thead>
+<tr>
+<th>Antes (no 1FN)</th>
+<th>Después (1FN)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ALUMNO(dni, nombre, <strong>teléfonos</strong>="600,700")</td>
+<td>ALUMNO(dni, nombre) + TELEFONO(dni, teléfono)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="63-segunda-forma-normal-2fn">6.3 Segunda forma normal (2FN)<a class="headerlink" href="#63-segunda-forma-normal-2fn" title="Permanent link">&para;</a></h3>
+<p>Está en <strong>2FN</strong> si está en 1FN y <strong>todo atributo no clave depende de la clave completa</strong> (sin dependencias parciales). Solo es relevante con claves compuestas.</p>
+<p>Ejemplo: <code>LINEA(id_pedido, cod_prod, desc_prod, cant)</code>, clave (id_pedido, cod_prod). <code>cod_prod → desc_prod</code> es parcial.</p>
+<p>Descomposición:
+<div class="highlight"><pre><span></span><code>LINEA(_id_pedido_, _cod_prod_, cant)
+PRODUCTO(_cod_prod_, desc_prod)
+</code></pre></div></p>
+<h3 id="64-tercera-forma-normal-3fn">6.4 Tercera forma normal (3FN)<a class="headerlink" href="#64-tercera-forma-normal-3fn" title="Permanent link">&para;</a></h3>
+<p>Está en <strong>3FN</strong> si está en 2FN y <strong>no hay dependencias transitivas</strong>: los atributos no clave dependen <strong>solo</strong> de la clave.</p>
+<p>Ejemplo: <code>PEDIDO(id_pedido, cod_cli, nombre_cli, ciudad_cli)</code>. <code>id_pedido → cod_cli → nombre_cli</code>.</p>
+<p>Descomposición:
+<div class="highlight"><pre><span></span><code>PEDIDO(_id_pedido_, #cod_cli)
+CLIENTE(_cod_cli_, nombre_cli, ciudad_cli)
+</code></pre></div></p>
+<blockquote>
+<p>Regla mnemotécnica: <em>"Cada atributo depende de la clave, de toda la clave y nada más que de la clave."</em></p>
+</blockquote>
+<h3 id="65-forma-normal-de-boyce-codd-fnbc">6.5 Forma normal de Boyce-Codd (FNBC)<a class="headerlink" href="#65-forma-normal-de-boyce-codd-fnbc" title="Permanent link">&para;</a></h3>
+<p>Está en <strong>FNBC</strong> si todo <strong>determinante</strong> (lado izquierdo de una DF) es <strong>clave candidata</strong>. Es una 3FN más estricta; difieren solo cuando hay varias claves candidatas compuestas solapadas.</p>
+<p>Ejemplo: <code>IMPARTE(alumno, asignatura, profesor)</code> con <code>profesor → asignatura</code> (cada profesor da una sola asignatura). <code>profesor</code> es determinante pero no clave: se descompone en <code>(profesor, asignatura)</code> y <code>(alumno, profesor)</code>.</p>
+<h3 id="66-hasta-que-nivel-normalizar">6.6 Hasta qué nivel normalizar<a class="headerlink" href="#66-hasta-que-nivel-normalizar" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Lo habitual y suficiente en la práctica: <strong>3FN</strong> (o FNBC).</li>
+<li>Existen 4FN (dependencias multivaluadas) y 5FN, de uso poco frecuente.</li>
+<li>A veces se <strong>desnormaliza</strong> de forma deliberada y documentada por rendimiento (menos <em>joins</em> en consultas de lectura masiva), asumiendo cierta redundancia.</li>
+</ul>
+<p>Proceso de normalización:</p>
+<pre class="mermaid"><code>flowchart LR
+    A[Tabla inicial] --&gt; B{¿Valores atómicos?}
+    B -- No --&gt; B1[Aplicar 1FN]
+    B -- Sí --&gt; C{¿Dependencias parciales?}
+    B1 --&gt; C
+    C -- Sí --&gt; C1[Aplicar 2FN]
+    C -- No --&gt; D{¿Dependencias transitivas?}
+    C1 --&gt; D
+    D -- Sí --&gt; D1[Aplicar 3FN]
+    D -- No --&gt; E{¿Todo determinante es clave?}
+    D1 --&gt; E
+    E -- No --&gt; E1[Aplicar FNBC]
+    E -- Sí --&gt; F[Diseño normalizado]
+    E1 --&gt; F</code></pre>
+<hr />
+<h2 id="7-esquema-resumen">7. Esquema-resumen<a class="headerlink" href="#7-esquema-resumen" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Concepto</th>
+<th>Idea clave</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Modelo E/R</td>
+<td>Entidades, atributos y relaciones con cardinalidad (1:1, 1:N, N:M)</td>
+</tr>
+<tr>
+<td>Entidad débil</td>
+<td>Se identifica con la clave de la fuerte + discriminador</td>
+</tr>
+<tr>
+<td>E/R ampliado</td>
+<td>Jerarquías: generalización/especialización, disjunta/solapada, total/parcial</td>
+</tr>
+<tr>
+<td>Modelo relacional</td>
+<td>Tablas con atributos atómicos, sin duplicados, con PK</td>
+</tr>
+<tr>
+<td>Claves</td>
+<td>PK, candidata, alternativa, FK</td>
+</tr>
+<tr>
+<td>Integridad</td>
+<td>Entidad, referencial, dominio, usuario</td>
+</tr>
+<tr>
+<td>E/R → relacional</td>
+<td>Entidad→tabla; 1:N→FK; N:M→tabla intermedia; débil→PK compuesta</td>
+</tr>
+<tr>
+<td>Restricciones no plasmables</td>
+<td>Documentarlas e implementarlas con triggers/CHECK/aplicación</td>
+</tr>
+<tr>
+<td>Normalización</td>
+<td>1FN (atómico) → 2FN (sin parciales) → 3FN (sin transitivas) → FNBC</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-glosario-de-terminos-clave">8. Glosario de términos clave<a class="headerlink" href="#8-glosario-de-terminos-clave" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Término</th>
+<th>Definición</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Atributo</strong></td>
+<td>Propiedad de una entidad o relación</td>
+</tr>
+<tr>
+<td><strong>Cardinalidad</strong></td>
+<td>Número de ocurrencias de una entidad que se asocian con otra</td>
+</tr>
+<tr>
+<td><strong>Clave ajena</strong></td>
+<td>Atributo que referencia la clave primaria de otra tabla</td>
+</tr>
+<tr>
+<td><strong>Clave candidata</strong></td>
+<td>Conjunto mínimo de atributos que identifica una tupla</td>
+</tr>
+<tr>
+<td><strong>Clave primaria</strong></td>
+<td>Candidata elegida para identificar las filas; única y no nula</td>
+</tr>
+<tr>
+<td><strong>Dependencia funcional</strong></td>
+<td>Relación <code>A → B</code> donde A determina B</td>
+</tr>
+<tr>
+<td><strong>Dominio</strong></td>
+<td>Conjunto de valores válidos de un atributo</td>
+</tr>
+<tr>
+<td><strong>Entidad débil</strong></td>
+<td>Entidad que no se identifica sin otra entidad propietaria</td>
+</tr>
+<tr>
+<td><strong>Generalización / especialización</strong></td>
+<td>Creación de superentidades o subentidades</td>
+</tr>
+<tr>
+<td><strong>Integridad referencial</strong></td>
+<td>Toda FK debe ser nula o existir en la tabla referenciada</td>
+</tr>
+<tr>
+<td><strong>Normalización</strong></td>
+<td>Proceso de descomposición para eliminar redundancias y anomalías</td>
+</tr>
+<tr>
+<td><strong>Relación (E/R)</strong></td>
+<td>Asociación entre entidades</td>
+</tr>
+<tr>
+<td><strong>Relación (modelo relacional)</strong></td>
+<td>Tabla</td>
+</tr>
+<tr>
+<td><strong>Tupla</strong></td>
+<td>Fila de una tabla</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@11/mermaid.min.js"></script>
+      
+        <script src="../javascript/mermaid.js"></script>
+      
+    
+  </body>
+</html>

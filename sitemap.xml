@@ -2,10 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://cizacas.github.io/GBD26-27-Apuntes/</loc>
-         <lastmod>2026-09-22</lastmod>
+         <lastmod>2026-10-19</lastmod>
     </url>
     <url>
          <loc>https://cizacas.github.io/GBD26-27-Apuntes/UD1_Sistemas_de_almacenamiento_de_la_informacion/</loc>
-         <lastmod>2026-09-22</lastmod>
+         <lastmod>2026-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://cizacas.github.io/GBD26-27-Apuntes/UD2_Dise%C3%B1o_logico_de_bases_de_datos/</loc>
+         <lastmod>2026-10-19</lastmod>
     </url>
 </urlset>
