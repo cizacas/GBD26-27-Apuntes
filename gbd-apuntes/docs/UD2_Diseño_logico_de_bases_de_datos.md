@@ -16,6 +16,7 @@
   - [2.5 Entidades débiles](#25-entidades-débiles)
   - [2.6 Herramientas gráficas](#26-herramientas-gráficas)
   - [2.7 Ejemplo completo con notación de Chen](#27-ejemplo-completo-con-notación-de-chen)
+    - [Variante compacta: atributos fuera de las entidades](#variante-compacta-atributos-fuera-de-las-entidades)
 - [3. El modelo E/R ampliado](#3-el-modelo-er-ampliado)
 - [4. El modelo relacional](#4-el-modelo-relacional)
   - [4.1 Terminología](#41-terminología)
@@ -84,6 +85,13 @@ Existen varias notaciones. La clásica de Chen usa:
 | Cardinalidad | Etiqueta (1, N, M) o (min,max) en la línea | Nº de ocurrencias que intervienen |
 | Línea | Segmento | Une entidades con relaciones y atributos |
 | Jerarquía (ISA) | Triángulo | Generalización/especialización |
+
+En algunos materiales se usa también una **variante compacta inspirada en Chen**: los atributos se escriben fuera del rectángulo de la entidad y se conectan a este, pero se omiten las elipses de Chen clásico. En la variante del ejemplo de abajo, un círculo precede a cada atributo:
+
+- `●` **atributo obligatorio**: debe tener un valor.
+- `○` **atributo opcional**: puede no tener valor.
+
+Estos círculos indican obligatoriedad, **no si el atributo es clave**. Para mostrar las claves en este ejemplo, se subrayan sus nombres, como en Chen clásico. La convención de los círculos puede variar entre materiales y herramientas, por lo que conviene incluir una leyenda que explique los símbolos.
 
 En la notación **pata de gallo** (crow's foot), muy usada en herramientas, las relaciones son líneas y la cardinalidad se dibuja en los extremos:
 
@@ -284,6 +292,39 @@ flowchart LR
 - `curso_académico` forma parte de la identificación de una matrícula: un mismo alumno puede volver a cursar el mismo módulo en otro curso. Por tanto, la clave de `SE MATRICULA` es `(id_alumno, id_módulo, curso_académico)`.
 - `calificación` pertenece a la relación porque depende de la matrícula concreta. Así, el alumno puede obtener calificaciones diferentes en distintos módulos o cursos.
 
+#### Variante compacta: atributos fuera de las entidades
+
+El siguiente diagrama representa **el mismo ejemplo ALUMNO–MÓDULO** de esta sección, ahora con la variante compacta. Los atributos no se representan con  una elipse por cada uno. `curso_académico` y `calificación` se conectan al rombo `SE MATRICULA` porque describen cada matrícula concreta.
+
+```mermaid
+%%{init: {"flowchart": {"rankSpacing": 12, "nodeSpacing": 35, "padding": 0}}}%%
+flowchart LR
+    ALUMNO[ALUMNO]
+    MATRICULA{SE MATRICULA}
+    MODULO[MÓDULO]
+
+    A_ID_ALUMNO["<u>id_alumno</u>"]:::atributo
+    A_NOMBRE_ALUMNO["nombre"]:::atributo
+    A_ID_MODULO["<u>id_módulo</u>"]:::atributo
+    A_NOMBRE_MODULO["nombre"]:::atributo
+    A_CURSO["<u>curso_académico</u>"]:::atributo
+    A_CALIFICACION["calificación"]:::atributo
+
+    ALUMNO ---o A_ID_ALUMNO
+    ALUMNO ---o A_NOMBRE_ALUMNO
+    MODULO ---o A_ID_MODULO
+    MODULO ---o A_NOMBRE_MODULO
+    MATRICULA ---o A_CURSO
+    MATRICULA ---o A_CALIFICACION
+
+    ALUMNO ---|"(1,N)"| MATRICULA
+    MATRICULA ---|"(1,N)"| MODULO
+
+    classDef atributo fill:transparent,stroke:transparent,color:#222
+```
+
+En este modelo todos los atributos se consideran obligatorios, por eso aparecen con `●`; si, por ejemplo, la calificación pudiera no estar registrada todavía, se marcaría con `○`. Los atributos subrayados son identificadores. La clave de cada matrícula se forma con `id_alumno`, `id_módulo` y `curso_académico`. Los pares `(mín,máx)` y las relaciones son los mismos que en el diagrama clásico.
+ 
 ---
 
 ## 3. El modelo E/R ampliado
