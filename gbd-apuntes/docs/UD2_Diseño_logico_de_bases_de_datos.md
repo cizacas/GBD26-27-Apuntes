@@ -200,9 +200,9 @@ La correspondencia con los ejemplos anteriores es:
 
 | Notación (mín,máx) | Pata de gallo |
 |---|---|
-| `DEPARTAMENTO (0,N) — EMPLEADO (1,1)` | `DEPARTAMENTO \|\|--o{ EMPLEADO` |
+| `DEPARTAMENTO (0,N) — EMPLEADO (1,1)` | <code>DEPARTAMENTO &#124;&#124;--o{ EMPLEADO</code> |
 | `ALUMNO (0,N) — ASIGNATURA (0,N)` | `ALUMNO o{--o{ ASIGNATURA` |
-| `EMPLEADO (0,1) — PLAZA_PARKING (0,1)` | `EMPLEADO o\|--o\| PLAZA_PARKING` |
+| `EMPLEADO (0,1) — PLAZA_PARKING (0,1)` | <code>EMPLEADO o&#124;--o&#124; PLAZA_PARKING</code> |
 
 En `DEPARTAMENTO ||--o{ EMPLEADO`, `||` queda junto a `DEPARTAMENTO` y la pata de gallo junto a `EMPLEADO`: expresa que un departamento puede estar relacionado con muchos empleados y que cada empleado pertenece a un único departamento. 
 
