@@ -187,6 +187,25 @@ flowchart LR
     USA ---|"(0,1)"| PLAZA[PLAZA_PARKING]
 ```
 
+Los mismos ejemplos pueden representarse con **notación de pata de gallo(crow's foot)**. En esta notación, `o` indica participación opcional, `|` participación obligatoria y la pata de gallo indica muchos:
+
+```mermaid
+erDiagram
+    DEPARTAMENTO ||--o{ EMPLEADO : "tiene"
+    ALUMNO o{--o{ ASIGNATURA : "cursa"
+    EMPLEADO o|--o| PLAZA_PARKING : "usa"
+```
+
+La correspondencia con los ejemplos anteriores es:
+
+| Notación (mín,máx) | Pata de gallo |
+|---|---|
+| `DEPARTAMENTO (0,N) — EMPLEADO (1,1)` | `DEPARTAMENTO \|\|--o{ EMPLEADO` |
+| `ALUMNO (0,N) — ASIGNATURA (0,N)` | `ALUMNO o{--o{ ASIGNATURA` |
+| `EMPLEADO (0,1) — PLAZA_PARKING (0,1)` | `EMPLEADO o\|--o\| PLAZA_PARKING` |
+
+En `DEPARTAMENTO ||--o{ EMPLEADO`, `||` queda junto a `DEPARTAMENTO` y la pata de gallo junto a `EMPLEADO`: expresa que un departamento puede estar relacionado con muchos empleados y que cada empleado pertenece a un único departamento. 
+
 ### 2.5 Entidades débiles
 
 Una **entidad débil** no tiene atributos suficientes para identificarse por sí misma: su existencia y su identificación **dependen de otra entidad fuerte** (propietaria).
@@ -447,7 +466,36 @@ CREATE TABLE empleado (
 
 ### 5.2 Ejemplo completo
 
-Enunciado: un instituto tiene **departamentos** con varios **profesores**; los **alumnos** se matriculan en **modulos** y obtienen una **nota**; los módulos los imparte un profesor.
+Enunciado: un instituto tiene **departamentos** con varios **profesores**, aunque puede haber departamentos sin profesores. Cada profesor pertenece a **un único departamento**. Un profesor puede no impartir ningún módulo y un módulo puede no figurar en ninguna matrícula. Todo **alumno** debe tener al menos una matrícula y obtiene una **nota** por cada módulo matriculado; los módulos los imparte **un profesor**.
+
+**1. Modelo conceptual**
+
+En esta primera representación solo aparecen las entidades, las relaciones y las cardinalidades. 
+
+```mermaid
+flowchart LR
+    DEPARTAMENTO[DEPARTAMENTO] ---|"(0,N)"| TIENE{TIENE}
+    TIENE ---|"(1,1)"| PROFESOR[PROFESOR]
+    PROFESOR ---|"(0,N)"| IMPARTE{IMPARTE}
+    IMPARTE ---|"(1,1)"| MODULO[MODULO]
+    ALUMNO[ALUMNO] ---|"(1,N)"| MATRICULA{MATRICULA}
+    MATRICULA ---|"(0,N)"| MODULO
+    MATRICULA --- NOTA([nota])
+```
+Las cardinalidades son:
+
+| Relación | Primera entidad | Segunda entidad | Interpretación |
+|---|---:|---:|---|
+| `TIENE` | `DEPARTAMENTO (0,N)` | `PROFESOR (1,1)` | Un departamento puede tener ningún o varios profesores; cada profesor pertenece a un único departamento |
+| `IMPARTE` | `PROFESOR (0,N)` | `MODULO (1,1)` | Un profesor puede impartir  ningún o varios módulos; cada módulo lo imparte un único profesor |
+| `MATRICULA` | `ALUMNO (1,N)` | `MODULO (0,N)` | Un alumno realiza una o más matrículas y un módulo puede aparecer en varias matrículas |
+
+En este modelo conceptual, `MATRICULA` es una **relación N:M** entre `ALUMNO` y `MODULO`, no una entidad independiente. `nota` es un atributo de esa relación. Al transformar el modelo al modelo relacional, la relación N:M se convierte en la tabla asociativa `MATRICULA`.
+
+**2. Representaciones gráficas del modelo relacional**
+
+El siguiente diagrama ya representa el modelo relacional: las entidades aparecen como tablas y se muestran sus atributos con tipos de datos, claves
+primarias (`PK`), claves foráneas (`FK`) y cardinalidades. Algunas herramientas de modelado denominan a esta representación **diagrama E/R** o **ERD**, aunque por su contenido corresponde al modelo lógico o relacional.
 
 ```mermaid
 erDiagram
@@ -483,23 +531,37 @@ erDiagram
 
 > **Lectura de símbolos y cardinalidades:** `||` significa **uno y solo uno**; `o{` significa **cero o muchos**; `|{` significa **uno o muchos**. El símbolo situado junto a cada entidad indica cuántas de sus ocurrencias pueden asociarse con una ocurrencia de la entidad opuesta. Por ejemplo, en `DEPARTAMENTO ||--o{ PROFESOR`, cada profesor pertenece a un único departamento, mientras que un departamento puede tener cero o muchos profesores. Del mismo modo, un profesor puede impartir cero o muchos módulos, y cada módulo lo imparte un único profesor; cada alumno debe tener una o muchas matrículas, y cada matrícula corresponde a un único alumno y un único módulo.
 
-Esquema relacional resultante (PK subrayada con `_`, FK con `#`):
+**Esquema relacional resultante (PK subrayada con `_`, FK con `#`):**
 
 ```
 DEPARTAMENTO(_cod_dep_, nombre)
 PROFESOR(_dni_, nombre, #cod_dep)
 MODULO(_cod_mod_, nombre, #dni_profesor)
 ALUMNO(_dni_, nombre, fecha_nac)
-MATRICULA(_#dni_alumno_, _#cod_mod_, nota)
+MATRICULA(#_dni_alumno_, #_cod_mod_, nota)
 ```
+
+En una clave que es simultáneamente primaria y foránea, `#` identifica la referencia y los guiones bajos delimitan el nombre completo del campo: `#_dni_alumno_`. En `MATRICULA`, ambos campos forman conjuntamente la clave primaria compuesta.
 
 Procedimiento: 
 
-1) una tabla por entidad 
+1) Una tabla por entidad 
+
 2) 1:N → FK en el lado N
+
 3) N:M → tabla `MATRICULA`
-4) los atributos de la relación (`nota`) van a la tabla intermedia 
-5) definir PK, FK y acciones referenciales.
+
+4) Los atributos de la relación (`nota`) van a la tabla intermedia 
+
+5) Definir PK, FK y acciones referenciales.
+
+
+**Esquema relacional gráfico**
+
+En este esquema las relaciones aparecen como tablas, con sus claves primarias y foráneas. Las flechas representan las referencias entre claves y las etiquetas muestran la cardinalidad. Se mantiene la convención de la representación textual: PK subrayada con `_` y FK con `#`.
+
+![relacional](img/relacional.png)
+
 
 ### 5.3 Restricciones que no pueden plasmarse en el diseño lógico
 
