@@ -198,9 +198,12 @@ La misma correspondencia puede resumirse con la notación `1:N`, `N:M` y `1:1`, 
 
 ```mermaid
 flowchart LR
-    DEPARTAMENTO[DEPARTAMENTO] ---|"1 : N"| EMPLEADO[EMPLEADO]
-    ALUMNO[ALUMNO] ---|"N : M"| ASIGNATURA[ASIGNATURA]
-    EMPLEADO_PLAZA[EMPLEADO] ---|"1 : 1"| PLAZA[PLAZA_PARKING]
+    DEPARTAMENTO[DEPARTAMENTO] ---|"1"| TIENE{TIENE}
+    TIENE ---|"N"| EMPLEADO[EMPLEADO]
+    ALUMNO[ALUMNO] ---|"N"| CURSA{CURSA}
+    CURSA ---|"M"| ASIGNATURA[ASIGNATURA]
+    EMPLEADO_PLAZA[EMPLEADO] ---|"1"| USA{USA}
+    USA ---|"1"| PLAZA[PLAZA_PARKING]
 ```
 
 En `1:N`, el `1` identifica el lado uno y `N` el lado muchos. Esta notación no muestra si la participación mínima es `0` o `1`; esa información se expresa con `(mín,máx)` o mediante los símbolos de pata de gallo.
