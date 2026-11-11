@@ -171,9 +171,7 @@ Indica **cuántas ocurrencias** de una entidad se asocian con una de la otra.
 - **0** (opcional, participación parcial) 
 - **1** (obligatoria, participación total). 
 
-Se expresa como par **(mín, máx)**: (0,1), (1,1), (0,N), (1,N).
-
-> Atención: en la notación (mín,máx) de Chen/Merise, cada par se coloca junto a la entidad **a la que se refiere**; en la notación de tipo 1:N, la N queda del lado "muchos".
+Se expresa como par **(mín, máx)**: (0,1), (1,1), (0,N), (1,N). En la notación `(mín,máx)` de Chen/Merise, cada par se coloca junto a la entidad a la que se refiere.
 
 ```mermaid
 flowchart LR
@@ -195,6 +193,19 @@ erDiagram
     ALUMNO o{--o{ ASIGNATURA : "cursa"
     EMPLEADO o|--o| PLAZA_PARKING : "usa"
 ```
+
+La misma correspondencia puede resumirse con la notación `1:N`, `N:M` y `1:1`, que muestra únicamente las cardinalidades máximas:
+
+```mermaid
+flowchart LR
+    DEPARTAMENTO[DEPARTAMENTO] ---|"1 : N"| EMPLEADO[EMPLEADO]
+    ALUMNO[ALUMNO] ---|"N : M"| ASIGNATURA[ASIGNATURA]
+    EMPLEADO_PLAZA[EMPLEADO] ---|"1 : 1"| PLAZA[PLAZA_PARKING]
+```
+
+En `1:N`, el `1` identifica el lado uno y `N` el lado muchos. Esta notación no muestra si la participación mínima es `0` o `1`; esa información se expresa con `(mín,máx)` o mediante los símbolos de pata de gallo.
+
+> **Cambio de colocación y lectura:** las tres notaciones expresan la misma relación, pero no colocan ni se leen los símbolos de la misma manera. En`(mín,máx)`, cada par se escribe junto a la entidad cuya participación se describe; en `1:N`, se identifica el lado uno y el lado muchos; y en pata de gallo, los símbolos se colocan en los extremos de la línea y se interpretan según el sentido de la relación. Por ello, no se deben trasladar mecánicamente los símbolos de una notación a otra.
 
 La correspondencia con los ejemplos anteriores es:
 
