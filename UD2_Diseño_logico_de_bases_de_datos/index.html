@@ -1331,6 +1331,35 @@
 
     EMPLEADO_PLAZA[EMPLEADO] ---|"(0,1)"| USA{USA}
     USA ---|"(0,1)"| PLAZA[PLAZA_PARKING]</code></pre>
+<p>Los mismos ejemplos pueden representarse con <strong>notación de pata de gallo(crow's foot)</strong>. En esta notación, <code>o</code> indica participación opcional, <code>|</code> participación obligatoria y la pata de gallo indica muchos:</p>
+<pre class="mermaid"><code>erDiagram
+    DEPARTAMENTO ||--o{ EMPLEADO : "tiene"
+    ALUMNO o{--o{ ASIGNATURA : "cursa"
+    EMPLEADO o|--o| PLAZA_PARKING : "usa"</code></pre>
+<p>La correspondencia con los ejemplos anteriores es:</p>
+<table>
+<thead>
+<tr>
+<th>Notación (mín,máx)</th>
+<th>Pata de gallo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DEPARTAMENTO (0,N) — EMPLEADO (1,1)</code></td>
+<td><code>DEPARTAMENTO \|\|--o{ EMPLEADO</code></td>
+</tr>
+<tr>
+<td><code>ALUMNO (0,N) — ASIGNATURA (0,N)</code></td>
+<td><code>ALUMNO o{--o{ ASIGNATURA</code></td>
+</tr>
+<tr>
+<td><code>EMPLEADO (0,1) — PLAZA_PARKING (0,1)</code></td>
+<td><code>EMPLEADO o\|--o\| PLAZA_PARKING</code></td>
+</tr>
+</tbody>
+</table>
+<p>En <code>DEPARTAMENTO ||--o{ EMPLEADO</code>, <code>||</code> queda junto a <code>DEPARTAMENTO</code> y la pata de gallo junto a <code>EMPLEADO</code>: expresa que un departamento puede estar relacionado con muchos empleados y que cada empleado pertenece a un único departamento. </p>
 <h3 id="25-entidades-debiles">2.5 Entidades débiles<a class="headerlink" href="#25-entidades-debiles" title="Permanent link">&para;</a></h3>
 <p>Una <strong>entidad débil</strong> no tiene atributos suficientes para identificarse por sí misma: su existencia y su identificación <strong>dependen de otra entidad fuerte</strong> (propietaria).</p>
 <ul>
@@ -1727,7 +1756,52 @@ flowchart LR
 <li><strong>Una única tabla</strong> con todos los atributos y un campo <code>tipo</code> (genera muchos nulos).</li>
 </ol>
 <h3 id="52-ejemplo-completo">5.2 Ejemplo completo<a class="headerlink" href="#52-ejemplo-completo" title="Permanent link">&para;</a></h3>
-<p>Enunciado: un instituto tiene <strong>departamentos</strong> con varios <strong>profesores</strong>; los <strong>alumnos</strong> se matriculan en <strong>modulos</strong> y obtienen una <strong>nota</strong>; los módulos los imparte un profesor.</p>
+<p>Enunciado: un instituto tiene <strong>departamentos</strong> con varios <strong>profesores</strong>, aunque puede haber departamentos sin profesores. Cada profesor pertenece a <strong>un único departamento</strong>. Un profesor puede no impartir ningún módulo y un módulo puede no figurar en ninguna matrícula. Todo <strong>alumno</strong> debe tener al menos una matrícula y obtiene una <strong>nota</strong> por cada módulo matriculado; los módulos los imparte <strong>un profesor</strong>.</p>
+<p><strong>1. Modelo conceptual</strong></p>
+<p>En esta primera representación solo aparecen las entidades, las relaciones y las cardinalidades. </p>
+<p><pre class="mermaid"><code>flowchart LR
+    DEPARTAMENTO[DEPARTAMENTO] ---|"(0,N)"| TIENE{TIENE}
+    TIENE ---|"(1,1)"| PROFESOR[PROFESOR]
+    PROFESOR ---|"(0,N)"| IMPARTE{IMPARTE}
+    IMPARTE ---|"(1,1)"| MODULO[MODULO]
+    ALUMNO[ALUMNO] ---|"(1,N)"| MATRICULA{MATRICULA}
+    MATRICULA ---|"(0,N)"| MODULO
+    MATRICULA --- NOTA([nota])</code></pre>
+Las cardinalidades son:</p>
+<table>
+<thead>
+<tr>
+<th>Relación</th>
+<th style="text-align: right;">Primera entidad</th>
+<th style="text-align: right;">Segunda entidad</th>
+<th>Interpretación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TIENE</code></td>
+<td style="text-align: right;"><code>DEPARTAMENTO (0,N)</code></td>
+<td style="text-align: right;"><code>PROFESOR (1,1)</code></td>
+<td>Un departamento puede tener ningún o varios profesores; cada profesor pertenece a un único departamento</td>
+</tr>
+<tr>
+<td><code>IMPARTE</code></td>
+<td style="text-align: right;"><code>PROFESOR (0,N)</code></td>
+<td style="text-align: right;"><code>MODULO (1,1)</code></td>
+<td>Un profesor puede impartir  ningún o varios módulos; cada módulo lo imparte un único profesor</td>
+</tr>
+<tr>
+<td><code>MATRICULA</code></td>
+<td style="text-align: right;"><code>ALUMNO (1,N)</code></td>
+<td style="text-align: right;"><code>MODULO (0,N)</code></td>
+<td>Un alumno realiza una o más matrículas y un módulo puede aparecer en varias matrículas</td>
+</tr>
+</tbody>
+</table>
+<p>En este modelo conceptual, <code>MATRICULA</code> es una <strong>relación N:M</strong> entre <code>ALUMNO</code> y <code>MODULO</code>, no una entidad independiente. <code>nota</code> es un atributo de esa relación. Al transformar el modelo al modelo relacional, la relación N:M se convierte en la tabla asociativa <code>MATRICULA</code>.</p>
+<p><strong>2. Representaciones gráficas del modelo relacional</strong></p>
+<p>El siguiente diagrama ya representa el modelo relacional: las entidades aparecen como tablas y se muestran sus atributos con tipos de datos, claves
+primarias (<code>PK</code>), claves foráneas (<code>FK</code>) y cardinalidades. Algunas herramientas de modelado denominan a esta representación <strong>diagrama E/R</strong> o <strong>ERD</strong>, aunque por su contenido corresponde al modelo lógico o relacional.</p>
 <pre class="mermaid"><code>erDiagram
     DEPARTAMENTO ||--o{ PROFESOR : "tiene"
     PROFESOR ||--o{ MODULO : "imparte"
@@ -1760,19 +1834,23 @@ flowchart LR
 <blockquote>
 <p><strong>Lectura de símbolos y cardinalidades:</strong> <code>||</code> significa <strong>uno y solo uno</strong>; <code>o{</code> significa <strong>cero o muchos</strong>; <code>|{</code> significa <strong>uno o muchos</strong>. El símbolo situado junto a cada entidad indica cuántas de sus ocurrencias pueden asociarse con una ocurrencia de la entidad opuesta. Por ejemplo, en <code>DEPARTAMENTO ||--o{ PROFESOR</code>, cada profesor pertenece a un único departamento, mientras que un departamento puede tener cero o muchos profesores. Del mismo modo, un profesor puede impartir cero o muchos módulos, y cada módulo lo imparte un único profesor; cada alumno debe tener una o muchas matrículas, y cada matrícula corresponde a un único alumno y un único módulo.</p>
 </blockquote>
-<p>Esquema relacional resultante (PK subrayada con <code>_</code>, FK con <code>#</code>):</p>
+<p><strong>Esquema relacional resultante (PK subrayada con <code>_</code>, FK con <code>#</code>):</strong></p>
 <div class="highlight"><pre><span></span><code>DEPARTAMENTO(_cod_dep_, nombre)
 PROFESOR(_dni_, nombre, #cod_dep)
 MODULO(_cod_mod_, nombre, #dni_profesor)
 ALUMNO(_dni_, nombre, fecha_nac)
-MATRICULA(_#dni_alumno_, _#cod_mod_, nota)
+MATRICULA(#_dni_alumno_, #_cod_mod_, nota)
 </code></pre></div>
+<p>En una clave que es simultáneamente primaria y foránea, <code>#</code> identifica la referencia y los guiones bajos delimitan el nombre completo del campo: <code>#_dni_alumno_</code>. En <code>MATRICULA</code>, ambos campos forman conjuntamente la clave primaria compuesta.</p>
 <p>Procedimiento: </p>
-<p>1) una tabla por entidad 
-2) 1:N → FK en el lado N
-3) N:M → tabla <code>MATRICULA</code>
-4) los atributos de la relación (<code>nota</code>) van a la tabla intermedia 
-5) definir PK, FK y acciones referenciales.</p>
+<p>1) Una tabla por entidad </p>
+<p>2) 1:N → FK en el lado N</p>
+<p>3) N:M → tabla <code>MATRICULA</code></p>
+<p>4) Los atributos de la relación (<code>nota</code>) van a la tabla intermedia </p>
+<p>5) Definir PK, FK y acciones referenciales.</p>
+<p><strong>Esquema relacional gráfico</strong></p>
+<p>En este esquema las relaciones aparecen como tablas, con sus claves primarias y foráneas. Las flechas representan las referencias entre claves y las etiquetas muestran la cardinalidad. Se mantiene la convención de la representación textual: PK subrayada con <code>_</code> y FK con <code>#</code>.</p>
+<p><img alt="relacional" src="../img/relacional.png" /></p>
 <h3 id="53-restricciones-que-no-pueden-plasmarse-en-el-diseno-logico">5.3 Restricciones que no pueden plasmarse en el diseño lógico<a class="headerlink" href="#53-restricciones-que-no-pueden-plasmarse-en-el-diseno-logico" title="Permanent link">&para;</a></h3>
 <p><em>(CE-i: Se han identificado y documentado las restricciones que no pueden plasmarse en el diseño lógico)</em></p>
 <p>Algunas reglas del problema <strong>no se pueden expresar</strong> con tablas, claves y relaciones. Deben <strong>documentarse</strong> (en un apartado del diseño) para implementarlas después con <code>CHECK</code>, disparadores (<em>triggers</em>), procedimientos o en la aplicación.</p>
