@@ -171,7 +171,7 @@ Indica **cuántas ocurrencias** de una entidad se asocian con una de la otra.
 - **0** (opcional, participación parcial) 
 - **1** (obligatoria, participación total). 
 
-Se expresa como par **(mín, máx)**: (0,1), (1,1), (0,N), (1,N). En la notación `(mín,máx)` de Chen/Merise, cada par se coloca junto a la entidad a la que se refiere.
+Se expresa como par **(mín, máx)**: (0,1), (1,1), (0,N), (1,N). En la notación `(mín,máx)` de Chen/Merise, cada par se coloca junto a la entidad a la que se refiere:*"Tomando una instancia de esta entidad, ¿con cuántas de la otra se relaciona como mínimo y como máximo?"*.
 
 ```mermaid
 flowchart LR
