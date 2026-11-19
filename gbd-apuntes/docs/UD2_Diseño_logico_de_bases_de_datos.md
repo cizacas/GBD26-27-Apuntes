@@ -6,40 +6,6 @@
 
 ---
 
-## Indice
-
-- [Indice](#indice)
-- [1. Modelo de datos](#1-modelo-de-datos)
-- [2. El modelo Entidad/Relación (E/R)](#2-el-modelo-entidadrelación-er)
-  - [2.1 Simbología del diagrama E/R](#21-simbología-del-diagrama-er)
-  - [2.2 Entidades y atributos](#22-entidades-y-atributos)
-  - [2.3 Relaciones](#23-relaciones)
-  - [2.4 Cardinalidad](#24-cardinalidad)
-  - [2.5 Entidades débiles](#25-entidades-débiles)
-  - [2.6 Herramientas gráficas](#26-herramientas-gráficas)
-  - [2.7 Ejemplo completo con notación de Chen](#27-ejemplo-completo-con-notación-de-chen)
-    - [Variante compacta: atributos fuera de las entidades](#variante-compacta-atributos-fuera-de-las-entidades)
-- [3. El modelo E/R ampliado](#3-el-modelo-er-ampliado)
-- [4. El modelo relacional](#4-el-modelo-relacional)
-  - [4.1 Terminología](#41-terminología)
-  - [4.2 Características de una relación (tabla)](#42-características-de-una-relación-tabla)
-  - [4.3 Claves](#43-claves)
-  - [4.4 Reglas de integridad](#44-reglas-de-integridad)
-- [5. Paso del diagrama E/R al modelo relacional](#5-paso-del-diagrama-er-al-modelo-relacional)
-  - [5.1 Reglas de transformación](#51-reglas-de-transformación)
-  - [5.2 Ejemplo completo](#52-ejemplo-completo)
-  - [5.3 Restricciones que no pueden plasmarse en el diseño lógico](#53-restricciones-que-no-pueden-plasmarse-en-el-diseño-lógico)
-- [6. Normalización](#6-normalización)
-  - [6.1 Dependencias funcionales](#61-dependencias-funcionales)
-  - [6.2 Primera forma normal (1FN)](#62-primera-forma-normal-1fn)
-  - [6.3 Segunda forma normal (2FN)](#63-segunda-forma-normal-2fn)
-  - [6.4 Tercera forma normal (3FN)](#64-tercera-forma-normal-3fn)
-  - [6.5 Forma normal de Boyce-Codd (FNBC)](#65-forma-normal-de-boyce-codd-fnbc)
-  - [6.6 Hasta qué nivel normalizar](#66-hasta-qué-nivel-normalizar)
-- [7. Esquema-resumen](#7-esquema-resumen)
-- [8. Glosario de términos clave](#8-glosario-de-términos-clave)
-
-
 ## 1. Modelo de datos
 
 *(CE-a: Se ha identificado el significado de la simbología propia de los diagramas entidad/relación)*
@@ -653,10 +619,10 @@ Anomalías: si Ana cambia de ciudad hay que actualizarlo en varias filas (**modi
 
 ### 6.1 Dependencias funcionales
 
-- **Dependencia funcional (DF):** `A → B` si cada valor de A determina un único valor de B. (`dni → nombre`).
-- **DF completa:** B depende de toda la clave compuesta, no de una parte.
-- **DF parcial:** B depende solo de una parte de la clave compuesta.
-- **DF transitiva:** `A → B` y `B → C` (con B no clave) entonces `A → C` de forma transitiva.
+- **Dependencia funcional (DF):** `A → B` si cada valor de A determina un único valor de B. Por ejemplo, en `ALUMNO(dni, nombre, fecha_nac)`, `dni → nombre`: conocido el DNI, solo puede corresponderle un nombre.
+- **DF completa:** B depende de toda la clave compuesta, no de una parte. Por ejemplo, en `MATRICULA(id_alumno, id_módulo, curso_académico, calificación)`, la combinación `(id_alumno, id_módulo, curso_académico) → calificación` es completa: la calificación corresponde a esa matrícula concreta y no se puede determinar usando solo el alumno, solo el módulo o solo el curso.
+- **DF parcial:** B depende solo de una parte de la clave compuesta. Por ejemplo, en `LINEA(id_pedido, cod_prod, desc_prod, cant)`, cuya clave es `(id_pedido, cod_prod)`, `cod_prod → desc_prod`: la descripción depende únicamente del producto y no del pedido completo. Por eso es una dependencia parcial.
+- **DF transitiva:** `A → B` y `B → C` (con B no clave) entonces `A → C` de forma transitiva. Por ejemplo, en `PEDIDO(id_pedido, cod_cli, nombre_cli, ciudad_cli)`, `id_pedido → cod_cli` y `cod_cli → nombre_cli, ciudad_cli`; por tanto, `id_pedido → nombre_cli, ciudad_cli` de forma transitiva.
 
 ### 6.2 Primera forma normal (1FN)
 
