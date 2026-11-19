@@ -1939,10 +1939,10 @@ MATRICULA(#_dni_alumno_, #_cod_mod_, nota)
 <p>Anomalías: si Ana cambia de ciudad hay que actualizarlo en varias filas (<strong>modificación</strong>); no se puede guardar un producto sin pedido (<strong>inserción</strong>); borrar el único pedido de un cliente elimina al cliente (<strong>borrado</strong>).</p>
 <h3 id="61-dependencias-funcionales">6.1 Dependencias funcionales<a class="headerlink" href="#61-dependencias-funcionales" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Dependencia funcional (DF):</strong> <code>A → B</code> si cada valor de A determina un único valor de B. (<code>dni → nombre</code>).</li>
-<li><strong>DF completa:</strong> B depende de toda la clave compuesta, no de una parte.</li>
-<li><strong>DF parcial:</strong> B depende solo de una parte de la clave compuesta.</li>
-<li><strong>DF transitiva:</strong> <code>A → B</code> y <code>B → C</code> (con B no clave) entonces <code>A → C</code> de forma transitiva.</li>
+<li><strong>Dependencia funcional (DF):</strong> <code>A → B</code> si cada valor de A determina un único valor de B. Por ejemplo, en <code>ALUMNO(dni, nombre, fecha_nac)</code>, <code>dni → nombre</code>: conocido el DNI, solo puede corresponderle un nombre.</li>
+<li><strong>DF completa:</strong> B depende de toda la clave compuesta, no de una parte. Por ejemplo, en <code>MATRICULA(id_alumno, id_módulo, curso_académico, calificación)</code>, la combinación <code>(id_alumno, id_módulo, curso_académico) → calificación</code> es completa: la calificación corresponde a esa matrícula concreta y no se puede determinar usando solo el alumno, solo el módulo o solo el curso.</li>
+<li><strong>DF parcial:</strong> B depende solo de una parte de la clave compuesta. Por ejemplo, en <code>LINEA(id_pedido, cod_prod, desc_prod, cant)</code>, cuya clave es <code>(id_pedido, cod_prod)</code>, <code>cod_prod → desc_prod</code>: la descripción depende únicamente del producto y no del pedido completo. Por eso es una dependencia parcial.</li>
+<li><strong>DF transitiva:</strong> <code>A → B</code> y <code>B → C</code> (con B no clave) entonces <code>A → C</code> de forma transitiva. Por ejemplo, en <code>PEDIDO(id_pedido, cod_cli, nombre_cli, ciudad_cli)</code>, <code>id_pedido → cod_cli</code> y <code>cod_cli → nombre_cli, ciudad_cli</code>; por tanto, <code>id_pedido → nombre_cli, ciudad_cli</code> de forma transitiva.</li>
 </ul>
 <h3 id="62-primera-forma-normal-1fn">6.2 Primera forma normal (1FN)<a class="headerlink" href="#62-primera-forma-normal-1fn" title="Permanent link">&para;</a></h3>
 <p>Una tabla está en <strong>1FN</strong> si todos sus atributos son <strong>atómicos</strong> (sin grupos repetitivos ni multivalorados) y tiene clave primaria.</p>
